@@ -19,5 +19,5 @@ const shuldrzTheme = createMuiTheme({
   },
 });
 
-console.log(shuldrzTheme)
+// console.log(shuldrzTheme)
 export { shuldrzTheme };
