@@ -14,6 +14,7 @@ const Home = ({ users }) => {
         </div>
       ))}
       <Link href="/login"><a>Login</a></Link>
+      <Link href="/signup"><a>Signup</a></Link>
     </div>
   )
 }
