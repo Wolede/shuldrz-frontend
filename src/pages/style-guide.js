@@ -1,5 +1,7 @@
 import Head from 'next/head'
-import { Button, Typography } from '@material-ui/core'
+import { Button as MuiButton, Typography } from '@material-ui/core'
+import Button from 'components/Button'
+import Link from 'next/link'
 
 const StyleGuide = () => {
     return (
@@ -22,16 +24,29 @@ const StyleGuide = () => {
             <br/>
             <Typography variant="caption">Caption</Typography>
             <br/>
-            <Button variant="contained" color="primary" size="small">small button</Button>
+            <Link href="/user-home">
+                <a style={{textDecoration:'none'}}>
+                    <Button
+                    variant="contained"
+                    size="large"
+                    color="primary"
+                    >
+                        Go to user
+                    </Button>
+                </a>
+            </Link>
+            
+            <br/>
+            <MuiButton variant="contained" color="primary" size="small">small button</MuiButton>
             <br/>
             <br/>
-            <Button variant="contained" color="secondary" size="medium">medium button</Button>
+            <MuiButton variant="contained" color="secondary" size="medium">medium button</MuiButton>
             <br/>
             <br/>
-            <Button variant="contained" color="secondary" size="large">Large button</Button>
+            <MuiButton variant="contained" color="secondary" size="large">Large button</MuiButton>
             <br/>
             <br/>
-            <Button variant="contained" disabled>Disabled button</Button>
+            <MuiButton variant="contained" disabled>Disabled button</MuiButton>
             <br/>
         </>
     )
