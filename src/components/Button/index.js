@@ -1,27 +1,28 @@
 import PropTypes from 'prop-types'
-import Link from 'next/link'
 import { Button as MuiButton, CircularProgress } from '@material-ui/core'
 import { useStyles } from './style'
 
-const Button = ({ linkPage, variant, color, onClick, size, disabled, loading, type, children }) => {
-    const classes = useStyles()
-    
-    // const ButtonLink = ({ className, href, hrefAs, children, prefetch }) => {
-    //     return (
-    //     <Link href={href} as={hrefAs} prefetch>
-    //       <a className={className}>
-    //         {children}
-    //       </a>
-    //     </Link>
-    // )}
+const Button = (props) => {
+    const { linkPage, variant, color, onClick, size, disabled, loading, type, children } = props
+    const classes = useStyles(props)
 
+    let coloured;
+    const primaryOrSecondaryColor = () => {
+        if (color === 'primary' || color === 'secondary') {
+            coloured = color
+        } else {
+            coloured = 'inherit'
+        }
+    }
+    primaryOrSecondaryColor()
+    console.log(coloured);
+    
     return (
         <MuiButton
         component={linkPage ? ButtonLink : undefined }
-        href={linkPage}
         variant={variant ? variant : undefined}
         className={classes.button}
-        color={color}
+        color={coloured}
         onClick={onClick}
         size={size}
         disabled={disabled || loading}

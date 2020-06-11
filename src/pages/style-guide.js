@@ -31,13 +31,28 @@ const StyleGuide = () => {
                     size="large"
                     color="primary"
                     >
-                        Go to user
+                        large Button
                     </Button>
                 </a>
             </Link>
             
             <br/>
-            <MuiButton variant="contained" color="primary" size="small">small button</MuiButton>
+            <br/>
+            <Button variant="contained" size="medium" color="secondary">Medium Button</Button>
+            <br/>
+            <br/>
+            <Button variant="contained" size="medium" color="error">Medium Button</Button>
+            <br/>
+            <br/>
+            <Button variant="contained" size="small" color="warning">small Button</Button>
+            <br/>
+            <br/>
+            <Button variant="contained" disabled>Disabled Button</Button>
+            <br/>
+            <br/>
+
+
+            {/* <MuiButton variant="contained" color="primary" size="small">small button</MuiButton>
             <br/>
             <br/>
             <MuiButton variant="contained" color="secondary" size="medium">medium button</MuiButton>
@@ -47,7 +62,7 @@ const StyleGuide = () => {
             <br/>
             <br/>
             <MuiButton variant="contained" disabled>Disabled button</MuiButton>
-            <br/>
+            <br/> */}
         </>
     )
 }

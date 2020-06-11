@@ -11,16 +11,20 @@ const AuthContextProvider = ({children}) => {
     const token = nookies.get({}, 'token').token
 
     const localState = async () => {
-        const value = await localForage.getItem('auth')
+        try {
+            const value = await localForage.getItem('auth')
 
-        const initialState = value ? value : {
-            isAuthenticated : token ? true : false,
-            token : token,
-            isSuccessful: null,
-            user: {}
-        }        
-        
-        return initialState
+            const initialState = value ? value : {
+                isAuthenticated : token ? true : false,
+                token : token,
+                isSuccessful: null,
+                user: {}
+            }        
+            
+            return initialState
+        } catch (error){
+            // stuff
+        }
     }
 
     const [auth, dispatchAuth] = useReducer( AuthReducer, {}, localState )
