@@ -31,7 +31,7 @@ const AuthContextProvider = ({children}) => {
     console.log(auth, 'auth in context');
 
     useEffect(() => {
-        localForage.setItem('auth', auth)
+        localForage.setItem('auth', auth).catch()
     },[auth])
     return (
         <AuthContext.Provider value={{auth, dispatchAuth}}>
