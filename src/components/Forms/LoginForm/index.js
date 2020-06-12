@@ -133,7 +133,7 @@ const LoginForm = () => {
                     </Box>
                     <Box marginBottom={2}>
                     <FormControl>
-                        {/* <FormHelperText error={true}>{auth.isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText> */}
+                        <FormHelperText error={true}>{auth.isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
                     </FormControl>
                     </Box>
                 </Form>

@@ -78,20 +78,20 @@ const colorPicker = (color, theme) => {
 const useStyles = makeStyles(theme => ({
     button: {
         position: 'relative',
-        backgroundColor: props => {const color = colorPicker(props.color, theme); return color.mainColor},
-        color: props => {const color = colorPicker(props.color, theme); return color.textColor},
+        backgroundColor: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.mainColor : null},
+        color: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.textColor : null},
         padding: props => {const size = sizePicker(props.size); return size.padding},
         fontSize: props => {const size = sizePicker(props.size); return size.fontSize},
-        boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadow},
+        boxShadow: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.boxShadow : null},
         transition: `all .7s cubic-bezier(.2,1,.22,1)`,
         letterSpacing: '0.09em',
         '&:hover' : {
-            backgroundColor: props => {const color = colorPicker(props.color, theme); return color.darkColor},
-            boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadowHover},
+            backgroundColor: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.darkColor : null},
+            boxShadow: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.boxShadowHover : null},
             transform: `translateY(-1.7px)`
         },
         '&:active' : {
-            boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadowActive}
+            boxShadow: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.boxShadowActive : null}
         },
     },
     wrapper: {

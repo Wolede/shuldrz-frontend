@@ -1,6 +1,8 @@
 import Head from 'next/head'
-import { Button as MuiButton, Typography } from '@material-ui/core'
+import { Typography, Avatar } from '@material-ui/core'
 import Button from 'components/Button'
+import Paper from 'components/Paper'
+import Chip from 'components/Chip'
 import Link from 'next/link'
 
 const StyleGuide = () => {
@@ -50,19 +52,29 @@ const StyleGuide = () => {
             <Button variant="contained" disabled>Disabled Button</Button>
             <br/>
             <br/>
+            <Paper width="30%">
+                This is a Paper
+            </Paper>
+            <Paper width="30%" color="primary">
+                This is a Primary Paper
+            </Paper>
+            <Paper width="40%" color="error">
+                This is a Error Paper
+            </Paper>
+            <br/>
+            <br/>
+            <Chip label="400" heart color="warning"/>
+            <Chip label="Gold" rank="#FFE926" color="error"/>
+            <Chip label="Lede Adeniyi" color="secondary"/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
 
-
-            {/* <MuiButton variant="contained" color="primary" size="small">small button</MuiButton>
-            <br/>
-            <br/>
-            <MuiButton variant="contained" color="secondary" size="medium">medium button</MuiButton>
-            <br/>
-            <br/>
-            <MuiButton variant="contained" color="secondary" size="large">Large button</MuiButton>
-            <br/>
-            <br/>
-            <MuiButton variant="contained" disabled>Disabled button</MuiButton>
-            <br/> */}
         </>
     )
 }

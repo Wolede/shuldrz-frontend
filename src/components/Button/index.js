@@ -6,6 +6,7 @@ const Button = (props) => {
     const { linkPage, variant, color, onClick, size, disabled, loading, type, children } = props
     const classes = useStyles(props)
 
+    // Only Primary and Secondary is allowed in the color prop so we're mitigating for that 
     let coloured;
     const primaryOrSecondaryColor = () => {
         if (color === 'primary' || color === 'secondary') {
@@ -15,7 +16,6 @@ const Button = (props) => {
         }
     }
     primaryOrSecondaryColor()
-    console.log(coloured);
     
     return (
         <MuiButton
