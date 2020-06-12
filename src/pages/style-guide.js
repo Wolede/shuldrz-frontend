@@ -1,8 +1,9 @@
 import Head from 'next/head'
-import { Typography, Avatar } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
 import Button from 'components/Button'
 import Paper from 'components/Paper'
 import Chip from 'components/Chip'
+import Avatar from 'components/Avatar'
 import Link from 'next/link'
 
 const StyleGuide = () => {
@@ -68,6 +69,11 @@ const StyleGuide = () => {
             <Chip label="Lede Adeniyi" color="secondary"/>
             <br/>
             <br/>
+            <Box width="300px">
+                <Avatar alt="lol" src="./images/avatar1.jpg" size="huge" autoWidth/>
+                <Avatar alt="Lolly pop" variant="rounded" src="./images/avatar.jg" size="small"/>
+                {/* broken images use the first letter of the alt attribute */}
+            </Box>
             <br/>
             <br/>
             <br/>
