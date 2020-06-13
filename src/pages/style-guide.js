@@ -27,7 +27,7 @@ const StyleGuide = () => {
             <br/>
             <Typography variant="caption">Caption</Typography>
             <br/>
-            <Link href="/user-home">
+            <Link href="/app">
                 <a style={{textDecoration:'none'}}>
                     <Button
                     variant="contained"

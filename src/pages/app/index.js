@@ -3,15 +3,15 @@ import Router from 'next/router'
 import nookies from 'nookies'
 import Logout from 'components/Logout'
 
-const UserHome = () => {
+const Home = () => {
     console.log(nookies.get().token);
     
     return (
         <div>
             <Head>
-                <title>Shuldrz | User Home</title>
+                <title>Shuldrz | App Home</title>
             </Head>
-            User Home
+            App Home
             <Logout/>
         </div>
     )
@@ -37,4 +37,4 @@ export async function getServerSideProps(ctx) {
     }
 }
 
-export default UserHome
+export default Home

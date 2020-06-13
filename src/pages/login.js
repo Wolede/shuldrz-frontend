@@ -21,11 +21,11 @@ export async function getServerSideProps(ctx) {
     // console.log(isAuthenticated, 'cookietoken')
     if (isAuthenticated) {
         if (typeof window !== 'undefined') {
-            Router.push("/user-home")
+            Router.push("/app")
         } else {
             if (ctx.res) {
                 ctx.res.writeHead(301, {
-                    Location: '/user-home'
+                    Location: '/app'
                 })
                 ctx.res.end()
             }

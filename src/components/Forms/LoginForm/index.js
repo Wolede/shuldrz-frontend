@@ -46,7 +46,7 @@ const LoginForm = () => {
                 user: user
             }})
 
-            Router.push('/user-home')
+            Router.push('/app')
         } catch (error) {
             //error state Login Unsuccessful 
             dispatchAuth({type: 'ERROR_AUTH'})
