@@ -51,7 +51,7 @@ const shuldrzTheme = createMuiTheme({
       secondary: shuldrzGrey.main
     },
     background: {
-      paper: shuldrzLight.main,
+      paper: shuldrzWhite.main,
       default: shuldrzLight.main,
     },
     type: 'light',

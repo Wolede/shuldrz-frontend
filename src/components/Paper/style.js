@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         width: props => props.width ? props.width : `100%`,
         padding: props => props.padding ? props.padding : `2.5rem`,
-        borderRadius: `3.75rem`,
+        borderRadius: `1.875rem`,
         boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadow},
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.backgroundColor},
         color: props => {const color = colorPicker(props.color, theme); return color.color},

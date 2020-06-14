@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Router from 'next/router'
 import nookies from 'nookies'
+import AppLayout from 'components/Layouts/AppLayout'
+import Paper from 'components/Paper'
 
 const Sessions = () => {
     return (
@@ -8,7 +10,11 @@ const Sessions = () => {
             <Head>
                 <title>Shuldrz | Sessions</title>
             </Head>
-            Sessions
+            <AppLayout>
+                <Paper color="primary">
+                    Sessions
+                </Paper>
+            </AppLayout>
         </div>
     )
 }

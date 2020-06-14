@@ -1,11 +1,20 @@
 import Head from 'next/head'
 import Router from 'next/router'
 import nookies from 'nookies'
+import AppLayout from 'components/Layouts/AppLayout'
+import Paper from 'components/Paper'
 
 const Trainings = () => {
     return (
         <div>
-            Trainings
+            <Head>
+                <title>Shuldrz | Trainings</title>
+            </Head>
+            <AppLayout withRightSidebar>
+                <Paper color="error">
+                    Trainings
+                </Paper>
+            </AppLayout>
         </div>
     )
 }

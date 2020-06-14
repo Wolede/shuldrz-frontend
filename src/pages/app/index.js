@@ -2,6 +2,9 @@ import Head from 'next/head'
 import Router from 'next/router'
 import nookies from 'nookies'
 import Logout from 'components/Logout'
+import AppLayout from 'components/Layouts/AppLayout'
+import Paper from 'components/Paper'
+
 
 const Home = () => {
     console.log(nookies.get().token);
@@ -11,8 +14,14 @@ const Home = () => {
             <Head>
                 <title>Shuldrz | App Home</title>
             </Head>
-            App Home
-            <Logout/>
+            <AppLayout withRightSidebar>
+
+                <Paper color="secondary">
+                    App Home
+                <Logout/>
+                </Paper>
+                
+            </AppLayout>
         </div>
     )
 }

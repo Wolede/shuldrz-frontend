@@ -1,11 +1,20 @@
 import Head from 'next/head'
 import Router from 'next/router'
 import nookies from 'nookies'
+import AppLayout from 'components/Layouts/AppLayout'
+import Paper from 'components/Paper'
 
 const Reviews = () => {
     return (
         <div>
-            Reviews
+            <Head>
+                <title>Shuldrz | Reviews</title>
+            </Head>
+            <AppLayout withRightSidebar>
+                <Paper color="warning">
+                    Reviews
+                </Paper>
+            </AppLayout>
         </div>
     )
 }
