@@ -1,14 +1,16 @@
+import { useContext } from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
 import nookies from 'nookies'
-import Logout from 'components/Logout'
 import AppLayout from 'components/Layouts/AppLayout'
 import Paper from 'components/Paper'
-
+import { AuthContext } from 'contexts/AuthContext'
 
 const Home = () => {
-    console.log(nookies.get().token);
-    
+
+    const { auth } = useContext(AuthContext)
+
+    console.log(auth, 'lol')
     return (
         <div>
             <Head>
@@ -17,8 +19,7 @@ const Home = () => {
             <AppLayout withRightSidebar>
 
                 <Paper color="secondary">
-                    App Home
-                <Logout/>
+                    App Home                
                 </Paper>
                 
             </AppLayout>

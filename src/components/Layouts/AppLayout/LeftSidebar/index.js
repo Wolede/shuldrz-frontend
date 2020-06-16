@@ -3,8 +3,10 @@ import { useStyles } from './style'
 import { Drawer } from '@material-ui/core'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SidebarNav from './SidebarNav';
+import Logout from 'components/Logout'
 
-const Sidebar = props => {
+
+const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
     const classes = useStyles(props)
 
@@ -47,16 +49,17 @@ const Sidebar = props => {
                 className={classes.nav}
                 pages={pages}
                 />
+                <Logout/>
             </div>
         </Drawer>
     )
 }
 
-Sidebar.propTypes = {
+LeftSidebar.propTypes = {
     className: PropTypes.string,
     onClose: PropTypes.func,
     open: PropTypes.bool.isRequired,
     variant: PropTypes.string.isRequired
 }
 
-export default Sidebar
+export default LeftSidebar

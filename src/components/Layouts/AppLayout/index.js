@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
-import Sidebar from './Sidebar'
+import LeftSidebar from './LeftSidebar'
+import RightSidebar from './RightSidebar';
 import ProfileBox from './ProfileBox'
 import CharityBox from './CharityBox'
 import UpcomingBox from './UpcomingBox'
-import { useMediaQuery, Hidden, IconButton, Grid } from '@material-ui/core';
+import { useMediaQuery, Hidden, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import Paper from 'components/Paper'
+import Topbar from './Topbar';
+
+
 
 const AppLayout = (props) => {
     const { children, withRightSidebar } = props
@@ -19,32 +21,42 @@ const AppLayout = (props) => {
         defaultMatches: true
     });
 
-    const [openSidebar, setOpenSidebar] = useState(false);
+    const [openLeftSidebar, setOpenLeftSidebar] = useState(false);
+    const [openRightSidebar, setOpenRightSidebar] = useState(false);
 
-    const handleSidebarOpen = () => {
-      setOpenSidebar(true);
+    const handleLeftSidebarOpen = () => {
+      setOpenLeftSidebar(true);
     };
   
-    const handleSidebarClose = () => {
-      setOpenSidebar(false);
+    const handleLeftSidebarClose = () => {
+      setOpenLeftSidebar(false);
+    };
+
+    const handleRightSidebarOpen = () => {
+      setOpenRightSidebar(true);
     };
   
-    const shouldOpenSidebar = isDesktop ? true : openSidebar;
+    const handleRightSidebarClose = () => {
+      setOpenRightSidebar(false);
+    };
+  
+    const shouldOpenLeftSidebar = isDesktop ? true : openLeftSidebar;
+    const shouldOpenRightSidebar = isDesktop ? true : openRightSidebar;
 
     
     return (
         <div>
-            <Hidden lgUp> {/* //this Hidden component is sweet o! */}
-                <IconButton
-                    color="inherit"
-                    onClick={handleSidebarOpen}
-                >
-                    <MenuIcon />
-                </IconButton>
+
+            <Hidden lgUp> {/* this hidden component is sweet  */}
+                <Topbar 
+                onLeftSidebarOpen={handleLeftSidebarOpen} 
+                onRightSidebarOpen={handleRightSidebarOpen} 
+                />
             </Hidden>
-            <Sidebar 
-            onClose={handleSidebarClose}
-            open={shouldOpenSidebar}
+
+            <LeftSidebar 
+            onClose={handleLeftSidebarClose}
+            open={shouldOpenLeftSidebar}
             variant={isDesktop ? 'persistent' : 'temporary'}
             />
 
@@ -54,25 +66,29 @@ const AppLayout = (props) => {
                 <Grid container spacing={4}>
                     <Grid 
                       item 
-                      lg={withRightSidebar ? 9 : 11} 
-                      md={withRightSidebar ? 9 : 11} 
-                      xl={withRightSidebar ? 9 : 11} 
+                      lg={withRightSidebar ? 8 : 11} 
+                      md={withRightSidebar ? 12 : 12} 
+                      xl={withRightSidebar ? 8 : 11} 
                       xs={12}
                       >
 
                         {children}
 
                     </Grid>
-
-                    {withRightSidebar  && (
-                        <Grid item lg={3} md={3} xl={3} xs={12}>
-                        <Paper>
-                            Right side!
-                        </Paper>
-                    </Grid>
-                    )}
                 </Grid>
             </div> 
+
+            {withRightSidebar  && (
+                <>
+                    <RightSidebar 
+                    onClose={handleRightSidebarClose}
+                    open={shouldOpenRightSidebar}
+                    variant={isDesktop ? 'persistent' : 'temporary'}
+                    />
+                </>
+            )}
+                
+            
         </div>
     )
 }

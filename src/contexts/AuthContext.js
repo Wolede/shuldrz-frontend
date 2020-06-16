@@ -13,19 +13,21 @@ const AuthContextProvider = ({children}) => {
     const localState = async () => {
         try {
             const value = await localForage.getItem('auth')
-
+            
             const initialState = value ? value : {
                 isAuthenticated : token ? true : false,
                 token : token,
                 isSuccessful: null,
                 user: {}
             }        
-            
+            // console.log(initialState, 'initialState');
             return initialState
+            
         } catch (error){
             // stuff
         }
     }
+
 
     const [auth, dispatchAuth] = useReducer( AuthReducer, {}, localState )
     console.log(auth, 'auth in context');
@@ -33,6 +35,7 @@ const AuthContextProvider = ({children}) => {
     useEffect(() => {
         localForage.setItem('auth', auth).catch()
     },[auth])
+
     return (
         <AuthContext.Provider value={{auth, dispatchAuth}}>
             { children }
