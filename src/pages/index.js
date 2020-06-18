@@ -2,6 +2,7 @@ import Head from 'next/head'
 import axios from "axios"
 import Link from 'next/link'
 
+
 const Home = ({ users }) => {
   return (
     <div>

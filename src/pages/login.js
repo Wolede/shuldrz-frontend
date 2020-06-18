@@ -4,6 +4,8 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { Button, FormControl, InputAdornment, IconButton, TextField, Box } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import BackButton from '../components/BackButton';
+import Card from '../components/Card'
 
 const Login = () => {
 
@@ -110,6 +112,8 @@ const Login = () => {
                 </Form>
             )}
             </Formik>
+            <BackButton/>        
+            <Card/>                  
             
         </div>
     )
