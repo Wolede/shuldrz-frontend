@@ -1,15 +1,16 @@
-import { useContext } from 'react'
+import { useState } from 'react'
 import Router from 'next/router'
-import axios from "axios"
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { Button, FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { AuthContext } from 'contexts/AuthContext'
-import nookies from 'nookies'
+import Cookies from 'js-cookie'
+import useAuth from 'contexts/Auth'
+import api from 'services/Api'
 
 const SignupForm = () => {
-    const { auth, dispatchAuth } = useContext(AuthContext)
+    const { setUser } = useAuth()
+    const [isSuccessful, setIsSuccessful] = useState()
 
     const initialValues = {
         firstName: '',
@@ -30,10 +31,8 @@ const SignupForm = () => {
     })
 
     const onSubmit = async (values) => {
-        const { API_URL } = process.env
-
         try {
-            const res = await axios.post(`${API_URL}/auth/local/register`, {
+            const res = await api.post(`auth/local/register`, {
                 firstName: values.firstName,
                 lastName: values.lastName,
                 username: values.username,
@@ -41,33 +40,26 @@ const SignupForm = () => {
                 email: values.email,
                 password: values.password
             })
-            console.log(res.data);
             
             const token = res.data.jwt
-            const user = res.data.user
 
-            nookies.set('', 'token', token, { 
-                maxAge: 30 * 24 * 60 * 60, 
-                path: '/' 
-            })
-
-            dispatchAuth({type: 'UPDATE_AUTH', auth: {
-                isAuthenticated : true,
-                token: token,
-                isSuccessful: true,
-                user: user
-            }})
-
-            Router.push('/app')
+            if(token) {
+                console.log('got token');
+                Cookies.set('token', token, { expires: 60 })
+                api.defaults.headers.Authorization = `Bearer ${token}`
+                const res = await api.get('users/me')
+                const user = res.data
+                setUser(user)
+                console.log("Got user", user)
+                Router.push('/app')
+            }
         } catch (error) {
-            //error state Login Unsuccessful 
-            dispatchAuth({type: 'ERROR_AUTH'})
             console.log(error, 'error')
-            // console.log(error.response.data.data[0].messages[0].message, 'error')
+            setIsSuccessful(false)
         }
     }
 
-    const [showPassword, setShowPassword] = React.useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -205,7 +197,7 @@ const SignupForm = () => {
                     </Box>
                     <Box marginBottom={2}>
                     <FormControl>
-                        <FormHelperText error={true}>{auth.isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                        <FormHelperText error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
                     </FormControl>
                     </Box>
                 </Form>

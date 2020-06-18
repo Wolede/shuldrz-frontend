@@ -14,6 +14,7 @@ const AuthContextProvider = ({children}) => {
         isAuthenticated : token ? true : false,
         token : token,
         isSuccessful: null,
+        loading: true,
         user: {}
     })
 
@@ -22,11 +23,9 @@ const AuthContextProvider = ({children}) => {
 
 
     const [auth, dispatchAuth] = useReducer( AuthReducer, initialState )
-    // const [auth, dispatchAuth] = useReducer( AuthReducer, {}, localState )
     console.log(auth, 'auth in context');
 
     useEffect(() => {
-        // localForage.setItem('auth', auth).catch()
         localStorage.setItem('auth', JSON.stringify(auth))
     },[auth])
 

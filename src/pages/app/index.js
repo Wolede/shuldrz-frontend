@@ -1,18 +1,19 @@
-import { useContext } from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
-import nookies from 'nookies'
+import useSWR, { mutate } from 'swr'
+import api from 'services/Api'
 import AppLayout from 'components/Layouts/AppLayout'
 import Paper from 'components/Paper'
-import { AuthContext } from 'contexts/AuthContext'
+import useAuth, { ProtectRoute } from 'contexts/Auth'
+import { Skeleton } from "@material-ui/lab"
 
 const Home = () => {
+    const { user, loading } = useAuth();
+    // const { data: { data: pages } = {}, isValidating } = useSWR(loading ? false : '/pages', api.get)
 
-    const { auth } = useContext(AuthContext)
-
-    if ( auth ) {
-        console.log(auth.user, 'auth in app page');
-    }
+    // const showSkeleton = isValidating || loading
+    const showSkeleton = loading
+    console.log(user);
     
     return (
         <div>
@@ -24,30 +25,10 @@ const Home = () => {
                 <Paper color="secondary">
                     App Home                
                 </Paper>
-                
+                {showSkeleton && <Skeleton height={40} />}
             </AppLayout>
         </div>
     )
 }
 
-export async function getServerSideProps(ctx) {
-    const isAuthenticated = nookies.get(ctx).token
-    // console.log(isAuthenticated, 'cookietoken')
-    if (!isAuthenticated) {
-        if (typeof window !== 'undefined') {
-            Router.push("/login")
-        } else {
-            if (ctx.res) {
-                ctx.res.writeHead(301, {
-                    Location: '/login'
-                })
-                ctx.res.end()
-            }
-        }
-        return {props: {isAuthenticated : true}}
-    } else {
-        return {props: {isAuthenticated : false}}
-    }
-}
-
-export default Home
+export default ProtectRoute(Home)

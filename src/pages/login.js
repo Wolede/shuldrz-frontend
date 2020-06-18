@@ -16,24 +16,24 @@ const Login = () => {
     )
 }
 
-export async function getServerSideProps(ctx) {
-    const isAuthenticated = nookies.get(ctx).token
-    // console.log(isAuthenticated, 'cookietoken')
-    if (isAuthenticated) {
-        if (typeof window !== 'undefined') {
-            Router.push("/app")
-        } else {
-            if (ctx.res) {
-                ctx.res.writeHead(301, {
-                    Location: '/app'
-                })
-                ctx.res.end()
-            }
-        }
-        return {props: {isAuthenticated : true}}
-    } else {
-        return {props: {isAuthenticated : false}}
-    }
-}
+// export async function getServerSideProps(ctx) {
+//     const isAuthenticated = nookies.get(ctx).token
+//     // console.log(isAuthenticated, 'cookietoken')
+//     if (isAuthenticated) {
+//         if (typeof window !== 'undefined') {
+//             Router.push("/app")
+//         } else {
+//             if (ctx.res) {
+//                 ctx.res.writeHead(301, {
+//                     Location: '/app'
+//                 })
+//                 ctx.res.end()
+//             }
+//         }
+//         return {props: {isAuthenticated : true}}
+//     } else {
+//         return {props: {isAuthenticated : false}}
+//     }
+// }
 
 export default Login

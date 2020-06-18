@@ -1,4 +1,4 @@
-import AuthContextProvider from './AuthContext'
+import { AuthContextProvider } from './Auth'
 
 const ContextWrapper = ({children}) => {
     return (

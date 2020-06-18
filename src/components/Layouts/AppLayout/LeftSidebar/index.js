@@ -5,15 +5,14 @@ import { Drawer } from '@material-ui/core'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SidebarNav from './SidebarNav';
 import Logout from 'components/Logout'
-import { AuthContext } from 'contexts/AuthContext'
+import useAuth from 'contexts/Auth'
 
 const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
     const classes = useStyles(props)
+    const { user } = useAuth();
 
-    const { auth } = useContext(AuthContext)
-
-    const pages = [
+    const pages = user.userType === "Volunteer" ? [
         {
           title: 'Home',
           href: '/app',
@@ -34,40 +33,18 @@ const LeftSidebar = props => {
           href: '/app/reviews',
           icon: <DashboardIcon />
         },
-    ]
-    // const pages = auth.user.userType === "Volunteer" ? [
-    //     {
-    //       title: 'Home',
-    //       href: '/app',
-    //       icon: <DashboardIcon />
-    //     },
-    //     {
-    //       title: 'Sessions',
-    //       href: '/app/sessions',
-    //       icon: <DashboardIcon />
-    //     },
-    //     {
-    //       title: 'Trainings',
-    //       href: '/app/trainings',
-    //       icon: <DashboardIcon />
-    //     },
-    //     {
-    //       title: 'Reviews',
-    //       href: '/app/reviews',
-    //       icon: <DashboardIcon />
-    //     },
-    // ] : [
-    //   {
-    //     title: 'Home',
-    //     href: '/app',
-    //     icon: <DashboardIcon />
-    //   },
-    //   {
-    //     title: 'Sessions',
-    //     href: '/app/sessions',
-    //     icon: <DashboardIcon />
-    //   },
-    // ];
+    ] : [
+      {
+        title: 'Home',
+        href: '/app',
+        icon: <DashboardIcon />
+      },
+      {
+        title: 'Sessions',
+        href: '/app/sessions',
+        icon: <DashboardIcon />
+      },
+    ];
 
     return (
         <Drawer
