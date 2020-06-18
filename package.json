@@ -16,11 +16,14 @@
     "formik": "^2.1.4",
     "immer": "^6.0.9",
     "js-cookie": "^2.2.1",
+    "localforage": "^1.7.4",
     "next": "9.4.4",
     "node-sass": "^4.14.1",
+    "nookies": "^2.3.1",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "swr": "^0.2.3",
     "yup": "^0.29.1"
   }
 }

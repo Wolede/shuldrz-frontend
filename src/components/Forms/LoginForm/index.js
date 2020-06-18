@@ -1,22 +1,66 @@
-import Head from 'next/head'
-import axios from "axios"
+import { useState } from 'react'
+import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { Button, FormControl, InputAdornment, IconButton, TextField, Box } from '@material-ui/core'
+import { Button, FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import BackButton from '../components/BackButton';
-import Card from '../components/Card'
-import Router from 'next/router'
-import nookies from 'nookies'
-import LoginForm from 'components/Forms/LoginForm'
+import Cookies from 'js-cookie'
+import useAuth from 'contexts/Auth'
+import api from 'services/Api'
 
-const Login = () => {
+const LoginForm = () => {
+    const { setUser } = useAuth()
+    const [isSuccessful, setIsSuccessful] = useState()
+    
+    const initialValues = {
+        email: '',
+        password: '',
+    }
+    
+    const validationSchema = Yup.object({
+        email: Yup.string().email('Invalid email format!').required('Email is empty!'),
+        password: Yup.string().required('Password is empty')
+    })
+
+    const onSubmit = async (values) => {
+        try {
+
+            const res = await api.post('auth/local', {
+                identifier: values.email,
+                password: values.password
+            })
+            const token = res.data.jwt
+            
+            if(token) {
+                console.log('got token');
+                Cookies.set('token', token, { expires: 60 })
+                api.defaults.headers.Authorization = `Bearer ${token}`
+                const res = await api.get('users/me')
+                const user = res.data
+                setUser(user)
+                console.log("Got user", user)
+                Router.push('/app')
+            }
+        } catch (error) {
+            //error state Login Unsuccessful 
+            console.log(error, 'error')
+            setIsSuccessful(false)
+        }
+
+    }
+
+    const [showPassword, setShowPassword] = useState(false)
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     return (
         <div>
-            <Head>
-                <title>Shuldrz | Login</title>
-            </Head>
             <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -48,7 +92,7 @@ const Login = () => {
                         label="Password"
                         { ...getFieldProps('password')}
                         variant="outlined"
-                        error={false}
+                        error={errors.password ? true : false}
                         helperText={ errors.password && touched.password ?
                             errors.password : null
                         }
@@ -81,35 +125,16 @@ const Login = () => {
                         </Button>
                     </FormControl>
                     </Box>
+                    <Box marginBottom={2}>
+                    <FormControl>
+                        <FormHelperText error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                    </FormControl>
+                    </Box>
                 </Form>
             )}
             </Formik>
-            <BackButton/>        
-            <Card/>                  
-            <LoginForm />
-            
         </div>
     )
 }
 
-// export async function getServerSideProps(ctx) {
-//     const isAuthenticated = nookies.get(ctx).token
-//     // console.log(isAuthenticated, 'cookietoken')
-//     if (isAuthenticated) {
-//         if (typeof window !== 'undefined') {
-//             Router.push("/app")
-//         } else {
-//             if (ctx.res) {
-//                 ctx.res.writeHead(301, {
-//                     Location: '/app'
-//                 })
-//                 ctx.res.end()
-//             }
-//         }
-//         return {props: {isAuthenticated : true}}
-//     } else {
-//         return {props: {isAuthenticated : false}}
-//     }
-// }
-
-export default Login
+export default LoginForm

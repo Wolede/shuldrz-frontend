@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { shuldrzTheme } from 'styles/theme'
 import { useStyles } from 'styles/global'
+import ContextWrapper from '../contexts/ContextWrapper';
 
 const MyApp = ({ Component, pageProps }) => {
     const classes = useStyles();
@@ -20,7 +21,9 @@ const MyApp = ({ Component, pageProps }) => {
         <>
         <ThemeProvider theme={shuldrzTheme}>
             <CssBaseline />
-            <Component {...pageProps} className={classes.html}/>
+            <ContextWrapper>
+                <Component {...pageProps} className={classes.html}/>
+            </ContextWrapper>
         </ThemeProvider>
         </>
     )

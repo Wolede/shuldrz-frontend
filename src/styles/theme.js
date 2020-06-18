@@ -3,18 +3,22 @@ import { createMuiTheme } from '@material-ui/core/styles';
 // Colour Profiles
 const shuldrzGreen = {
   main : '#00C766',
+  dark : '#0C9D56',
   contrastText : '#FFFFFF',
 }
 const shuldrzPurple = {
   main : '#3F316B',
+  dark : '#2C2348',
   contrastText : '#F5F6FA'
 }
 const shuldrzYellow = {
   main : '#F3B700',
+  dark : '#D4A106',
   contrastText : '#F5F6FA'
 }
 const shuldrzRed = {
   main : '#FD4659',
+  dark : '#D21F32',
   contrastText : '#F5F6FA'
 }
 const shuldrzWhite = {
@@ -47,7 +51,7 @@ const shuldrzTheme = createMuiTheme({
       secondary: shuldrzGrey.main
     },
     background: {
-      paper: shuldrzLight.main,
+      paper: shuldrzWhite.main,
       default: shuldrzLight.main,
     },
     type: 'light',
@@ -124,5 +128,5 @@ const shuldrzTheme = createMuiTheme({
   }
 });
 
-console.log(shuldrzTheme)
+// console.log(shuldrzTheme)
 export { shuldrzTheme };

@@ -10,6 +10,8 @@ module.exports = {
         config.resolve.alias['components'] = path.join(__dirname, 'src/components')
         config.resolve.alias['public'] = path.join(__dirname, 'public')
         config.resolve.alias['styles'] = path.join(__dirname, 'src/styles')
+        config.resolve.alias['contexts'] = path.join(__dirname, 'src/contexts')
+        config.resolve.alias['services'] = path.join(__dirname, 'src/services')
 
         return config
     }
