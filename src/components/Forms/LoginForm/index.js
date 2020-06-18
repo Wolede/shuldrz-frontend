@@ -11,6 +11,8 @@ import nookies from 'nookies'
 const LoginForm = () => {
     const { auth, dispatchAuth } = useContext(AuthContext)
 
+    console.log(auth, 'in login');
+    
     const initialValues = {
         email: '',
         password: '',
@@ -133,7 +135,7 @@ const LoginForm = () => {
                     </Box>
                     <Box marginBottom={2}>
                     <FormControl>
-                        <FormHelperText error={true}>{auth.isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                        <FormHelperText error={true}>{auth ? ( auth.isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null) : null}</FormHelperText>
                     </FormControl>
                     </Box>
                 </Form>

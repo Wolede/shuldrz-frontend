@@ -3,7 +3,6 @@ import Router from 'next/router'
 import nookies from 'nookies'
 import { AuthContext } from 'contexts/AuthContext'
 import { Button } from '@material-ui/core'
-import * as localForage from "localforage"
 
 const Logout = () => {
     const { dispatchAuth } = useContext(AuthContext)
@@ -11,8 +10,8 @@ const Logout = () => {
     const logoutHandler = () => {
         nookies.destroy(null, 'token')
         dispatchAuth({type: 'REMOVE_USER'})
-        localForage.clear()
-        Router.push('/')
+        localStorage.clear()
+        Router.push('/login')
     }
 
     return (

@@ -1,14 +1,17 @@
+import { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import { Drawer } from '@material-ui/core'
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SidebarNav from './SidebarNav';
 import Logout from 'components/Logout'
-
+import { AuthContext } from 'contexts/AuthContext'
 
 const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
     const classes = useStyles(props)
+
+    const { auth } = useContext(AuthContext)
 
     const pages = [
         {
@@ -31,7 +34,40 @@ const LeftSidebar = props => {
           href: '/app/reviews',
           icon: <DashboardIcon />
         },
-    ];
+    ]
+    // const pages = auth.user.userType === "Volunteer" ? [
+    //     {
+    //       title: 'Home',
+    //       href: '/app',
+    //       icon: <DashboardIcon />
+    //     },
+    //     {
+    //       title: 'Sessions',
+    //       href: '/app/sessions',
+    //       icon: <DashboardIcon />
+    //     },
+    //     {
+    //       title: 'Trainings',
+    //       href: '/app/trainings',
+    //       icon: <DashboardIcon />
+    //     },
+    //     {
+    //       title: 'Reviews',
+    //       href: '/app/reviews',
+    //       icon: <DashboardIcon />
+    //     },
+    // ] : [
+    //   {
+    //     title: 'Home',
+    //     href: '/app',
+    //     icon: <DashboardIcon />
+    //   },
+    //   {
+    //     title: 'Sessions',
+    //     href: '/app/sessions',
+    //     icon: <DashboardIcon />
+    //   },
+    // ];
 
     return (
         <Drawer

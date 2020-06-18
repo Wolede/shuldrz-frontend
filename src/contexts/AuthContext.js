@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useEffect } from 'react'
 import { AuthReducer } from '../reducers/AuthReducer'
 import nookies from 'nookies'
-import * as localForage from "localforage"
+import api from 'services/Api'
 
 export const AuthContext = createContext();
 
@@ -10,30 +10,24 @@ const AuthContextProvider = ({children}) => {
 
     const token = nookies.get({}, 'token').token
 
-    const localState = async () => {
-        try {
-            const value = await localForage.getItem('auth')
-            
-            const initialState = value ? value : {
-                isAuthenticated : token ? true : false,
-                token : token,
-                isSuccessful: null,
-                user: {}
-            }        
-            // console.log(initialState, 'initialState');
-            return initialState
-            
-        } catch (error){
-            // stuff
-        }
-    }
+    const initialState = typeof localStorage === "undefined" || localStorage === null ? null : ( localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')) : {
+        isAuthenticated : token ? true : false,
+        token : token,
+        isSuccessful: null,
+        user: {}
+    })
 
 
-    const [auth, dispatchAuth] = useReducer( AuthReducer, {}, localState )
+    console.log(initialState, 'initial');
+
+
+    const [auth, dispatchAuth] = useReducer( AuthReducer, initialState )
+    // const [auth, dispatchAuth] = useReducer( AuthReducer, {}, localState )
     console.log(auth, 'auth in context');
 
     useEffect(() => {
-        localForage.setItem('auth', auth).catch()
+        // localForage.setItem('auth', auth).catch()
+        localStorage.setItem('auth', JSON.stringify(auth))
     },[auth])
 
     return (

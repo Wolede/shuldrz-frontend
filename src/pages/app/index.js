@@ -10,7 +10,10 @@ const Home = () => {
 
     const { auth } = useContext(AuthContext)
 
-    console.log(auth, 'lol')
+    if ( auth ) {
+        console.log(auth.user, 'auth in app page');
+    }
+    
     return (
         <div>
             <Head>

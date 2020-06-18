@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { List, ListItem, Button, colors } from '@material-ui/core';
-import { useStyles } from '../../style';
+import { useStyles } from './style';
 
 const SidebarNav = props => {
     const { pages, className, ...rest } = props;
