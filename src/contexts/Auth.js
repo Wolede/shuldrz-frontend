@@ -29,9 +29,9 @@ export const AuthContextProvider = ({ children }) => {
     }, [])
 
     const logout = (identifier, password) => {
-        Cookies.remove('token')
-        setUser(null)
         window.location.pathname = '/login'
+        Cookies.remove('token')
+        setUser(null)     
     }
 
     return (

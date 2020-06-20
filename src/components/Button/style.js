@@ -85,6 +85,8 @@ const useStyles = makeStyles(theme => ({
         boxShadow: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.boxShadow : null},
         transition: `all .7s cubic-bezier(.2,1,.22,1)`,
         letterSpacing: '0.09em',
+        marginTop: props => props.marginTop,
+        marginBottom: props => props.marginBottom,
         '&:hover' : {
             backgroundColor: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.darkColor : null},
             boxShadow: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.boxShadowHover : null},

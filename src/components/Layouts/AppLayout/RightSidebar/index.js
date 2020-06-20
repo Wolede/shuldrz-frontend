@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import { Drawer, Typography, Hidden } from '@material-ui/core'
-import Paper from 'components/Paper'
+import ProfileBox from '../ProfileBox'
+import UpcomingBox from '../UpcomingBox'
 
 const RightSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
@@ -19,9 +20,8 @@ const RightSidebar = props => {
             {...rest}
             className={classes.root}
             >
-                <Paper>
-                    Right side!
-                </Paper>
+                <ProfileBox />
+                <UpcomingBox />
                 <Hidden lgUp>
                     <Typography variant="body1" onClick={onClose} align="center" >{'close >>>'}</Typography>
                 </Hidden>

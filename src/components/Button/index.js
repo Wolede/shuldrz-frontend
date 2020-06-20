@@ -45,7 +45,9 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     type: PropTypes.string,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    marginTop: PropTypes.string,
+    marginBottom: PropTypes.string,
 }
 
 export default Button

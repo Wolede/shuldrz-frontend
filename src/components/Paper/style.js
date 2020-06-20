@@ -42,6 +42,7 @@ const useStyles = makeStyles(theme => ({
         boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadow},
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.backgroundColor},
         color: props => {const color = colorPicker(props.color, theme); return color.color},
+        marginBottom: props => props.marginBottom,
     }
 }));
 

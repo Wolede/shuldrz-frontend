@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import { Drawer } from '@material-ui/core'
@@ -12,7 +11,7 @@ const LeftSidebar = props => {
     const classes = useStyles(props)
     const { user } = useAuth();
 
-    const pages = user.userType === "Volunteer" ? [
+    const pages = user?.userType === "Volunteer" ? [
         {
           title: 'Home',
           href: '/app',
