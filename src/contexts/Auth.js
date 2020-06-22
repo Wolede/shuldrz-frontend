@@ -29,8 +29,8 @@ export const AuthContextProvider = ({ children }) => {
     }, [])
 
     const logout = (identifier, password) => {
-        window.location.pathname = '/login'
         Cookies.remove('token')
+        window.location.pathname = '/login'
         setUser(null)     
     }
 
@@ -56,7 +56,9 @@ export function ProtectRoute(Component) {
         const router = useRouter()
 
         useEffect(() => {
-            if (!isAuthenticated && !loading) Router.push('/login')
+            if (!isAuthenticated && !loading) router.push('/login')
+            console.log('over here');
+            
         }, [loading, isAuthenticated])
 
         return (<Component {...arguments} />)
