@@ -12,7 +12,7 @@ const LeftSidebar = props => {
     const classes = useStyles(props)
     const { user } = useAuth();
 
-    const pages = user.userType === "Volunteer" ? [
+    const pages = [
         {
           title: 'Home',
           href: '/app',
@@ -33,18 +33,18 @@ const LeftSidebar = props => {
           href: '/app/reviews',
           icon: <DashboardIcon />
         },
-    ] : [
-      {
-        title: 'Home',
-        href: '/app',
-        icon: <DashboardIcon />
-      },
-      {
-        title: 'Sessions',
-        href: '/app/sessions',
-        icon: <DashboardIcon />
-      },
-    ];
+    ] //: [
+    //   {
+    //     title: 'Home',
+    //     href: '/app',
+    //     icon: <DashboardIcon />
+    //   },
+    //   {
+    //     title: 'Sessions',
+    //     href: '/app/sessions',
+    //     icon: <DashboardIcon />
+    //   },
+    // ];
 
     return (
         <Drawer

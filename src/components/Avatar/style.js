@@ -4,9 +4,9 @@ const sizePicker = (size) => {
     switch (size) {
         case 'small':
             return {
-                width: '6.25rem',
-                height: '6.25rem',
-                borderRadius: '1.875rem',
+                width: '7.5rem',
+                height: '6.75rem',
+                borderRadius: '1.8rem',
             }
         case 'medium':
             return {

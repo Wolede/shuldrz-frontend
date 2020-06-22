@@ -125,6 +125,7 @@ const shuldrzTheme = createMuiTheme({
         fontWeight: 500,
         fontSize: `1rem`
       }
+      
   }
 });
 

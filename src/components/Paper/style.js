@@ -34,15 +34,31 @@ const colorPicker = (color, theme) => {
         }
     }
 }
+
+
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: props => props.width ? props.width : `100%`,
+        height: props => props.height ? props.height: null,
         padding: props => props.padding ? props.padding : `2.5rem`,
-        borderRadius: `1.875rem`,
+        borderRadius: props => props.borderRadius ? props.borderRadius : '1.875rem 1.875rem 1.875rem 1.875rem',  
+        borderTopLeftRadius: props => props.borderTopLeftRadius ? props.borderTopLeftRadius : null,
+        borderTopRightRadius: props => props.borderTopRightRadius ? props.borderTopRightRadius : null,
+        borderBottomLeftRadius: props => props.borderBottomLeftRadius ? props.borderBottomLeftRadius : null,
+        borderBottomRightRadius: props => props.borderBottomRightRadius ? props.borderBottomRightRadius : null,
         boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadow},
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.backgroundColor},
-        color: props => {const color = colorPicker(props.color, theme); return color.color},
+        color: props => {const color = colorPicker(props.color, theme); return color.color},    
+        // borderTopRightRadius: props => props.active ? '0' : null,
+        // borderBottomRightRadius: props => props.active ? '0' : null,
+        // backgroundColor: props => props.active ? theme.palette.secondary.main : null,
+    },
+    
+    inactive: {
+        borderRadius: '0'
     }
 }));
 
 export { useStyles }
+

@@ -7,6 +7,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
+const firebase = require("firebase");
 
 const LoginForm = () => {
     const { setUser } = useAuth()
