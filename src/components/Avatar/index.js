@@ -25,6 +25,7 @@ Avatar.proptypes = {
     src: PropTypes.string,
     variant: PropTypes.string,
     autoWidth: PropTypes.bool,
+    marginBottom: PropTypes.string,
 }
 
 export default Avatar

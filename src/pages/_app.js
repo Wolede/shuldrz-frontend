@@ -5,6 +5,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { shuldrzTheme } from 'styles/theme'
 import { useStyles } from 'styles/global'
 import ContextWrapper from '../contexts/ContextWrapper';
+import { SWRConfig } from 'swr'
+import axios from 'axios'
 
 const MyApp = ({ Component, pageProps }) => {
     const classes = useStyles();
@@ -21,9 +23,11 @@ const MyApp = ({ Component, pageProps }) => {
         <>
         <ThemeProvider theme={shuldrzTheme}>
             <CssBaseline />
-            <ContextWrapper>
-                <Component {...pageProps} className={classes.html}/>
-            </ContextWrapper>
+            <SWRConfig value={{ fetcher: (url) => axios(url).then(res => res.data) }}>
+                <ContextWrapper>
+                    <Component {...pageProps} className={classes.html}/>
+                </ContextWrapper>
+            </SWRConfig>
         </ThemeProvider>
         </>
     )

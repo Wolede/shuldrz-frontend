@@ -22,6 +22,11 @@ const colorPicker = (color, theme) => {
                 mainColor: theme.palette.error.main,
                 textColor: theme.palette.error.contrastText,
             }
+        case 'paper':
+            return {
+                mainColor: theme.palette.background.default,
+                textColor: theme.palette.text.primary,
+            }
         default:
             return {
                 mainColor: null,

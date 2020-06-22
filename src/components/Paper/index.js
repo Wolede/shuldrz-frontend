@@ -20,6 +20,7 @@ Paper.propTypes = {
     width: PropTypes.string,
     padding: PropTypes.string,
     color: PropTypes.string,
+    marginBottom: PropTypes.string,
 }
 
 export default Paper

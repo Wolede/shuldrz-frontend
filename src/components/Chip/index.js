@@ -27,7 +27,7 @@ const Chip = props => {
         if (color === 'primary' || color === 'secondary') {
             coloured = color
         } else {
-            coloured = 'inherit'
+            coloured = 'default'
         }
     }
     primaryOrSecondaryColor()

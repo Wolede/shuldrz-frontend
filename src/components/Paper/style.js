@@ -49,14 +49,8 @@ const useStyles = makeStyles(theme => ({
         borderBottomRightRadius: props => props.borderBottomRightRadius ? props.borderBottomRightRadius : null,
         boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadow},
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.backgroundColor},
-        color: props => {const color = colorPicker(props.color, theme); return color.color},    
-        // borderTopRightRadius: props => props.active ? '0' : null,
-        // borderBottomRightRadius: props => props.active ? '0' : null,
-        // backgroundColor: props => props.active ? theme.palette.secondary.main : null,
-    },
-    
-    inactive: {
-        borderRadius: '0'
+        color: props => {const color = colorPicker(props.color, theme); return color.color},
+        marginBottom: props => props.marginBottom,
     }
 }));
 
