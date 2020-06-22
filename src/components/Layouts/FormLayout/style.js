@@ -71,9 +71,9 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         padding: props => props.page === 'volunteer' ? theme.spacing(5, 14) : theme.spacing(5, 19),
-        [theme.breakpoints.down('md')]: {
-            padding: theme.spacing(5, 6),
-        }
+        [theme.breakpoints.down('sm')]: {
+            padding: props => props.page === 'volunteer' ? theme.spacing(5, 6) : theme.spacing(5, 6),
+        },
         // padding: theme.spacing(15, 19),
         // [theme.breakpoints.down('md')]: {
         //     padding: theme.spacing(15, 4),

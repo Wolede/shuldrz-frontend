@@ -4,6 +4,7 @@ import { AppBar, Toolbar, IconButton, Hidden, Typography } from '@material-ui/co
 import { useStyles } from './style'
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from 'components/Button'
+
 const Header = (props) => {
     const { className, onSidebarOpen, isLight, ...rest } = props;
     const classes = useStyles();
@@ -38,7 +39,7 @@ const Header = (props) => {
                     </Link>
 
                     <Link 
-                        href="/"      
+                        href="#"      
                     >
                         <a className={classes.menuLink}>
                             <Typography
@@ -46,6 +47,19 @@ const Header = (props) => {
                                 className={isLight ? classes.lightText : null}
                             >
                                 Donate 
+                            </Typography>
+                        </a>
+                    </Link>
+
+                    <Link 
+                        href="#"      
+                    >
+                        <a className={classes.menuLink}>
+                            <Typography
+                                variant="body2"
+                                className={isLight ? classes.lightText : null}
+                            >
+                                FAQ 
                             </Typography>
                         </a>
                     </Link>
