@@ -2,13 +2,16 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { Button, FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useStyles } from './style'
 import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 
 const LoginForm = () => {
+    const classes = useStyles()
     const { setUser } = useAuth()
     const [isSuccessful, setIsSuccessful] = useState()
     
@@ -68,8 +71,8 @@ const LoginForm = () => {
             >
             {({values, errors, touched, getFieldProps, isSubmitting}) => (
                 <Form noValidate autoComplete="off">
-                    <Box marginBottom={2}>
-                    <FormControl>
+
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="email" 
                         id="email" 
@@ -82,9 +85,8 @@ const LoginForm = () => {
                         }
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="password" 
                         id="password" 
@@ -112,24 +114,23 @@ const LoginForm = () => {
                         }}
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 
                         color="primary" 
                         type="submit"
                         disabled={isSubmitting}
+                        loading={isSubmitting}
                         >
                             Login
                         </Button>
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
-                        <FormHelperText error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                    
+                    <FormControl className={classes.formControl}>
+                        <FormHelperText style={{ textAlign: 'center' }} error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
                     </FormControl>
-                    </Box>
+                    
                 </Form>
             )}
             </Formik>

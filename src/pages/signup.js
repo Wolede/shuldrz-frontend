@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import Router from 'next/router'
-import nookies from 'nookies'
 import SignupForm from 'components/Forms/SignupForm'
+import MainLayout from 'components/Layouts/MainLayout'
+import FormLayout from 'components/Layouts/FormLayout';
 
 const Signup = () => {
     return (
@@ -9,9 +9,13 @@ const Signup = () => {
             <Head>
                 <title>Shuldrz | Signup</title>
             </Head>
-            Signup
+            <MainLayout isLight>
+                <FormLayout page="signup">
+                    <SignupForm />
+                </FormLayout>
+            </MainLayout>
 
-            <SignupForm />
+            
         </div>
     )
 }

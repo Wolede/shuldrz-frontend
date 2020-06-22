@@ -13,8 +13,7 @@ const UpcomingBox = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
 
-    const { data, error, isValidating } = useSWR(loading ? false : `/upcoming-sessions`, api.get, {revalidateOnFocus: false})
-    // const { data, error, isValidating } = useSWR(loading ? false : `/upcoming-sessions?user.id=${user.id}&_limit=4`, api.get, {revalidateOnFocus: false})
+    const { data, error, isValidating } = useSWR(loading ? false : `/upcoming-sessions?user.id=${user.id}&_limit=4`, api.get, {revalidateOnFocus: false})
     
     const upcomings = data ? data.data : null
     console.log(upcomings, 'upcoming sessions')
@@ -34,7 +33,7 @@ const UpcomingBox = () => {
                         <Box key={key} position="relative">
                             <Card className={classes.card}>
                                 <Avatar 
-                                    alt={user.firstName} 
+                                    alt={upcoming.sessionUser.firstName} 
                                     src={upcoming.sessionUser.profileImage ? upcoming.sessionUser.profileImage.url : '/'} 
                                     size="small" 
                                 />

@@ -2,13 +2,16 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { Button, FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import { useStyles } from './style'
+import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 
-const SignupForm = () => {
+const SignupForm = ({volunteer}) => {
+    const classes = useStyles()
     const { setUser } = useAuth()
     const [isSuccessful, setIsSuccessful] = useState()
 
@@ -16,16 +19,17 @@ const SignupForm = () => {
         firstName: '',
         lastName: '',
         username: '',
-        occupation: '',
+        // occupation: '',
         email: '',
         password: '',
+        userType: volunteer ? 'Volunteer' : 'Guest', // assigning user type
     }
     
     const validationSchema = Yup.object({
         firstName: Yup.string().required('First name is empty'),
         lastName: Yup.string().required('Last name is empty'),
         username: Yup.string().required('Username is empty'),
-        occupation: Yup.string().required('Occupation is empty'),
+        // occupation: Yup.string().required('Occupation is empty'),
         email: Yup.string().email('Invalid email format!').required('Email is empty!'),
         password: Yup.string().required('Password is empty')
     })
@@ -33,12 +37,13 @@ const SignupForm = () => {
     const onSubmit = async (values) => {
         try {
             const res = await api.post(`auth/local/register`, {
-                firstName: values.firstName,
-                lastName: values.lastName,
+                firstName: values.firstName.charAt(0).toUpperCase() + values.firstName.slice(1), //Capitalize first letter
+                lastName: values.lastName.charAt(0).toUpperCase() + values.lastName.slice(1),
                 username: values.username,
-                occupation: values.occupation,
+                // occupation: values.occupation,
                 email: values.email,
-                password: values.password
+                password: values.password,
+                userType: values.userType
             })
             
             const token = res.data.jwt
@@ -78,8 +83,8 @@ const SignupForm = () => {
             >
             {({errors, touched, getFieldProps, isSubmitting}) => (
                 <Form noValidate autoComplete="off">
-                    <Box marginBottom={2}>
-                    <FormControl>
+
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="firstName" 
                         id="firstName" 
@@ -92,9 +97,8 @@ const SignupForm = () => {
                         }
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="lastName" 
                         id="lastName" 
@@ -107,9 +111,8 @@ const SignupForm = () => {
                         }
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="username" 
                         id="username" 
@@ -122,9 +125,8 @@ const SignupForm = () => {
                         }
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    {/* <FormControl className={classes.formControl}>
                         <TextField 
                         name="occupation" 
                         id="occupation" 
@@ -136,10 +138,9 @@ const SignupForm = () => {
                             errors.occupation : null
                         }
                         />
-                    </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    </FormControl> */}
+                    
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="email" 
                         id="email" 
@@ -152,9 +153,8 @@ const SignupForm = () => {
                         }
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    <FormControl className={classes.formControl}>
                         <TextField 
                         name="password" 
                         id="password" 
@@ -182,24 +182,23 @@ const SignupForm = () => {
                         }}
                         />
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
-                    <FormControl>
+                    
+                    <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 
                         color="primary" 
                         type="submit"
                         disabled={isSubmitting}
+                        loading={isSubmitting}
                         >
                             Signup
                         </Button>
                     </FormControl>
-                    </Box>
-                    <Box marginBottom={2}>
+                    
                     <FormControl>
-                        <FormHelperText error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                        <FormHelperText style={{ textAlign: 'center' }} error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
                     </FormControl>
-                    </Box>
+
                 </Form>
             )}
             </Formik>
