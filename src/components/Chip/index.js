@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { Chip as MuiChip } from '@material-ui/core'
 import { useStyles } from './style'
-
+import HeartSVG from 'public/icons/heart2.svg'
 // To learn how to use, visit https://material-ui.com/components/chips/
 
 const Chip = props => {
@@ -12,7 +12,7 @@ const Chip = props => {
     let avatar;
     const chooseIcon = () => {
         if(heart) {
-            avatar = <img alt="heart" src="./icons/heart2.svg" />
+            avatar = <img alt="heart" src={HeartSVG} />
         } else if (rank) {
             avatar = <div style={{ width: '1.5rem', height: '1.5rem', backgroundColor: rank, borderRadius: '100%'  }}></div>
         } else {

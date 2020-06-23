@@ -12,7 +12,13 @@ module.exports = {
         config.resolve.alias['styles'] = path.join(__dirname, 'src/styles')
         config.resolve.alias['contexts'] = path.join(__dirname, 'src/contexts')
         config.resolve.alias['services'] = path.join(__dirname, 'src/services')
-
+        config.module.rules.push({
+            test: /\.svg$/,
+            issuer: {
+              test: /\.(js|ts)x?$/,
+            },
+            use: ['@svgr/webpack', 'url-loader'],
+        });
         return config
     }
 }

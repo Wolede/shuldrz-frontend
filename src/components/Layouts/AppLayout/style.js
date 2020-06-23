@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('lg')]: {
             margin: '0 auto auto 18rem',
             padding: theme.spacing(4),
-            zIndex: 9999,
+            // zIndex: 9999,
         },
     }
 }))

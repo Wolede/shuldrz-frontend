@@ -25,7 +25,14 @@ const useStyles = makeStyles(theme => ({
         '*::-webkit-scrollbar-thumb': {
           backgroundColor: 'rgba(0,0,0,.2)',
           borderRadius: '8px'
-        }
+        },
+        'iframe, object, embed' : {
+          'position': 'absolute', 
+          'top': '0',
+          'left': '0', 
+          'width': '100%', 
+          'height': '100% !important',
+        },
     }
 }));
 

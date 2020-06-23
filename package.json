@@ -26,5 +26,9 @@
     "react-dom": "16.13.1",
     "swr": "^0.2.3",
     "yup": "^0.29.1"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^5.4.0",
+    "url-loader": "^4.1.0"
   }
 }
