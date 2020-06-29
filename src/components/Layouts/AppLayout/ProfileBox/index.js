@@ -7,11 +7,13 @@ import Chip from 'components/Chip'
 import Button from 'components/Button'
 import { Box, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
+import Link from 'next/link'
 
 const ProfileBox = () => {
     const { user } = useAuth()
     const classes = useStyles()
-
+    // console.log(user);
+    
     return (
         <Paper padding="2rem 2rem 1.5rem 2rem" marginBottom="2rem">
             <Box display="flex" flexDirection="column" alignItems='center' justifyContent="center">
@@ -31,8 +33,11 @@ const ProfileBox = () => {
                     <Typography variant="body1" className={classes.text}>{user.occupation ? user.occupation : 'Occupation not set'}</Typography>
 
                     <Chip label={user.hearts ? user.hearts : 'No hearts yet'} heart color="paper"/>
-                    
+                    <Link href="/app/profile">
+                    <a style={{textDecoration:'none'}}>
                     <Button variant="contained" size="small" color="secondary" marginTop='1rem'>Edit Profile</Button>
+                    </a>
+                    </Link>
                     </>
                 )}
                 

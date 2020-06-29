@@ -19,7 +19,9 @@ const TrainingsLayout = () => {
 
     return (
         <div>
-            <Typography variant="h3" gutterBottom>Trainings</Typography>
+            <Box marginBottom="2rem">
+                <Typography variant="h3">Trainings</Typography>
+            </Box>
             {!trainings ? (
 
                 <Skeleton variant="rect" height={150} animation="wave"/>
