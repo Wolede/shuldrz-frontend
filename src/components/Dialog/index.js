@@ -31,7 +31,6 @@ const Dialog = (props) => {
                     <Paper padding="2.5rem 1.5rem 1rem 1.5rem">
 
 
-
                     { props.view === "uploadProfileImage" &&
                         (
                             <>

@@ -3,9 +3,13 @@ import PropTypes from 'prop-types'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormControlLabel, FormHelperText, FormLabel, Select, MenuItem, InputLabel, RadioGroup, Radio, TextField, Typography, Box, Grid } from '@material-ui/core'
+import { FormControl, FormControlLabel, FormHelperText, FormLabel, Select, MenuItem, InputLabel, RadioGroup, Radio, TextField, Checkbox, Typography, Box, Grid } from '@material-ui/core'
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import {Autocomplete} from '@material-ui/lab';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
 import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
 import { useStyles } from './style'
@@ -14,6 +18,8 @@ const ProfileForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()
     const theme = useTheme();
+    const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+    const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
     const [isSuccessful, setIsSuccessful] = useState()
 
@@ -48,6 +54,13 @@ const ProfileForm = ({ user }) => {
         gender: '',
         maritalStatus: '',
         personality_type: '',
+        occupation: '',
+        reference: '',
+        experience: '',
+        availableDays: [],
+        availableTime: '',
+        charity: '',
+        topics: '',
     }
 
     const validationSchema = Yup.object({
@@ -59,6 +72,13 @@ const ProfileForm = ({ user }) => {
         gender: Yup.string(),
         maritalStatus: Yup.string(),
         personality_type: Yup.string(),
+        occupation: Yup.string(),
+        reference: Yup.string(),
+        experience: Yup.string(),
+        // availableDays: Yup.any(),
+        availableTime: Yup.string(),
+        charity: Yup.string(),
+        // topics: Yup.array(),
     })
 
     const onSubmit = async (values) => {
@@ -87,7 +107,7 @@ const ProfileForm = ({ user }) => {
                             <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '1rem' }}>
                                 Personal Information
                             </Typography>
-                            
+                            {console.log(values)}
                             <div className={classes.fieldWrapper}>
                                 <TextField 
                                 name="firstName" 
@@ -131,6 +151,7 @@ const ProfileForm = ({ user }) => {
                                 label="Phone Number (optional)"
                                 { ...getFieldProps('phoneNumber')}
                                 variant="outlined"
+                                type="number"
                                 error={errors.phoneNumber && touched.phoneNumber ? true : false}
                                 helperText={ errors.phoneNumber && touched.phoneNumber ?
                                     errors.phoneNumber : null
@@ -183,7 +204,7 @@ const ProfileForm = ({ user }) => {
                             </Typography>
 
                             <Typography variant="body1" style={{ marginBottom: '1rem' }}>
-                                Select your personality type below. We recommend taking the test at <a href="16personalities.com" style={{ color: theme.palette.primary.main }}>16personalities.com</a>
+                                Select your personality type below. We recommend taking the test at <a href="16personalities.com" target="_blank" style={{ color: theme.palette.primary.main }}>16personalities.com</a>
                             </Typography>
                             
                             <div className={classes.fieldWrapper}>
@@ -204,7 +225,195 @@ const ProfileForm = ({ user }) => {
                             </div>
 
                         </Box>
-                    
+
+                        
+                        <Box>
+                            <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
+                                Experience
+                            </Typography>
+                            
+                            <div className={classes.fieldWrapper}>
+                                <TextField 
+                                    name="occupation" 
+                                    id="occupation" 
+                                    label="Occupation"
+                                    { ...getFieldProps('occupation')}
+                                    variant="outlined"
+                                    error={errors.occupation && touched.occupation ? true : false}
+                                    helperText={ errors.occupation && touched.occupation ?
+                                        errors.occupation : null
+                                    }
+                                />
+
+                                <TextField 
+                                    name="reference" 
+                                    id="reference" 
+                                    label="Reference"
+                                    { ...getFieldProps('reference')}
+                                    variant="outlined"
+                                    error={errors.reference && touched.reference ? true : false}
+                                    helperText={ errors.reference && touched.reference ?
+                                        errors.reference : null
+                                    }
+                                />
+
+                                <TextField 
+                                    name="experience" 
+                                    id="experience" 
+                                    label="Tell us a bit about your work experience"
+                                    { ...getFieldProps('experience')}
+                                    variant="outlined"
+                                    multiline
+                                    rows={4}
+                                    style={{ width: '100%' }}
+                                    error={errors.experience && touched.experience ? true : false}
+                                    helperText={ errors.experience && touched.experience ?
+                                        errors.experience : null
+                                    }
+                                />
+
+                            </div>
+                        </Box>
+
+
+                        <Box>
+                            <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
+                                Availability
+                            </Typography>
+                            
+                            <div className={classes.fieldWrapper}>
+                                <Autocomplete
+                                    multiple
+                                    id="availableDays"
+                                    options={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']}
+                                    disableCloseOnSelect
+                                    getOptionLabel={(option) => option}
+                                    value={values.availableDays}
+                                    onChange={(event, newValue) => setFieldValue("availableDays", newValue)}
+                                    renderOption={(option, { selected }) => (
+                                        <React.Fragment>
+                                        <Checkbox
+                                            icon={icon}
+                                            checkedIcon={checkedIcon}
+                                            style={{ marginRight: 8 }}
+                                            checked={selected}
+                                        />
+                                        {option}
+                                        </React.Fragment>
+                                    )}
+                                    // style={{ width: 500 }}
+                                    renderInput={(params) => (
+                                        <TextField {...params} name="availableDays" variant="outlined" label="Available Days" placeholder="Days of the week"
+                                        
+                                       />
+                                    )}
+                                />
+
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <InputLabel id="availableTimeLabel">Available Time</InputLabel>
+                                    <Select
+                                    labelId="availableTimeLabel"
+                                    id="availableTime"
+                                    { ...getFieldProps('availableTime')}
+                                    label="Available Time"
+                                    >
+                                    <MenuItem value={'7'}>7:00</MenuItem>
+                                    <MenuItem value={'7'}>8:00</MenuItem>
+                                    </Select>
+                                </FormControl>
+
+
+                            </div>
+                        </Box>
+
+
+                        <Box>
+                            <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
+                                Charity
+                            </Typography>
+                            
+                            <Typography variant="body1" style={{ marginBottom: '1rem' }}>
+                                Select one of the charities we support. All your volunteer efforts will go to them.
+                            </Typography>
+
+                            <div className={classes.fieldWrapper}>
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <InputLabel id="charityLabel">Charity</InputLabel>
+                                    <Select
+                                    labelId="charityLabel"
+                                    id="charity"
+                                    { ...getFieldProps('charity')}
+                                    label="Charity"
+                                    >
+                                    <MenuItem value={'7'}>7:00</MenuItem>
+                                    <MenuItem value={'7'}>8:00</MenuItem>
+                                    </Select>
+                                </FormControl>
+
+                            </div>
+                        </Box>
+
+
+                        <Box>
+                            <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
+                                Interested Topics (Needs)
+                            </Typography>
+
+                            <Typography variant="body1" style={{ marginBottom: '1rem' }}>
+                            These are the topics we'd use to match you with guests.
+                            </Typography>
+                            
+                            <div className={classes.fieldWrapper}>
+                                <Autocomplete
+                                    multiple
+                                    id="topics"
+                                    options={['All', 'Epilepsy', 'etc']}
+                                    disableCloseOnSelect
+                                    getOptionLabel={(option) => option}
+                                    value={values.topics}
+                                    onChange={(event, newValue) => setFieldValue("topics", newValue)}
+                                    renderOption={(option, { selected }) => (
+                                        <React.Fragment>
+                                        <Checkbox
+                                            icon={icon}
+                                            checkedIcon={checkedIcon}
+                                            style={{ marginRight: 8 }}
+                                            checked={selected}
+                                        />
+                                        {option}
+                                        </React.Fragment>
+                                    )}
+                                    // style={{ width: 500 }}
+                                    renderInput={(params) => (
+                                        <TextField {...params} name="topics" variant="outlined" label="Topics" placeholder="Interested Topics"
+                                        
+                                       />
+                                    )}
+                                />
+                            </div>
+                        </Box>
+
+                        <Box>
+                            <FormControl className={classes.formControl}>
+                                <Button 
+                                variant="contained" 
+                                color="primary" 
+                                type="submit"
+                                disabled={isSubmitting}
+                                loading={isSubmitting}
+                                >
+                                    Save
+                                </Button>
+                            </FormControl>
+                            
+                            <FormControl className={classes.formControl}>
+                                <FormHelperText style={{ textAlign: 'center' }} error={isSuccessful === false ? true : false}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : 'Saved!'}</FormHelperText>
+                            </FormControl>
+                        </Box>
+
+
+
+
                     </Form>
             )}
             </Formik>
