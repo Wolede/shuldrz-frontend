@@ -36,20 +36,47 @@ const colorPicker = (color, theme) => {
 }
 
 const useStyles = makeStyles(theme => ({    
-    grid: {
-        flexWrap: 'nowrap'
+    chatItem: {
+        display: 'flex',
+        // flexDirection: 'row',
+        padding: '1rem',
+        flexWrap: 'nowrap',
+        cursor: 'pointer'
     },
     h4: {
         marginBottom: '8px'
     },
     typography:{
-        marginLeft: '16px'
+        marginLeft: '16px',
+        // width: '80%'
     },
 
     root:{
-        marginBottom: '16px'
+        marginBottom: '16px',
+        // height: 'calc(100% - 35px)',
+        // position: 'absolute',
         // color: props => props.color === 'null' ?  
+    },
+
+    chatActive:{
+        display: 'flex',
+        // flexDirection: 'row',
+        padding: '1rem',
+        flexWrap: 'nowrap',
+        backgroundColor: '#3F316B',
+        boxShadow: `0px 15px 20px rgba(63, 50, 107, 0.25)`,
+        color: 'white',
+        borderRadius: `1.8rem 0 0 1.8rem`
+    }, 
+
+    newChatBtn: {
+        borderRadius: '0px'
     }
+    
+   
+    // typography:{
+    //     width:'100%'
+    // }
     
 }))
 

@@ -32,18 +32,18 @@ const LeftSidebar = props => {
           href: '/app/reviews',
           icon: <DashboardIcon />
         },
-    ] //: [
-    //   {
-    //     title: 'Home',
-    //     href: '/app',
-    //     icon: <DashboardIcon />
-    //   },
-    //   {
-    //     title: 'Sessions',
-    //     href: '/app/sessions',
-    //     icon: <DashboardIcon />
-    //   },
-    // ];
+    ] : [
+       {
+        title: 'Home',
+        href: '/app',
+        icon: <DashboardIcon />
+       },
+       {
+        title: 'Sessions',
+        href: '/app/sessions',
+        icon: <DashboardIcon />
+     },
+       ];
 
     return (
         <Drawer
@@ -64,7 +64,7 @@ const LeftSidebar = props => {
                 <Logout/>
             </div>
         </Drawer>
-    )
+  )
 }
 
 LeftSidebar.propTypes = {

@@ -6,6 +6,7 @@ import Router, { useRouter } from 'next/router'
 import api from 'services/Api'
 
 
+
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {

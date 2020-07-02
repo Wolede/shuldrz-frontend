@@ -41,6 +41,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         width: props => props.width ? props.width : `100%`,
         height: props => props.height ? props.height: null,
+        minHeight: props => props.minHeight ? props.minHeight: null,
         padding: props => props.padding ? props.padding : `2.5rem`,
         borderRadius: props => props.borderRadius ? props.borderRadius : '1.875rem 1.875rem 1.875rem 1.875rem',  
         borderTopLeftRadius: props => props.borderTopLeftRadius ? props.borderTopLeftRadius : null,
@@ -51,6 +52,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.backgroundColor},
         color: props => {const color = colorPicker(props.color, theme); return color.color},
         marginBottom: props => props.marginBottom,
+        overflow: props => props.overflow,
+        position: props => props.position,
+        
     }
 }));
 

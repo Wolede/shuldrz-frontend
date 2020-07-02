@@ -7,6 +7,7 @@ const shuldrzGreen = {
   contrastText : '#FFFFFF',
 }
 const shuldrzPurple = {
+  light: '#9D8CD4',
   main : '#3F316B',
   dark : '#2C2348',
   contrastText : '#F5F6FA'

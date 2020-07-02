@@ -18,6 +18,12 @@ const sizePicker = (size) => {
                 padding: '0.4rem 1rem',
                 fontSize: '0.75rem'
             }
+        case 'tiny':
+            return{
+                padding: '0.4rem 0.85rem',
+                fontSize: '0.65rem',
+                fontWeight: '100'                
+            }
         default:
             return {
                 padding: '0.8rem 2rem',
@@ -41,6 +47,15 @@ const colorPicker = (color, theme) => {
         case 'secondary':
             return {
                 mainColor: theme.palette.secondary.main,
+                darkColor: theme.palette.secondary.dark,
+                textColor: theme.palette.secondary.contrastText,
+                boxShadow: `0px 30px 60px rgba(63, 49, 107, 0.20)`,
+                boxShadowHover: `0px 30px 60px rgba(63, 49, 107, 0.50)`,
+                boxShadowActive: `0px 30px 60px rgba(63, 49, 107, 0.60)`,
+            }
+        case 'secondary-light':
+            return {
+                mainColor: theme.palette.secondary.light,
                 darkColor: theme.palette.secondary.dark,
                 textColor: theme.palette.secondary.contrastText,
                 boxShadow: `0px 30px 60px rgba(63, 49, 107, 0.20)`,
@@ -71,6 +86,7 @@ const colorPicker = (color, theme) => {
                 boxShadow: null,
                 boxShadowHover: null,
                 boxShadowActive: null,
+                textColor: 'black'
             }
     }
 }
@@ -82,6 +98,7 @@ const useStyles = makeStyles(theme => ({
         color: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.textColor : null},
         padding: props => {const size = sizePicker(props.size); return size.padding},
         fontSize: props => {const size = sizePicker(props.size); return size.fontSize},
+        fontWeight: props => {const size = sizePicker(props.size); return size.fontWeight},
         boxShadow: props => {const color = colorPicker(props.color, theme); return props.variant === "contained" ? color.boxShadow : null},
         transition: `all .7s cubic-bezier(.2,1,.22,1)`,
         letterSpacing: '0.09em',

@@ -2,6 +2,12 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const sizePicker = (size) => {
     switch (size) {
+        case 'tiny':
+            return {                
+                width: '40px',
+                height: 'inherit',
+                borderRadius: '3.5rem',
+            }
         case 'small':
             return {
                 width: '7.5rem',
