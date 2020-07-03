@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import Router from 'next/router'
+import api from 'services/Api'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { FormControl, FormControlLabel, FormHelperText, FormLabel, Select, MenuItem, InputLabel, RadioGroup, Radio, TextField, Checkbox, Typography, Box, Grid } from '@material-ui/core'
@@ -23,44 +24,59 @@ const ProfileForm = ({ user }) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
 
-    // availableDays: null
+    const { id, firstName, lastName, username, phoneNumber, DateOfBirth, gender, maritalStatus, personality_type, occupation, reference, experience, availableDays, availableTime, charity, topics } = user
     // availableTime: "07:00:00.000"
-    // blocked: false
-    // confirmed: true
-    // createdAt: "2020-06-02T21:49:15.638Z"
-    // email: "wolede.adeniyi@gmail.com"
-    // firstName: "Wolede"
-    // gender: "Male"
-    // id: "5ed6c95b4a27b30dd0f7adfa"
-    // lastName: "Adeniyi"
-    // maritalStatus: "Single"
-    // occupation: "Product Designer"
-    // profileImage: {_id: "5ef8150a1a277900170c42d0", name: "Clothes 01", alternativeText: null, caption: null, hash: "Clothes_01_6912cd768e", …}
-    // provider: "local"
-    // role: {_id: "5ed44b8ebb80ca4d4036bfb1", name: "Authenticated", description: "Default role given to authenticated user.", type: "authenticated", createdAt: "2020-06-01T00:27:58.433Z", …}
-    // topics: []
-    // updatedAt: "2020-06-28T03:56:58.433Z"
-    // userType: "Guest"
-    // username: "wolede"
-    // __v: 0
-    // _id: "5ed6c95b4a27b30dd0f7adfa"
 
+    // console.log('FOFO', formOptions);
+    const [formOptions, setFormOptions] = useState()
+    // i need charity, personality type, topics, 
+    const getFormOptions = async () => {
+        try {
+            const resCharities = await api.get('/charities')
+            const resPersonality = await api.get('/personality-types')
+            const resTopics = await api.get('/topics')
+            
+            setFormOptions({
+                ...formOptions,
+                charities: resCharities.data, 
+                personalities: resPersonality.data, 
+                topics: resTopics.data
+            })
+
+            console.log(user);
+            
+
+        } catch (error) {
+            setFormOptions(null)
+        }
+    } 
+
+
+    useEffect(() => {
+        user ? getFormOptions() : false
+    }, [])
+
+
+    console.log(topics);
+    console.log(formOptions?.topics);
+    
     const fetchedValues = {
-        firstName: '',
-        lastName: '',
-        username: '',
-        phoneNumber: '',
-        dateOfBirth: null,
-        gender: '',
-        maritalStatus: '',
-        personality_type: '',
-        occupation: '',
-        reference: '',
-        experience: '',
-        availableDays: [],
-        availableTime: '',
-        charity: '',
-        topics: '',
+        firstName: firstName ? firstName : '',
+        lastName: lastName ? lastName : '',
+        username: username ? username : '',
+        phoneNumber: phoneNumber ? phoneNumber : '',
+        dateOfBirth: DateOfBirth ? new Date(DateOfBirth) : new Date(),
+        gender: gender ? gender : '',
+        maritalStatus: maritalStatus ? maritalStatus : '',
+        personality_type: personality_type ? personality_type.id : '',
+        occupation: occupation ? occupation : '',
+        reference: reference ? reference : '',
+        experience: experience ? experience : '',
+        availableDays: availableDays ? availableDays : [],
+        availableTime: availableTime ? availableTime : '',
+        charity: charity ? charity.id : '',
+        // topics: topics ? topics.map((option) => option.name) : [],
+        topics: topics ? topics : [],
     }
 
     const validationSchema = Yup.object({
@@ -75,15 +91,17 @@ const ProfileForm = ({ user }) => {
         occupation: Yup.string(),
         reference: Yup.string(),
         experience: Yup.string(),
-        // availableDays: Yup.any(),
+        availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string(),
-        // topics: Yup.array(),
+        topics: Yup.array(),
     })
 
     const onSubmit = async (values) => {
         try {
-
+            const res = await api.put(`users/${id}`, values)
+            
+            console.log('letsee', res);
             
         } catch (error) {
             //error state Login Unsuccessful 
@@ -168,7 +186,7 @@ const ProfileForm = ({ user }) => {
                                     id="dateOfBirth"
                                     label="dateOfBirth"
                                     value={values.dateOfBirth}
-                                    onChange={value => setFieldValue("dateOfBirth", value)}
+                                    onChange={value => setFieldValue("dateOfBirth", value.toDate())}
                                     KeyboardButtonProps={{
                                         'aria-label': 'change date',
                                     }}
@@ -217,7 +235,10 @@ const ProfileForm = ({ user }) => {
                                 { ...getFieldProps('personality_type')}
                                 label="Personality Type"
                                 >
-                                <MenuItem value={10}>Ten</MenuItem>
+                                <MenuItem value={null}>A Brick</MenuItem>
+                                {formOptions?.personalities?.map((value, key) => (
+                                    <MenuItem key={key} value={value.id}>{value.personalityType}</MenuItem>
+                                ))}
                                 </Select>
                             </FormControl>
 
@@ -317,8 +338,8 @@ const ProfileForm = ({ user }) => {
                                     { ...getFieldProps('availableTime')}
                                     label="Available Time"
                                     >
-                                    <MenuItem value={'7'}>7:00</MenuItem>
-                                    <MenuItem value={'7'}>8:00</MenuItem>
+                                    <MenuItem value={'07:00:00.000'}>7:00</MenuItem>
+                                    <MenuItem value={'08:00:00.000'}>8:00</MenuItem>
                                     </Select>
                                 </FormControl>
 
@@ -345,8 +366,10 @@ const ProfileForm = ({ user }) => {
                                     { ...getFieldProps('charity')}
                                     label="Charity"
                                     >
-                                    <MenuItem value={'7'}>7:00</MenuItem>
-                                    <MenuItem value={'7'}>8:00</MenuItem>
+                                        <MenuItem value={null}>No Charity</MenuItem>
+                                    {formOptions?.charities?.map((value, key) => (
+                                        <MenuItem key={key} value={value.id}>{value.name}</MenuItem>
+                                    ))}
                                     </Select>
                                 </FormControl>
 
@@ -367,11 +390,13 @@ const ProfileForm = ({ user }) => {
                                 <Autocomplete
                                     multiple
                                     id="topics"
-                                    options={['All', 'Epilepsy', 'etc']}
+                                    options={
+                                        formOptions ? formOptions.topics : [] 
+                                    }
                                     disableCloseOnSelect
-                                    getOptionLabel={(option) => option}
+                                    getOptionLabel={(option) => option.name}
                                     value={values.topics}
-                                    onChange={(event, newValue) => setFieldValue("topics", newValue)}
+                                    onChange={(event, newValue) => {setFieldValue("topics", newValue)} }
                                     renderOption={(option, { selected }) => (
                                         <React.Fragment>
                                         <Checkbox
@@ -380,7 +405,7 @@ const ProfileForm = ({ user }) => {
                                             style={{ marginRight: 8 }}
                                             checked={selected}
                                         />
-                                        {option}
+                                        {option.name}
                                         </React.Fragment>
                                     )}
                                     // style={{ width: 500 }}

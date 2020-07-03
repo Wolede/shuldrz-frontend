@@ -13,10 +13,10 @@ const ProfileLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
     
-    const { data, error, isValidating } = useSWR(loading ? false : `/users/me`, api.get, {revalidateOnFocus: false})
+    const { data, error, isValidating } = useSWR(loading ? false : `/users/${user?.id}`, api.get, {revalidateOnFocus: false})
     
     const userData = data ? data.data : null
-    console.log(userData, 'user data in profile')
+    // console.log(userData, 'user data in profile')
 
     return (
         <>
