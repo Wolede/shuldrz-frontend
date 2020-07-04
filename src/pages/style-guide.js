@@ -3,8 +3,12 @@ import { Typography, Box } from '@material-ui/core'
 import Button from 'components/Button'
 import Paper from 'components/Paper'
 import Chip from 'components/Chip'
+import BackButton from 'components/Backbutton'
+import Card from 'components/ProfileCard'
+import CharityBox from 'components/CharityBox'
 import Avatar from 'components/Avatar'
 import Link from 'next/link'
+
 
 const StyleGuide = () => {
     return (
@@ -80,6 +84,13 @@ const StyleGuide = () => {
             <br/>
             <br/>
             <br/>
+
+            <BackButton/>
+            <br/>
+            <br/>
+            <Card/>
+            <br/>
+            <CharityBox/>
 
         </>
     )

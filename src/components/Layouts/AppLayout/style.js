@@ -9,6 +9,7 @@ const useStyles = makeStyles(theme => ({
             padding: theme.spacing(4),
             // zIndex: 9999,
         },
+        height: '100vh'
     }
 }))
 

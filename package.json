@@ -14,7 +14,9 @@
     "@material-ui/lab": "^4.0.0-alpha.54",
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
+    "clsx": "^1.1.1",
     "dotenv": "^8.2.0",
+    "firebase": "^7.15.3",
     "formik": "^2.1.4",
     "immer": "^6.0.9",
     "js-cookie": "^2.2.1",
@@ -27,6 +29,7 @@
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-scrollable-feed": "^1.1.2",
     "swr": "^0.2.3",
     "yup": "^0.29.1"
   },
