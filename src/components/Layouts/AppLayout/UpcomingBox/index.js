@@ -13,10 +13,9 @@ const UpcomingBox = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
 
-    const { data, error, isValidating } = useSWR(loading ? false : `/upcoming-sessions?user.id=${user.id}&_limit=4`, api.get, {revalidateOnFocus: false})
+    const { data, error, isValidating } = useSWR(loading ? false : `/upcoming-sessions?user.id=${user?.id}&_limit=4`, api.get, {revalidateOnFocus: false})
     
     const upcomings = data ? data.data : null
-    console.log(upcomings, 'upcoming sessions')
 
     return (
         <Paper padding="2rem 1.1rem 2rem 1.5rem">

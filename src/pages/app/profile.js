@@ -1,19 +1,19 @@
 import Head from 'next/head'
 import AppLayout from 'components/Layouts/AppLayout'
 import { ProtectRoute } from 'contexts/Auth'
-import TrainingsLayout from 'components/Layouts/TrainingsLayout'
+import ProfileLayout from 'components/Layouts/ProfileLayout'
 
-const Trainings = () => {
+const Profile = () => {
     return (
         <div>
             <Head>
-                <title>Shuldrz | Trainings</title>
+                <title>Shuldrz | Profile</title>
             </Head>
             <AppLayout withRightSidebar>
-                <TrainingsLayout/>
+                <ProfileLayout />
             </AppLayout>
         </div>
     )
 }
 
-export default ProtectRoute(Trainings)
+export default ProtectRoute(Profile)

@@ -95,7 +95,7 @@ const LoginForm = () => {
                         label="Email Address"
                         { ...getFieldProps('email')}
                         variant="outlined"
-                        error={errors.email ? true : false}
+                        error={errors.email && touched.email ? true : false}
                         helperText={ errors.email && touched.email ?
                             errors.email : null
                         }
@@ -110,7 +110,7 @@ const LoginForm = () => {
                         label="Password"
                         { ...getFieldProps('password')}
                         variant="outlined"
-                        error={errors.password ? true : false}
+                        error={errors.password && touched.password ? true : false}
                         helperText={ errors.password && touched.password ?
                             errors.password : null
                         }

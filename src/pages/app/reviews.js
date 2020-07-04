@@ -1,11 +1,7 @@
 import Head from 'next/head'
-import Router from 'next/router'
-import useSWR, { mutate } from 'swr'
-import api from 'services/Api'
 import AppLayout from 'components/Layouts/AppLayout'
-import Paper from 'components/Paper'
-import useAuth, { ProtectRoute } from 'contexts/Auth'
-import { Skeleton } from "@material-ui/lab"
+import { ProtectRoute } from 'contexts/Auth'
+import ReviewsLayout from 'components/Layouts/ReviewsLayout'
 
 const Reviews = () => {
     return (
@@ -14,9 +10,7 @@ const Reviews = () => {
                 <title>Shuldrz | Reviews</title>
             </Head>
             <AppLayout withRightSidebar>
-                <Paper color="warning">
-                    Reviews
-                </Paper>
+                <ReviewsLayout />
             </AppLayout>
         </div>
     )

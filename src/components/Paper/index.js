@@ -19,6 +19,7 @@ const Paper = (props) => {
 Paper.propTypes = {
     width: PropTypes.string,
     padding: PropTypes.string,
+    borderRadius: PropTypes.string,
     color: PropTypes.string,
     marginBottom: PropTypes.string,
     

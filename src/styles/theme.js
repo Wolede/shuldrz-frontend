@@ -58,7 +58,7 @@ const shuldrzTheme = createMuiTheme({
     type: 'light',
   },
   shape : {
-    borderRadius : 60
+    borderRadius : 30
   },
   breakpoints : {
     values : {

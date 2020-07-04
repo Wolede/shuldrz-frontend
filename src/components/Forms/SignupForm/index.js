@@ -91,7 +91,7 @@ const SignupForm = ({volunteer}) => {
                         label="First Name"
                         { ...getFieldProps('firstName')}
                         variant="outlined"
-                        error={errors.firstName ? true : false}
+                        error={errors.firstName && touched.firstName ? true : false}
                         helperText={ errors.firstName && touched.firstName ?
                             errors.firstName : null
                         }
@@ -105,7 +105,7 @@ const SignupForm = ({volunteer}) => {
                         label="Last Name"
                         { ...getFieldProps('lastName')}
                         variant="outlined"
-                        error={errors.lastName ? true : false}
+                        error={errors.lastName && touched.lastName ? true : false}
                         helperText={ errors.lastName && touched.lastName ?
                             errors.lastName : null
                         }
@@ -119,7 +119,7 @@ const SignupForm = ({volunteer}) => {
                         label="Username"
                         { ...getFieldProps('username')}
                         variant="outlined"
-                        error={errors.username ? true : false}
+                        error={errors.username && touched.username ? true : false}
                         helperText={ errors.username && touched.username ?
                             errors.username : null
                         }
@@ -147,7 +147,7 @@ const SignupForm = ({volunteer}) => {
                         label="Email Address"
                         { ...getFieldProps('email')}
                         variant="outlined"
-                        error={errors.email ? true : false}
+                        error={errors.email && touched.email ? true : false}
                         helperText={ errors.email && touched.email ?
                             errors.email : null
                         }
@@ -162,7 +162,7 @@ const SignupForm = ({volunteer}) => {
                         label="Password"
                         { ...getFieldProps('password')}
                         variant="outlined"
-                        error={errors.password ? true : false}
+                        error={errors.password && touched.password ? true : false}
                         helperText={ errors.password && touched.password ?
                             errors.password : null
                         }
