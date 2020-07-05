@@ -1,10 +1,14 @@
 import { AuthContextProvider } from './Auth'
+import SessionContextProvider  from './SessionContext'
 
-const ContextWrapper = ({children}) => {
+const ContextWrapper = ({ children }) => {
     return (
         <AuthContextProvider>
-            {children}
+            <SessionContextProvider>
+                {children}
+            </SessionContextProvider>
         </AuthContextProvider>
+
     )
 }
 

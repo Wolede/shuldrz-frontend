@@ -37,7 +37,7 @@ const TrainingsLayout = () => {
                     const { link, name, type, backgroundImage } = training
                     return (
          
-                        <VideoBox key={key} link={link} title={name} type={type} backgroundImage={backgroundImage.url} />
+                        <VideoBox key={key} link={link} title={name} type={type} backgroundImage={backgroundImage?.url} />
 
                     )
                 })

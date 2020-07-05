@@ -26,6 +26,12 @@ const colorPicker = (color, theme) => {
                 color: theme.palette.error.contrastText,
                 boxShadow: `0px 30px 60px rgba(237, 123, 132, 0.15)`,
             }
+        case 'transPrimary':
+            return {
+                backgroundColor: '#77C7A0',
+                color: theme.palette.primary.contrastText,
+                boxShadow: `0px 30px 60px rgba(13, 206, 158, 0.1)`,
+            }
         default: 
             return {
             backgroundColor: theme.palette.background.paper,
@@ -34,16 +40,25 @@ const colorPicker = (color, theme) => {
         }
     }
 }
+
+
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: props => props.width ? props.width : `100%`,
+        height: props => props.height ? props.height: null,
+        minHeight: props => props.minHeight ? props.minHeight: null,
         padding: props => props.padding ? props.padding : `2.5rem`,
         borderRadius: props => props.borderRadius ? props.borderRadius : `1.875rem`,
         boxShadow: props => {const color = colorPicker(props.color, theme); return color.boxShadow},
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.backgroundColor},
         color: props => {const color = colorPicker(props.color, theme); return color.color},
         marginBottom: props => props.marginBottom,
+        overflow: props => props.overflow,
+        position: props => props.position,
+        
     }
 }));
 
 export { useStyles }
+

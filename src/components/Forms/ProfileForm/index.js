@@ -222,7 +222,7 @@ const ProfileForm = ({ user }) => {
                             </Typography>
 
                             <Typography variant="body1" style={{ marginBottom: '1rem' }}>
-                                Select your personality type below. We recommend taking the test at <a href="16personalities.com" target="_blank" style={{ color: theme.palette.primary.main }}>16personalities.com</a>
+                                Select your personality type below. We recommend taking the test at <a href="https://16personalities.com" target="_blank" style={{ color: theme.palette.primary.main }}>16personalities.com</a>
                             </Typography>
                             
                             <div className={classes.fieldWrapper}>

@@ -3,6 +3,7 @@ import axios from "axios"
 import Link from 'next/link'
 import Login from './login'
 
+
 const Home = ({ users }) => {
   return (
     <Login/>
