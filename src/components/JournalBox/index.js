@@ -4,7 +4,7 @@ import { Typography, Box, useMediaQuery } from '@material-ui/core'
 import Paper from 'components/Paper'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
-import {FormatQuoteIcon } from '@material-ui/icons/FormatQuote';
+import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const JournalBox = ( { journal } ) => {

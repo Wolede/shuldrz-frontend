@@ -68,14 +68,14 @@ const JourneyLayout = () => {
                                     // console.log(val);
                                     
                                     return (
-                                        <>
+                                        <div key={index}>
                                         { val.sessionUser && ( // a unique key to session logs
                                             <>
                                             <Box paddingLeft="1rem" marginBottom=".5rem">
                                                 <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
                                             </Box>
 
-                                            <SessionLogBox sessionLog={val} key={index} />
+                                            <SessionLogBox sessionLog={val}/>
 
                                             </>
                                         )}
@@ -86,7 +86,7 @@ const JourneyLayout = () => {
                                                 <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
                                             </Box>
 
-                                            <AnnouncementBox announcement={val} key={index} />
+                                            <AnnouncementBox announcement={val} />
                                             
                                             </>
                                         )}
@@ -97,12 +97,12 @@ const JourneyLayout = () => {
                                                 <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
                                             </Box>
                                             
-                                            <JournalBox journal={val} key={index} />
+                                            <JournalBox journal={val} />
                                             
                                             </>
                                         )}
         
-                                        </>
+                                        </div>
                                     )
         
                                 })
