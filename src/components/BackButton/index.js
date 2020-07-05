@@ -4,7 +4,7 @@ import Router from 'next/router'
 
 
 
-const backButton = () => {
+const BackButton = () => {
     const classes = useStyles()
     return (
         <div className={classes.paper} onClick={() => Router.back()}>
@@ -13,4 +13,4 @@ const backButton = () => {
     )
 }
 
-export default backButton;
+export default BackButton;
