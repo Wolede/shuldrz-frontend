@@ -31,7 +31,7 @@ const ReviewBox = props => {
                             <Typography variant="subtitle1" gutterBottom>{username} left you a review</Typography>
                         </Box>
                         <Box marginBottom=".5rem">
-                            <Chip label={hearts} heart/>
+                            <Chip label={hearts.toString()} heart/>
                         </Box>
                         <Box>
                             <Typography variant="body1">{comment}</Typography>

@@ -8,6 +8,7 @@ import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
 import ProfileForm from '../../Forms/ProfileForm'
 import UploadForm from '../../Forms/UploadForm'
+import BackButton from 'components/BackButton'
 
 const ProfileLayout = () => {
     const classes = useStyles()
@@ -20,7 +21,7 @@ const ProfileLayout = () => {
 
     return (
         <>
-            go back
+            <BackButton />
             <Paper>
                 <Box marginBottom="2.5rem" textAlign='center'>
                     <Typography variant="h3" gutterBottom>Edit Profile</Typography>

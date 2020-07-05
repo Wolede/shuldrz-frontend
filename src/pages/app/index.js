@@ -1,9 +1,7 @@
 import Head from 'next/head'
 import AppLayout from 'components/Layouts/AppLayout'
-import Paper from 'components/Paper'
 import { ProtectRoute } from 'contexts/Auth'
-import { Skeleton } from "@material-ui/lab"
-
+import JourneyLayout from 'components/Layouts/JourneyLayout'
 
 
 const Home = () => {
@@ -14,10 +12,7 @@ const Home = () => {
                 <title>Shuldrz | App Home</title>
             </Head>
             <AppLayout withRightSidebar>
-
-                <Paper color="secondary">
-                    App Home                
-                </Paper>
+                <JourneyLayout />
             </AppLayout>
         </div>
     )
