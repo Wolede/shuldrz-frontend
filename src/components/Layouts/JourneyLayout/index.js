@@ -5,7 +5,9 @@ import useAuth from 'contexts/Auth'
 import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
 import { useStyles } from './style'
+import JournalBox from 'components/JournalBox'
 import AnnouncementBox from 'components/AnnouncementBox'
+import SessionLogBox from 'components/SessionLogBox'
 import moment from 'moment'
 
 
@@ -55,7 +57,6 @@ const JourneyLayout = () => {
                 
             ) : //feed goes here
                 (
-                    // <AnnouncementBox />
                     feeds.map((feed, key) => {
 
                         // const sortedFeed = feed.sort((a, b) => b.createdAt - a.createdAt)
@@ -69,21 +70,36 @@ const JourneyLayout = () => {
                                     return (
                                         <>
                                         { val.sessionUser && ( // a unique key to session logs
-                                        
-                                            <p>SessionLog { moment(val.createdAt).calendar() }</p>
-                                            
+                                            <>
+                                            <Box paddingLeft="1rem" marginBottom=".5rem">
+                                                <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                                            </Box>
+
+                                            <SessionLogBox sessionLog={val} key={index} />
+
+                                            </>
                                         )}
 
                                         { val.message && val.userType && ( //a unique key to Announcements
-                                        
-                                            <p>Announcement { moment(val.createdAt).calendar() }</p>
+                                            <>
+                                            <Box paddingLeft="1rem" marginBottom=".5rem">
+                                                <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                                            </Box>
+
+                                            <AnnouncementBox announcement={val} key={index} />
                                             
+                                            </>
                                         )}
 
                                         { val.notes && ( // a unique key to only journals.journalSnippet
-                                        
-                                            <p>Journals { moment(val.createdAt).calendar() } </p>
+                                            <>
+                                            <Box paddingLeft="1rem" marginBottom=".5rem">
+                                                <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                                            </Box>
                                             
+                                            <JournalBox journal={val} key={index} />
+                                            
+                                            </>
                                         )}
         
                                         </>

@@ -4,42 +4,41 @@ import { Typography, Box, useMediaQuery } from '@material-ui/core'
 import Paper from 'components/Paper'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import {FormatQuoteIcon } from '@material-ui/icons/FormatQuote';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
-const AnnouncementBox = ( { announcement } ) => {
+const JournalBox = ( { journal } ) => {
     const classes = useStyles()
 
     const theme = useTheme();
     const isMobile= useMediaQuery(theme.breakpoints.up('sm'));
 
-    // console.log('announcement', announcement);
-    const { message, title } = announcement
+    // console.log('journal', journal);
+    const { notes } = journal
 
     return (
         <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="primary">
             <Box display="flex">
                 <Box>
                     <Paper 
-                        width={isMobile ? '8rem' : '3.125rem'} 
+                        color="transPrimary" 
+                        width={ isMobile ? '8rem' : '3.125rem' } 
                         borderRadius={isMobile ? null : '1.25rem'} 
-                        height={isMobile ? '100%' : '3.125rem'} 
+                        height={isMobile ? '6.25rem' : '3.125rem'} 
                         padding=".5rem"
                     >
+
                         <Box display='flex' alignItems='center' justifyContent='center' height='100%'>
-                            logo
+                            <FormatQuoteIcon style={{ fontSize: '3.5rem' }} />
                         </Box>
+                        
                     </Paper>
                 </Box>
                 <Box flexGrow="1" paddingLeft={isMobile ? '2rem' : '1rem'}>
 
-                    <Box marginBottom=".5rem">
-                        <Typography variant="h3">
-                            { title }
-                        </Typography>
-                    </Box>
-
                     <Typography 
                         variant="subtitle1" 
-                        dangerouslySetInnerHTML={{ __html : message }} 
+                        dangerouslySetInnerHTML={{ __html : notes }} 
                         style={{ fontWeight: 400 }}    
                     />
                 </Box>
@@ -48,8 +47,8 @@ const AnnouncementBox = ( { announcement } ) => {
     )
 }
 
-AnnouncementBox.propTypes = {
-    announcement: PropTypes.object
+JournalBox.propTypes = {
+    journal: PropTypes.object
 }
 
-export default AnnouncementBox
+export default JournalBox
