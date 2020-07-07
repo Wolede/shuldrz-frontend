@@ -18,10 +18,15 @@ export const AuthContextProvider = ({ children }) => {
         async function loadUserFromCookies() {
             const token = Cookies.get('token')
             if (token) {
-                console.log("Got a token in the cookies, let's see if it is valid", token)
+                // console.log("Got a token in the cookies, let's see if it is valid", token)
                 api.defaults.headers.Authorization = `Bearer ${token}`
-                const { data: user } = await api.get('users/me')
-                if (user) setUser(user);
+                try {
+                    const { data: user } = await api.get('users/me')
+                    if (user) setUser(user);
+                } catch (error) {
+                    logout()
+                }
+                
             }
             setLoading(false)
             console.log('over here')

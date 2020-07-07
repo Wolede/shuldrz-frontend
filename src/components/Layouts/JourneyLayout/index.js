@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import useAuth from 'contexts/Auth'
 import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
+import { JournalContext } from 'contexts/JournalContext'
 import { useStyles } from './style'
 import Button from 'components/Button'
 import JournalBox from 'components/JournalBox'
@@ -20,6 +21,9 @@ const JourneyLayout = () => {
     const announcementRes = useSWR(loading ? false : `/announcements?userType=${user?.userType}&_limit=5`, api.get, {revalidateOnFocus: true})
     const sessionLogRes = useSWR(loading ? false : `/session-logs?user.id=${user?.id}&_limit=5`, api.get, {revalidateOnFocus: true})
     
+    const [ , setJournal ] = useContext(JournalContext)
+    if (journalRes) setJournal(journalRes.data?.data);
+
     const journals = journalRes ? journalRes.data?.data : null
     const announcements = announcementRes ? announcementRes.data?.data : null
     const sessionLogs = sessionLogRes ? sessionLogRes.data?.data : null
@@ -33,7 +37,7 @@ const JourneyLayout = () => {
     var feedsFlatten = [].concat(...feedsNested) // flatten array of objects
     const feeds = feedsFlatten.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
 
-    console.log(feeds);
+    // console.log(feeds);
     
 
     const profileCompletion = {
@@ -66,7 +70,7 @@ const JourneyLayout = () => {
                 </Box>
             </Box>
 
-            {!feeds ? (
+            {feeds[0] === undefined ? (
                 
                 <Skeleton variant="rect" height={150} animation="wave"/>
 
