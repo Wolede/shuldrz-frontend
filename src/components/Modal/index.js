@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal as MuiModal, Container, Box } from '@material-ui/core'
 import { useStyles } from './style'
 import Paper from 'components/Paper'
+import AddJournalForm from '../Forms/AddJournalForm'
 
 const Modal = props => {
     const classes = useStyles()
@@ -16,7 +17,7 @@ const Modal = props => {
         onClose={handleClose}
         disableBackdropClick={disableBackdropClick}
         >
-            <Container maxWidth="md" >
+            <Container maxWidth={view === 'video' ? 'md' : 'sm'} >
                 <Box marginTop="8rem">
                 { view === "video" && 
                     (
@@ -28,8 +29,8 @@ const Modal = props => {
 
                 { view === "writeJournal" &&
                     (
-                        <Paper>
-                            lol
+                        <Paper padding="1.5rem">
+                            <AddJournalForm onClose={handleClose} />
                         </Paper>
                     )
                 }

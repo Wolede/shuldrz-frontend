@@ -1,32 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {IconButton} from '@material-ui/core';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const BoxMenu = (props) => {
 
-    // const { options } = props
-
-    const options = [
-        'None',
-        'Atria',
-        'Callisto',
-        'Dione',
-        'Ganymede',
-        'Hangouts Call',
-        'Luna',
-        'Oberon',
-        'Phobos',
-        'Pyxis',
-        'Sedna',
-        'Titania',
-        'Triton',
-        'Umbriel',
-      ];
-      
-    const ITEM_HEIGHT = 48;
-
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
   
+
+
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -37,40 +21,36 @@ const BoxMenu = (props) => {
 
 
     return (
-        <div>
-        <IconButton
+        <>
+            <IconButton
             aria-label="more"
             aria-controls="long-menu"
             aria-haspopup="true"
             onClick={handleClick}
-        >
-            <MoreVertIcon />
-        </IconButton>
-        <Menu
-            id="long-menu"
+            color='secondary'
+            >
+                <MoreVertIcon style={{ color: '#ffffff' }} />
+            </IconButton>
+
+            <Menu
+            id="simple-menu"
             anchorEl={anchorEl}
             keepMounted
-            open={open}
+            open={Boolean(anchorEl)}
             onClose={handleClose}
-            PaperProps={{
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5,
-                width: '20ch',
-            },
-            }}
-        >
-            {options.map((option) => (
-            <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
-                {option}
-            </MenuItem>
-            ))}
-        </Menu>
-        </div>
+            >
+            <MenuItem onClick={props.setVisibility}>Set to {props.isVisible ? 'Private' : 'Public'}</MenuItem>
+            <MenuItem onClick={props.deleteSnippet}>Delete</MenuItem>
+            </Menu>
+        
+        </>
     )
 }
 
 BoxMenu.propTypes = {
-    options: propTypes.array
+    options: PropTypes.array,
+    isVisible: PropTypes.bool,
+    id: PropTypes.string
 }
 
 export default BoxMenu
