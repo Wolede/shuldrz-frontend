@@ -31,7 +31,7 @@ const JournalBox = ( { journal } ) => {
         // mutate(`/journals?user.id=${user?.id}&_limit=5`, journal[0].journalSnippet.filter(c => c.id !== id), false )
         try {
             const res = await api.delete(`journals/${id}`)
-            trigger(`/journals?user.id=${user?.id}&_limit=5`)
+            trigger(`/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`)
 
         } catch (error) {
 

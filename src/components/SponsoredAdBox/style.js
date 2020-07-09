@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     },
     media: {
         height: '50px'
+    },
+    content: {
+        padding: '1rem'
     }
 }))
 
