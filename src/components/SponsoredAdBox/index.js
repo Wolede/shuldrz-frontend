@@ -33,7 +33,7 @@ const SponsoredAdBox = props => {
                         image={ad.image.url}
                         title={ad.name}
                         />
-                        <CardContent>
+                        <CardContent className={classes.content}>
                         <Typography variant="caption" color="secondary">
                             { ad.name }
                         </Typography>
