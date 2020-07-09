@@ -5,6 +5,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import SidebarNav from './SidebarNav';
 import Logout from 'components/Logout'
 import useAuth from 'contexts/Auth'
+import SponsoredAdBox from '../../../SponsoredAdBox';
 
 const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
@@ -61,6 +62,7 @@ const LeftSidebar = props => {
                 className={classes.nav}
                 pages={pages}
                 />
+                <SponsoredAdBox />
                 <Logout/>
             </div>
         </Drawer>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Typography, Box, useMediaQuery } from '@material-ui/core'
 import Paper from 'components/Paper'
@@ -10,31 +10,27 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import LockIcon from '@material-ui/icons/Lock';
 import api from 'services/Api'
 import useAuth from 'contexts/Auth'
-import { JournalContext } from 'contexts/JournalContext' 
-import { trigger, mutate } from 'swr'
+// import { JournalContext } from 'contexts/JournalContext' 
+import { trigger } from 'swr'
 
 
-const JournalBox = ( { journal : journalAlias } ) => {
+const JournalBox = ( { journal } ) => {
     const classes = useStyles()
     const { user } = useAuth();
 
     const theme = useTheme();
     const isMobile= useMediaQuery(theme.breakpoints.up('sm'));
 
-    const { notes, isVisible, id } = journalAlias
+    const { notes, isVisible, id } = journal
 
-    const [ journal ] = useContext(JournalContext)
+    // const [ journal ] = useContext(JournalContext)
     // delete 
     const deleteSnippet = async () => {
         
         // console.log(journal[0].journalSnippet.filter(c => c.id !== id));
         // mutate(`/journals?user.id=${user?.id}&_limit=5`, journal[0].journalSnippet.filter(c => c.id !== id), false )
         try {
-            const res = await api.put(`journals/${journal[0].id}`, {
-                journalSnippet: [
-                    journal[0].journalSnippet.filter(c => c.id !== id),
-                ]
-            })
+            const res = await api.delete(`journals/${id}`)
             trigger(`/journals?user.id=${user?.id}&_limit=5`)
 
         } catch (error) {
@@ -45,14 +41,8 @@ const JournalBox = ( { journal : journalAlias } ) => {
     // update 
     const setVisibility = async () => {
         try {
-            const res = await api.put(`journals/${journal[0].id}`, {
-                journalSnippet: [
-                    ...journal[0].journalSnippet,
-                    {
-                        id: id,
-                        isVisible: !isVisible,
-                    }
-                ]
+            const res = await api.put(`journals/${journal.id}`, {
+                isVisible: !isVisible,
             })
         } catch (error) {
 

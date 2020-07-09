@@ -5,7 +5,7 @@ import Button from 'components/Button'
 import { Box, Typography, Card, CardContent, Button as MuiButton } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import useAuth from 'contexts/Auth'
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 import api from 'services/Api'
 import moment from 'moment'
 

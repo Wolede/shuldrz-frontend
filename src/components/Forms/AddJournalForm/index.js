@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -8,14 +8,14 @@ import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 import api from 'services/Api'
-import { JournalContext } from 'contexts/JournalContext'
+// import { JournalContext } from 'contexts/JournalContext'
 
 const AddJournalForm = props => {
     const classes = useStyles()
     const { user } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
 
-    const [ journal ] = useContext(JournalContext)
+    // const [ journal ] = useContext(JournalContext)
     
     const initialValues = {
         snippetNote: '',
@@ -30,19 +30,15 @@ const AddJournalForm = props => {
 
     const onSubmit = async (values) => {
         try {
-            const res = await api.put(`journals/${journal[0].id}`, {
-                journalSnippet: [
-                    ...journal[0].journalSnippet,
-                    {
+            const res = await api.post(`journals`, {
                     notes: values.snippetNote,
                     isVisible: values.isVisible,
-                    }
-                ]
+                    user: user.id
             })
             
             // console.log('let see', res);
+            trigger(`/journals?user.id=${user.id}&_limit=5`, api.get)
             props.onClose()
-            trigger(`/journals?user.id=${user?.id}&_limit=5`, api.get)
             
         } catch (error) {
             console.log(error, 'error')

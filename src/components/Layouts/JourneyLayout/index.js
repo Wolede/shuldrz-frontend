@@ -4,7 +4,7 @@ import { Skeleton } from '@material-ui/lab'
 import useAuth from 'contexts/Auth'
 import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
-import { JournalContext } from 'contexts/JournalContext'
+// import { JournalContext } from 'contexts/JournalContext'
 import { useStyles } from './style'
 import Button from 'components/Button'
 import JournalBox from 'components/JournalBox'
@@ -17,19 +17,19 @@ const JourneyLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
 
-    const journalRes = useSWR(loading ? false : `/journals?user.id=${user?.id}&_limit=5`, api.get, {revalidateOnFocus: true})
-    const announcementRes = useSWR(loading ? false : `/announcements?userType=${user?.userType}&_limit=5`, api.get, {revalidateOnFocus: true})
-    const sessionLogRes = useSWR(loading ? false : `/session-logs?user.id=${user?.id}&_limit=5`, api.get, {revalidateOnFocus: true})
+    const journalRes = useSWR(loading ? false : `/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    const announcementRes = useSWR(loading ? false : `/announcements?userType=${user?.userType}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    const sessionLogRes = useSWR(loading ? false : `/session-logs?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
     
-    const [ , setJournal ] = useContext(JournalContext)
-    if (journalRes) setJournal(journalRes.data?.data);
+    // const [ , setJournal ] = useContext(JournalContext)
+    // if (journalRes) setJournal(journalRes.data?.data);
 
     const journals = journalRes ? journalRes.data?.data : null
     const announcements = announcementRes ? announcementRes.data?.data : null
     const sessionLogs = sessionLogRes ? sessionLogRes.data?.data : null
 
     const feedsNested = [
-        journals ? journals[0]?.journalSnippet : undefined,
+        journals,
         announcements,
         sessionLogs,
     ]
@@ -66,7 +66,7 @@ const JourneyLayout = () => {
                     <Typography variant="h3">Journey</Typography>
                 </Box>
                 <Box>
-                    <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add Journal Entry</Button>
+                    <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add To Journal</Button>
                 </Box>
             </Box>
 
