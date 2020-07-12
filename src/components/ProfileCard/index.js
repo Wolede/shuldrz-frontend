@@ -1,23 +1,69 @@
-import { Card, Button, Typography } from '@material-ui/core';
-import React from 'react';
+import { Box, Typography } from '@material-ui/core';
+import PropTypes from 'prop-types'
+import Paper from 'components/Paper'
+import Avatar from 'components/Avatar'
+import Chip from 'components/Chip'
+import Button from 'components/Button'
 import { useStyles } from './styles';
 
-const card = () => {
+const ProfileCard = (props) => {
     const classes = useStyles()
-    
+    const { username, profileImage, occupation, heart, ranking, id } = props
+
 
     return (
-        <Card className={classes.card}>
-            <img src='/images/happy-woman.png' />
-            <Typography variant="h5">Sarah Michaels</Typography>
-            <Typography variant="body1">Product Designer</Typography>
-            <div>
-                <Button variant="contained" color="primary" size="small">MESSAGE</Button>
-                <Button variant="contained" color="primary" size="small">View Profile</Button>
-            </div>
-        </Card>
+        <Paper padding="1.5rem 1.5rem 1.5rem 1.5rem" marginBottom="2rem">
+            <Box display="flex" flexDirection="column" alignItems='flex-start' justifyContent="center">
+                <Avatar
+                    alt={username}
+                    src={profileImage ? profileImage.url : '/empty'}
+                    size="medium"
+                    autoWidth
+                    marginBottom="1.5rem"
+                />
+                <Typography variant="h4" className={classes.headerText}>{username}</Typography>
+
+                <Typography variant="body1" className={classes.text}>{occupation ? occupation : 'Occupation not set'}</Typography>
+
+                <Box display="flex" justifyContent="center" flexWrap="wrap">
+                    <Chip label={ranking ? ranking.name : 'Bronze'} rank={ranking ? ranking.colourCode : '#cd7f32'} color="paper" margin=".25rem .25rem .25rem 0" />
+                    <Chip label={heart ? heart.count.toString() : '0'} heart color="paper"/>
+                </Box>
+
+                <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
+                    <Button variant="contained" size="small" color="primary" marginTop='1rem'>Message</Button>
+                    {/* <Link href="/app/profile">
+                    <a style={{textDecoration:'none'}}> */}
+                    <Button variant="contained" size="small" color="secondary" marginTop='1rem'>View Profile</Button>
+                    {/* </a>
+                    </Link> */}
+
+                </Box>
+            </Box>
+        </Paper>
+
+
+
+
+        // <Card className={classes.card}>
+        //     <img src='/images/happy-woman.png' />
+        //     <Typography variant="h5">Sarah Michaels</Typography>
+        //     <Typography variant="body1">Product Designer</Typography>
+        //     <div>
+        //         <Button variant="contained" color="primary" size="small">MESSAGE</Button>
+        //         <Button variant="contained" color="primary" size="small">View Profile</Button>
+        //     </div>
+        // </Card>
     )
 }
 
+ProfileCard.proptypes = {
+    username: PropTypes.string,
+    profileImage: PropTypes.object,
+    occupation: PropTypes.string,
+    heart: PropTypes.string,
+    ranking: PropTypes.object,
+    id: PropTypes.string,
+}
 
-export default card;
+export default ProfileCard;

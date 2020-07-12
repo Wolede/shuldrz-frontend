@@ -8,6 +8,17 @@ const useStyles = makeStyles(theme => ({
         flexDirection: `column`,
         justifyContent: `center`,
         alignItems: `center`
+    },
+    buttonGroup: {
+        '& > button' : {
+            margin: '1.5rem .5rem 0 0'
+        }
+    },
+    headerText: {
+        marginBottom: '.5rem'
+    },
+    text: {
+        marginBottom: '.5rem'
     }
     
 }));

@@ -36,7 +36,7 @@ const colorPicker = (color, theme) => {
 
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: theme.spacing(0.5),
+        margin: props =>  props.margin ? props.margin : theme.spacing(0.5),
         backgroundColor: props => {const color = colorPicker(props.color, theme); return color.mainColor},
         color: props => {const color = colorPicker(props.color, theme); return color.textColor},
         padding: '.5rem 0 .5rem .18rem',

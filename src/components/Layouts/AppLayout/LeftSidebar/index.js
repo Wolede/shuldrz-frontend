@@ -12,6 +12,7 @@ const LeftSidebar = props => {
     const classes = useStyles(props)
     const { user } = useAuth();
 
+    // If user is a Volunteer 
     const pages = user?.userType === "Volunteer" ? [
         {
           title: 'Home',
@@ -42,6 +43,11 @@ const LeftSidebar = props => {
        {
         title: 'Sessions',
         href: '/app/sessions',
+        icon: <DashboardIcon />
+     },
+       {
+        title: 'Buddies',
+        href: '/app/buddies',
         icon: <DashboardIcon />
      },
        ];

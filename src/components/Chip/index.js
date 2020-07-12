@@ -56,6 +56,7 @@ Chip.propTypes = {
     icon: PropTypes.any,
     avatar: PropTypes.any,
     label: PropTypes.string,
+    margin: PropTypes.string
 }
 
 export default Chip
