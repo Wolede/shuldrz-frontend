@@ -28,7 +28,7 @@ const JournalBox = ( { journal } ) => {
     const deleteSnippet = async () => {
         
         // console.log(journal[0].journalSnippet.filter(c => c.id !== id));
-        // mutate(`/journals?user.id=${user?.id}&_limit=5`, journal[0].journalSnippet.filter(c => c.id !== id), false )
+        // mutate( `/journals?user.id=${user?.id}&_limit=5`, journal[0].journalSnippet.filter(c => c.id !== id), false )
         try {
             const res = await api.delete(`journals/${id}`)
             trigger(`/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`)
@@ -44,6 +44,7 @@ const JournalBox = ( { journal } ) => {
             const res = await api.put(`journals/${journal.id}`, {
                 isVisible: !isVisible,
             })
+            trigger(`/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`)
         } catch (error) {
 
         }

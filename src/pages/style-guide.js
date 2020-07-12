@@ -4,10 +4,10 @@ import Button from 'components/Button'
 import Paper from 'components/Paper'
 import Chip from 'components/Chip'
 import BackButton from 'components/BackButton'
-import Card from 'components/ProfileCard'
 import CharityBox from 'components/CharityBox'
 import Avatar from 'components/Avatar'
 import Link from 'next/link'
+import ProfileCard from '../components/ProfileCard'
 
 
 const StyleGuide = () => {
@@ -88,7 +88,8 @@ const StyleGuide = () => {
             <BackButton/>
             <br/>
             <br/>
-            <Card/>
+            {/* <ProfileCard/> */}
+            profile card was removed temporarily as some props aren't available withuot api calls.
             <br/>
             <CharityBox/>
 
