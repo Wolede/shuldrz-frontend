@@ -22,6 +22,7 @@ Paper.propTypes = {
     borderRadius: PropTypes.string,
     color: PropTypes.string,
     marginBottom: PropTypes.string,
+    height: PropTypes.string
     
 }
 

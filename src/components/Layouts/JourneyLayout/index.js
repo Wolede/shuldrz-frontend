@@ -1,107 +1,141 @@
-import React from 'react'
+import React, {useState, useContext} from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import useAuth from 'contexts/Auth'
 import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
 import { useStyles } from './style'
+import Button from 'components/Button'
+import JournalBox from 'components/JournalBox'
 import AnnouncementBox from 'components/AnnouncementBox'
+import SessionLogBox from 'components/SessionLogBox'
 import moment from 'moment'
-
+import Modal from 'components/Modal'
 
 const JourneyLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
 
-    const journalRes = useSWR(loading ? false : `/journals?user.id=${user?.id}`, api.get, {revalidateOnFocus: false})
-    const announcementRes = useSWR(loading ? false : `/announcements?userType=${user?.userType}`, api.get, {revalidateOnFocus: false})
-    const sessionLogRes = useSWR(loading ? false : `/session-logs?user.id=${user?.id}`, api.get, {revalidateOnFocus: false})
+    const journalRes = useSWR(loading ? false : `/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    const announcementRes = useSWR(loading ? false : `/announcements?userType=${user?.userType}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    const sessionLogRes = useSWR(loading ? false : `/session-logs?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
     
+    // const [ , setJournal ] = useContext(JournalContext)
+    // if (journalRes) setJournal(journalRes.data?.data);
+
     const journals = journalRes ? journalRes.data?.data : null
     const announcements = announcementRes ? announcementRes.data?.data : null
     const sessionLogs = sessionLogRes ? sessionLogRes.data?.data : null
 
-    // const feeds = [
-    //     journals ? journals[0].journalSnippet : undefined,
-    //     announcements,
-    //     sessionLogs,
-    // ]
+    const feedsNested = [
+        journals,
+        announcements,
+        sessionLogs,
+    ]
 
+    var feedsFlatten = [].concat(...feedsNested) // flatten array of objects
+    const feeds = feedsFlatten.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
 
-//     const profileCompletion = {
-//         isCompleted: true,
-//         percentage: null
-//     }
+    // console.log(feeds);
+    
 
-//     return (
-//         <div>
-//             { !profileCompletion.isCompleted && (
-//                 <p>completed!</p> //profile box goes here!
-//             )}
+    const profileCompletion = {
+        isCompleted: true,
+        percentage: null
+    }
+    
+    const [openModal, setOpenModal] = useState(false);
 
-//             <Box marginBottom="2rem">
-//                 <Typography variant="h3">Journey</Typography>
-//             </Box>
+    const handleOpen = () => {
+        setOpenModal(true);
+    };
 
-//             {!feeds ? (
+    const handleClose = () => {
+        setOpenModal(false);
+    };
 
-//                 <Skeleton variant="rect" height={150} animation="wave"/>
+    return (
+        <div>
+            { !profileCompletion.isCompleted && (
+                <p>completed!</p> //profile box goes here!
+            )}
 
-//             ) : feeds.length === 0 ? (
+            <Box marginBottom="2rem" display="flex">
+                <Box className={classes.headerText}>
+                    <Typography variant="h3">Journey</Typography>
+                </Box>
+                <Box>
+                    <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add To Journal</Button>
+                </Box>
+            </Box>
 
-//                 <Box textAlign="center" paddingTop="100"> 
-//                     <Typography align="center" variant="body1">Your feed is empty</Typography>
-//                 </Box>
+            {feeds[0] === undefined ? (
                 
-//             ) : //feed goes here
-//                 (
-//                     // <AnnouncementBox />
-//                     feeds.map((feed, key) => {
+                <Skeleton variant="rect" height={150} animation="wave"/>
 
-//                         // const sortedFeed = feed.sort((a, b) => b.createdAt - a.createdAt)
+            ) : feeds.length === 0 ? (
 
-//                         return (
-//                             <div key={key}>
+                 <Box textAlign="center" paddingTop="100"> 
+                    <Typography align="center" variant="body1">Your feed is empty</Typography>
+                </Box>
+                
+            ) : //feed goes here
+                
+                (
+                    feeds.map((val, index) => {
 
-//                                 {feed?.map(( val, index ) => {
-//                                     // console.log(val);
-                                    
-//                                     return (
-//                                         <>
-//                                         { val.sessionUser && ( // a unique key to session logs
-                                        
-//                                             <p>SessionLog { moment(val.createdAt).calendar() }</p>
-                                            
-//                                         )}
+                        return (
+                            <div key={index}>
 
-//                                         { val.message && val.userType && ( //a unique key to Announcements
-                                        
-//                                             <p>Announcement { moment(val.createdAt).calendar() }</p>
-                                            
-//                                         )}
+                            { val?.sessionUser && ( // a unique key to session logs
+                                <>
+                                <Box paddingLeft="1rem" marginBottom=".5rem">
+                                    <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                                </Box>
 
-//                                         { val.notes && ( // a unique key to only journals.journalSnippet
-                                        
-//                                             <p>Journals { moment(val.createdAt).calendar() } </p>
-                                            
-//                                         )}
+                                <SessionLogBox sessionLog={val}/>
+
+                                </>
+                            )}
+
+                            { val?.message && val?.userType && ( //a unique key to Announcements
+                                <>
+                                <Box paddingLeft="1rem" marginBottom=".5rem">
+                                    <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                                </Box>
+
+                                <AnnouncementBox announcement={val} />
+                                
+                                </>
+                            )}
+
+                            { val?.notes && ( // a unique key to only journals.journalSnippet
+                                <>
+                                <Box paddingLeft="1rem" marginBottom=".5rem">
+                                    <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                                </Box>
+                                
+                                <JournalBox journal={val} />
+                                
+                                </>
+                            )}
         
-//                                         </>
-//                                     )
-        
-//                                 })
-//                                 }
-//                             </div>
-//                         )
-//                     })
-//                 )
+                            </div>
+                        )
+                    })
+                )
+            }
 
-//             }
 
-//         </div>
-//     )
+            /* Load Custom Modal COmponent */
+            {openModal === true &&
+                (
+                    <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />
+                )
+            }
 
-    return <div>Hello</div>
+        </div>
+    )
 }
 
 export default JourneyLayout

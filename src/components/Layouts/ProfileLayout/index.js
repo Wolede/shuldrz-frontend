@@ -21,7 +21,9 @@ const ProfileLayout = () => {
 
     return (
         <>
-            <BackButton />
+            <Box marginBottom="1.5rem">
+                <BackButton />  
+            </Box>
             <Paper>
                 <Box marginBottom="2.5rem" textAlign='center'>
                     <Typography variant="h3" gutterBottom>Edit Profile</Typography>

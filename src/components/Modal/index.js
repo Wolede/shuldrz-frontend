@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal as MuiModal, Container, Box } from '@material-ui/core'
 import { useStyles } from './style'
+import Paper from 'components/Paper'
+import AddJournalForm from '../Forms/AddJournalForm'
 
 const Modal = props => {
     const classes = useStyles()
@@ -15,7 +17,7 @@ const Modal = props => {
         onClose={handleClose}
         disableBackdropClick={disableBackdropClick}
         >
-            <Container maxWidth="md" >
+            <Container maxWidth={view === 'video' ? 'md' : 'sm'} >
                 <Box marginTop="8rem">
                 { view === "video" && 
                     (
@@ -23,6 +25,14 @@ const Modal = props => {
                             <iframe width="560" height="315" src={embedUrl} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="modalFrame"></iframe>
                         </div> 
                     )                            
+                }
+
+                { view === "writeJournal" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddJournalForm onClose={handleClose} />
+                        </Paper>
+                    )
                 }
                 </Box>
             </Container>

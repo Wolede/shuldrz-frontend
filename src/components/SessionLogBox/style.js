@@ -4,9 +4,6 @@ const useStyles = makeStyles(theme => ({
     root: {
         
     },
-    headerText: {
-        flexGrow: 1
-    }
 }))
 
 export { useStyles }

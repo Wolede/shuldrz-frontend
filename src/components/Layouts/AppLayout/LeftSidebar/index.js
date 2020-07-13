@@ -5,12 +5,14 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import SidebarNav from './SidebarNav';
 import Logout from 'components/Logout'
 import useAuth from 'contexts/Auth'
+import SponsoredAdBox from '../../../SponsoredAdBox';
 
 const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
     const classes = useStyles(props)
     const { user } = useAuth();
 
+    // If user is a Volunteer 
     const pages = user?.userType === "Volunteer" ? [
         {
           title: 'Home',
@@ -43,6 +45,11 @@ const LeftSidebar = props => {
         href: '/app/sessions',
         icon: <DashboardIcon />
      },
+       {
+        title: 'Buddies',
+        href: '/app/buddies',
+        icon: <DashboardIcon />
+     },
        ];
 
     return (
@@ -61,6 +68,7 @@ const LeftSidebar = props => {
                 className={classes.nav}
                 pages={pages}
                 />
+                <SponsoredAdBox />
                 <Logout/>
             </div>
         </Drawer>
