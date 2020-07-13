@@ -43,7 +43,7 @@ const ChatView = ({ user, chat }) => {
     if (chat === undefined) {
         return (
             <div>
-                Loading
+                Select a chat
             </div>
         )
     } else {

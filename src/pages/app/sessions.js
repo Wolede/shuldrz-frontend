@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Grid, makeStyles } from '@material-ui/core'
+import { Grid, makeStyles, Box } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 import AppLayout from 'components/Layouts/AppLayout'
 import Paper from 'components/Paper'
 import ChatList from 'components/ChatList'
@@ -21,11 +22,11 @@ const Sessions = (props) => {
         },   
     
     }))
-    const { user } = useAuth()
+    const { user, loading } = useAuth()
     
     const [chats, updateChatList] = useState()
     const [selectedChat, updateSelectedChat] = useState(null)
-    // console.log(chats)
+   
     
     
 
@@ -50,6 +51,7 @@ const Sessions = (props) => {
 
             })              
             console.log(user)
+
             // scrollToEnd()
         }   
         
@@ -195,24 +197,50 @@ const Sessions = (props) => {
                     alignItems="center"
                     className={useStyles.root}
                 >
-                    <Paper  height='95vh' borderTopRightRadius="0" borderBottomRightRadius="0" width='30%' padding="0">
-                    { chats ? 
+                    <Paper  height='95vh' borderRadius='30px 0 0 30px' width='30%' padding="0">
+                    {
+                        loading ?  (
+                                <>
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box>  
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box> 
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box> 
+                                </>
+                        ): 
+                        (
+                            chats ?                         
+                            <ChatList 
+                            user={user}
+                            history={props.history} 
+                            selectChatFn={selectChat}
+                            newChatFn = {newChatFn}
+                            chats={chats ? chats : null}
+                            selectedChatIndex={selectedChat}
+                            />
+                            :  (
+                                <>
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box>  
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box> 
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box> 
+                                </>
+                            )                            
+
+                        )
+                    }
                         
-                        <ChatList 
-                        user={user}
-                        history={props.history} 
-                        selectChatFn={selectChat}
-                        newChatFn = {newChatFn}
-                        chats={chats}
-                        selectedChatIndex={selectedChat}
-                        />
-                        : <ChatList/>
-                    }      
                     </Paper>
-                    <Paper  overflow="auto" height='95vh'  borderTopLeftRadius="0" borderBottomLeftRadius="0" width='70%' color="secondary" padding='0 3rem 3rem 3rem'>
-                        {
-                            chats ? 
-                            <ChatView user={user.email} chat={chats[selectedChat]}/>  : <ChatView/>
+                    <Paper  overflow="auto" height='95vh'  borderRadius='0 30px 30px 0' width='70%' color="secondary" padding='0 3rem 3rem 3rem'>
+                        {   
+                            loading ? (
+                                <Box marginTop={3}>
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box>  
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box> 
+                                  <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave"/> </Box> 
+                                </Box>
+                            ) :
+                            (
+                                chats !== undefined ? 
+                                <ChatView user={user.email} chat={chats[selectedChat]}/>  : <div> No chat available select a profile to chat with </div>
+                            )
                         }                      
                     </Paper>
                     <ChatInput submitMessageFn={submitMessage}/>

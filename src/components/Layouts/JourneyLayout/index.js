@@ -21,85 +21,87 @@ const JourneyLayout = () => {
     const announcements = announcementRes ? announcementRes.data?.data : null
     const sessionLogs = sessionLogRes ? sessionLogRes.data?.data : null
 
-    const feeds = [
-        journals ? journals[0].journalSnippet : undefined,
-        announcements,
-        sessionLogs,
-    ]
+    // const feeds = [
+    //     journals ? journals[0].journalSnippet : undefined,
+    //     announcements,
+    //     sessionLogs,
+    // ]
 
 
-    const profileCompletion = {
-        isCompleted: true,
-        percentage: null
-    }
+//     const profileCompletion = {
+//         isCompleted: true,
+//         percentage: null
+//     }
 
-    return (
-        <div>
-            { !profileCompletion.isCompleted && (
-                <p>completed!</p> //profile box goes here!
-            )}
+//     return (
+//         <div>
+//             { !profileCompletion.isCompleted && (
+//                 <p>completed!</p> //profile box goes here!
+//             )}
 
-            <Box marginBottom="2rem">
-                <Typography variant="h3">Journey</Typography>
-            </Box>
+//             <Box marginBottom="2rem">
+//                 <Typography variant="h3">Journey</Typography>
+//             </Box>
 
-            {!feeds ? (
+//             {!feeds ? (
 
-                <Skeleton variant="rect" height={150} animation="wave"/>
+//                 <Skeleton variant="rect" height={150} animation="wave"/>
 
-            ) : feeds.length === 0 ? (
+//             ) : feeds.length === 0 ? (
 
-                <Box textAlign="center" paddingTop="100"> 
-                    <Typography align="center" variant="body1">Your feed is empty</Typography>
-                </Box>
+//                 <Box textAlign="center" paddingTop="100"> 
+//                     <Typography align="center" variant="body1">Your feed is empty</Typography>
+//                 </Box>
                 
-            ) : //feed goes here
-                (
-                    // <AnnouncementBox />
-                    feeds.map((feed, key) => {
+//             ) : //feed goes here
+//                 (
+//                     // <AnnouncementBox />
+//                     feeds.map((feed, key) => {
 
-                        // const sortedFeed = feed.sort((a, b) => b.createdAt - a.createdAt)
+//                         // const sortedFeed = feed.sort((a, b) => b.createdAt - a.createdAt)
 
-                        return (
-                            <div key={key}>
+//                         return (
+//                             <div key={key}>
 
-                                {feed?.map(( val, index ) => {
-                                    // console.log(val);
+//                                 {feed?.map(( val, index ) => {
+//                                     // console.log(val);
                                     
-                                    return (
-                                        <>
-                                        { val.sessionUser && ( // a unique key to session logs
+//                                     return (
+//                                         <>
+//                                         { val.sessionUser && ( // a unique key to session logs
                                         
-                                            <p>SessionLog { moment(val.createdAt).calendar() }</p>
+//                                             <p>SessionLog { moment(val.createdAt).calendar() }</p>
                                             
-                                        )}
+//                                         )}
 
-                                        { val.message && val.userType && ( //a unique key to Announcements
+//                                         { val.message && val.userType && ( //a unique key to Announcements
                                         
-                                            <p>Announcement { moment(val.createdAt).calendar() }</p>
+//                                             <p>Announcement { moment(val.createdAt).calendar() }</p>
                                             
-                                        )}
+//                                         )}
 
-                                        { val.notes && ( // a unique key to only journals.journalSnippet
+//                                         { val.notes && ( // a unique key to only journals.journalSnippet
                                         
-                                            <p>Journals { moment(val.createdAt).calendar() } </p>
+//                                             <p>Journals { moment(val.createdAt).calendar() } </p>
                                             
-                                        )}
+//                                         )}
         
-                                        </>
-                                    )
+//                                         </>
+//                                     )
         
-                                })
-                                }
-                            </div>
-                        )
-                    })
-                )
+//                                 })
+//                                 }
+//                             </div>
+//                         )
+//                     })
+//                 )
 
-            }
+//             }
 
-        </div>
-    )
+//         </div>
+//     )
+
+    return <div>Hello</div>
 }
 
 export default JourneyLayout

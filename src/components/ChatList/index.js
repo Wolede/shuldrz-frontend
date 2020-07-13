@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Grid, Typography } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 import Avatar from 'components/Avatar'
 import Paper from 'components/Paper'
 import Notification from 'components/Notification'
@@ -71,41 +72,45 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
         )
     } else {
 
-
-        return (
-            mockChats.map((chat, i) => {
-
-                return (
-                    <Paper padding="16px" active={true}>
-                        <Grid
-                            key={i}
-                            className={classes.chatItem}
-                            container
-                            direction="row"
-                            justify="center"
-                            alignItems="center"
-                        >
-
-                            <Avatar alt="profile picture" src={`/images/radn`} size="small" variant='rounded' />
-                            <Grid
-                                container
-                                direction="column"
-                                className={classes.typography}
-                            >
-                                <Typography className={classes.h4} variant="h4">Username</Typography>
-                                <Typography variant="body2">
-                                    Loading...
-                            </Typography>
-                            </Grid>
-
-                        </Grid>
-                    </Paper>
-                )
-            })
+        return(
+            <div>No chats available</div>
         )
-    }
 
 
+    //     return (
+    //         mockChats.map((chat, i) => {
+
+    //             return (
+    //                 <Paper padding="16px" active={true}>
+    //                     <Grid
+    //                         key={i}
+    //                         className={classes.chatItem}
+    //                         container
+    //                         direction="row"
+    //                         justify="center"
+    //                         alignItems="center"
+    //                     >
+
+    //                         <Avatar alt="profile picture" src={`/images/radn`} size="small" variant='rounded' />
+    //                         <Grid
+    //                             container
+    //                             direction="column"
+    //                             className={classes.typography}
+    //                         >
+    //                             <Typography className={classes.h4} variant="h4">Username</Typography>
+    //                             <Typography variant="body2">
+    //                                 Loading...
+    //                         </Typography>
+    //                         </Grid>
+
+    //                     </Grid>
+    //                 </Paper>
+    //             )
+    //         })
+    //     )
+    // }
+
+        }       
 
 
 
