@@ -1,15 +1,50 @@
 import { Box, Typography } from '@material-ui/core';
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import Paper from 'components/Paper'
 import Avatar from 'components/Avatar'
 import Chip from 'components/Chip'
 import Button from 'components/Button'
 import { useStyles } from './styles';
+import { SelectedUserContext } from 'contexts/SelectedUserContext';
+const firebase = require("firebase");
 
 const ProfileCard = (props) => {
+    const router = useRouter()
     const classes = useStyles()
-    const { username, profileImage, occupation, heart, ranking, id } = props
+    const { username, email, profileImage, occupation, heart, ranking, id } = props
 
+    const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
+    // if (journalRes) setJournal(journalRes.data?.data);
+
+     // <!-- check if user exists on firebase -->    
+    // const userExists = async () => {
+    //     const usersSnapshot = await 
+    //     firebase
+    //       .firestore()
+    //       .collection('users')
+    //       .get();
+    //     const exists = usersSnapshot
+    //       .docs
+    //         .map(_doc => _doc.data().email)
+    //         .includes(useremail);
+        
+    //     return exists;
+    // }
+
+    const handleMessageUser =  async (e) => {
+        console.log()
+
+        
+        
+        setSelectedUser({
+            username,
+            profileImage,
+            id,
+            email
+        })
+        router.push('/app/sessions')
+    }
 
     return (
         <Paper padding="1.5rem 1.5rem 1.5rem 1.5rem" marginBottom="2rem">
@@ -31,7 +66,7 @@ const ProfileCard = (props) => {
                 </Box>
 
                 <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
-                    <Button variant="contained" size="small" color="primary" marginTop='1rem'>Message</Button>
+                    <Button variant="contained" size="small" color="primary" marginTop='1rem' onClick={handleMessageUser}>Say Hello</Button>
                     {/* <Link href="/app/profile">
                     <a style={{textDecoration:'none'}}> */}
                     <Button variant="contained" size="small" color="secondary" marginTop='1rem'>View Profile</Button>

@@ -70,7 +70,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
             })
 
         )
-    } else {
+    } else  {
 
         return(
             <div>No chats available</div>

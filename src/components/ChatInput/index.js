@@ -20,7 +20,7 @@ const ChatInput = (props) => {
     }
 
     return (
-        <div>
+        <>
             <TextField
                 className={classes.formControl}
                 onKeyUp={(e) => userTyping(e)}
@@ -33,10 +33,10 @@ const ChatInput = (props) => {
                     <Send className={classes.sendBtn} onClick={submitMessage}/>
                     </InputAdornment>
                 ),
-        }}
+                }}
             />
 
-        </div>
+        </>
     )
 }
 
