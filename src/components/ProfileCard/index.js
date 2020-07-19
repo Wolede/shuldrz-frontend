@@ -66,7 +66,7 @@ const ProfileCard = (props) => {
                 </Box>
 
                 <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
-                    <Button variant="contained" size="small" color="primary" marginTop='1rem' onClick={handleMessageUser}>Say Hello</Button>
+                    <Button variant="contained" size="small" color="primary" marginTop='1rem' onClick={handleMessageUser}>message</Button>
                     {/* <Link href="/app/profile">
                     <a style={{textDecoration:'none'}}> */}
                     <Button variant="contained" size="small" color="secondary" marginTop='1rem'>View Profile</Button>

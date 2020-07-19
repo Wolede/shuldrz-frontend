@@ -5,11 +5,11 @@ import ChatInput from 'components/ChatInput'
 import React, { useState, useEffect } from 'react'
 import { useStyles } from './styles'
 import Divider from 'components/Divider'
-import ScrollableFeed from 'react-scrollable-feed'
 
 
 
-const ChatView = ({ user, chat }) => {
+
+const ChatView = ({ user, chat, endSessionFn, endBtn }) => {
     const classes = useStyles()
 
     const [sessionStart, updateSessionStart] = useState(true)
@@ -25,7 +25,7 @@ const ChatView = ({ user, chat }) => {
     }
 
     const endSession = () => {
-        console.log('session has ended')
+        endSessionFn()
     }
 
     // function scrollToEnd(){
@@ -68,28 +68,46 @@ const ChatView = ({ user, chat }) => {
                     <div className={classes.chatHeaderSession}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
                         <Button onClick={startSession} variant="contained" size="tiny" color="secondary-light">Start session</Button>
-                        <Button onClick={endSession} variant="contained" size="tiny" >End session</Button>
+                        <Button onClick={endSession} variant="contained" size="tiny" disabled={endBtn}>End session</Button>
                     </div>
                 </Grid>
-                <ScrollableFeed forceScroll={true} id="chatview-container" className={classes.chatContainer}>
-                    {sessionStart ? <Divider>Session Started</Divider> : null}
-
+                <div  id="chatview-container" className={classes.chatContainer}>
+                    
                     {
-                        chat.messages.map((msg, i) => {
+                        chat.messages.map((msg, i) => {   
 
                             return (
-                                <div key={i} className={msg.sender === user ? classes.userSent : classes.friendSent}>
+                                <div key={i}>
+                                    {
+                                        msg.message && (
+                                            <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
 
-                                    <Typography variant="h6">{msg.message}</Typography>
+                                            <Typography variant="h6">{msg.message}</Typography>
 
+                                            </div>
+                                        )
+                                    }
+                                    {                                       
+                                        msg.session === 'started' && (<Divider>Session Started</Divider>)
+                                    }
+
+                                    {   
+                                        msg.session === 'ended' && (<Divider>Session Ended</Divider>)
+                                    }
                                 </div>
-                            )
+                            )                         
+                           
+                           {/* return msg.message ? (
+                                
+                                
+                            ) : null                                   */}
+                            
                         })
                     }
 
                     {/* {sessionEnd ? <Divider>Session Ended</Divider> : null} */}
 
-                </ScrollableFeed>
+                </div>
 
                 
                 

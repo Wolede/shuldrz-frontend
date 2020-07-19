@@ -10,6 +10,8 @@ import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 
+const firebase = require("firebase");
+
 const SignupForm = ({volunteer}) => {
     const classes = useStyles()
     const { setUser } = useAuth()

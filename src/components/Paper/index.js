@@ -6,11 +6,11 @@ import clsx from 'clsx';
 
 
 const Paper = (props) => {
-    const {className, children} = props     
+    const {className, children, ref} = props     
     const classes = useStyles(props);
 
     return (
-        <MuiPaper className={ clsx(classes.root, className)}>
+        <MuiPaper ref={ref} className={ clsx(classes.root, className)}>
             { children }
         </MuiPaper>
     )
@@ -22,7 +22,8 @@ Paper.propTypes = {
     borderRadius: PropTypes.string,
     color: PropTypes.string,
     marginBottom: PropTypes.string,
-    height: PropTypes.string
+    height: PropTypes.string,
+    ref: PropTypes.any
     
 }
 
