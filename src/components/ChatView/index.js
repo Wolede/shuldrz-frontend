@@ -1,19 +1,38 @@
-import { Grid, Typography } from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import { Grid, Typography, Box, Fab, useMediaQuery, Button as MuiButton } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles';
+import PropTypes from 'prop-types'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
-import React, { useState, useEffect } from 'react'
 import { useStyles } from './styles'
 import Divider from 'components/Divider'
-import ScrollableFeed from 'react-scrollable-feed'
+import moment from 'moment'
+import MiniDrawer from 'components/MiniDrawer';
+import ChatProfile from '../ChatProfile';
 
 
-
-const ChatView = ({ user, chat }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) => {
     const classes = useStyles()
 
-    const [sessionStart, updateSessionStart] = useState(true)
-    const [sessionEnd, updateSessionEnd] = useState(true)
+    // More sidebar profile stuff 
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+        defaultMatches: true
+    });
+
+    const [openRightSidebar, setOpenRightSidebar] = useState(false);
+
+    const handleRightSidebarOpen = () => {
+        setOpenRightSidebar(true);
+    };
+    
+    const handleRightSidebarClose = () => {
+        setOpenRightSidebar(false);
+    };
+
+    // const shouldOpenRightSidebar = isDesktop ? false : openRightSidebar;
 
 
     const setSchedule = () => {
@@ -25,7 +44,7 @@ const ChatView = ({ user, chat }) => {
     }
 
     const endSession = () => {
-        console.log('session has ended')
+        endSessionFn()
     }
 
     // function scrollToEnd(){
@@ -43,61 +62,114 @@ const ChatView = ({ user, chat }) => {
     if (chat === undefined) {
         return (
             <div>
-                Loading
+                Select a chat
             </div>
         )
     } else {
         console.log(chat)
         return (
-            <div>
+            <>
+                {
+                    <MiniDrawer
+                        direction='left'
+                        open={openRightSidebar}
+                        width='100%'
+                        position='absolute'
+                    >
+                        <ChatProfile
+                            closeChatProfile={handleRightSidebarClose}
+                        />
+                    </MiniDrawer>
+                }
 
-                <Grid
-                    // container
-                    direction="row"
-                    className={classes.chatHeader}
-                    justify="space-between"
-                    alignItems="center"
-                    
+                <Box 
+                    position='sticky'
+                    top='0.1px'
+                    display="flex"
+                    style={{ backgroundColor: '#3f316b' }}
+                    padding='0rem 0rem 1rem 0rem'
                 >
-                    <div className={classes.chatHeaderLink}>
-                        <Avatar className={classes.chatAvatar} alt={chat.users.filter(_user => _user !== user)[0]} src={`/images/${chat.img}`} size="tiny" variant='rounded' />
-                        <Button size="small" color="warning">More info</Button>
-                    </div>
-
-
-                    <div className={classes.chatHeaderSession}>
+                    <Box flexGrow='1' display='flex' alignItems='center'>
+                        {  !isDesktop && (
+                            <Fab size="small" aria-label="back" color="secondary" onClick={backBtn} style={{ marginRight: '1rem' }}>
+                                <ArrowBackIcon />
+                            </Fab>
+                            )
+                        }
+                        <MuiButton
+                            variant="contained"
+                            color="secondary"
+                            size='small'
+                            startIcon={
+                                <Avatar className={classes.chatAvatar} alt={chat.users.filter(_user => _user !== user)[0]} src={`/images/${chat.img}`} size="tiny" variant='rounded' />
+                            }
+                            onClick={handleRightSidebarOpen}
+                        >
+                            More
+                        </MuiButton>
+                        
+                    </Box>
+                    <div className={classes.headerButtons}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
-                        <Button onClick={startSession} variant="contained" size="tiny" color="secondary-light">Start session</Button>
-                        <Button onClick={endSession} variant="contained" size="tiny" >End session</Button>
+                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn}>End session</Button>
                     </div>
-                </Grid>
-                <ScrollableFeed forceScroll={true} id="chatview-container" className={classes.chatContainer}>
-                    {sessionStart ? <Divider>Session Started</Divider> : null}
-
+                </Box>
+                <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
+                    
                     {
-                        chat.messages.map((msg, i) => {
+                        chat.messages.map((msg, i) => {   
 
                             return (
-                                <div key={i} className={msg.sender === user ? classes.userSent : classes.friendSent}>
+                                <div key={i}>
+                                    {                                       
+                                        msg.session === 'started' && (
+                                            <Divider>
+                                                <Typography variant="body1">Session Started</Typography>
+                                            </Divider>
+                                        )
+                                    }
 
-                                    <Typography variant="h6">{msg.message}</Typography>
+                                    {
+                                        msg.message && (
+                                            <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
+                                                <div>
+                                                    <Typography variant="body1">{msg.message}</Typography>
+                                                    <Typography color="secondary" className='timestamp'>
+                                                        {moment(msg.timestamp).calendar()}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
 
+                                    {   
+                                        msg.session === 'ended' && (
+                                            <Divider>
+                                                <Typography variant="body1">Session Ended</Typography>
+                                            </Divider>
+                                        )
+                                    }
                                 </div>
-                            )
+                            )                         
+                           
+                            
                         })
                     }
 
-                    {/* {sessionEnd ? <Divider>Session Ended</Divider> : null} */}
+                </Box>
 
-                </ScrollableFeed>
-
+                <ChatInput submitMessageFn={submitMessage} />
                 
-                
-            </div>
+            </>
         )
     }
 
 
 }
+
+ChatView.propTypes = {
+    backBtn: PropTypes.func,
+    endBtn: PropTypes.bool
+};
 
 export default ChatView

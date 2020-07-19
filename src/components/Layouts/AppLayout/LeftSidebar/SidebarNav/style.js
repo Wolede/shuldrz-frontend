@@ -4,8 +4,9 @@ const useStyles = makeStyles(theme => ({
     root: {},
     item: {
         display: 'flex',
+        justifyContent: 'center',
         paddingTop: 0,
-        paddingBottom: 0
+        paddingBottom: '2rem',
     },
     button: {
         padding: '10px 8px',
@@ -13,7 +14,19 @@ const useStyles = makeStyles(theme => ({
         textTransform: 'none',
         letterSpacing: 0,
         width: '100%',
-        fontWeight: theme.typography.fontWeightMedium
+        fontWeight: theme.typography.fontWeightMedium,
+        '& .MuiButton-label' : {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        '& :hover':{
+            '& svg' : {
+                stroke: theme.palette.primary.main
+            },
+            '& p':{
+                color: theme.palette.primary.main
+            }
+        }
     },
     icon: {
         color: theme.palette.icon,
@@ -21,13 +34,31 @@ const useStyles = makeStyles(theme => ({
         height: 24,
         display: 'flex',
         alignItems: 'center',
-        marginRight: theme.spacing(1)
+        '& svg': {
+            stroke: '#838A97',
+        },
     },
-    active: {
-        color: theme.palette.primary.main,
+    menuText: {
+        fontSize: '1.5rem',
+        fontWeight: '400',
+        color: '#838A97',
+    },
+    activeButton: {
+        padding: '10px 8px',
+        justifyContent: 'flex-start',
+        textTransform: 'none',
+        letterSpacing: 0,
+        width: '100%',
         fontWeight: theme.typography.fontWeightMedium,
-        '& $icon': {
-        color: theme.palette.primary.main
+        '& .MuiButton-label' : {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        '& svg' : {
+            stroke: theme.palette.primary.main
+        },
+        '& p':{
+            color: theme.palette.primary.main
         }
     }
 }))

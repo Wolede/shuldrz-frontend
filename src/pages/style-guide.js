@@ -31,17 +31,7 @@ const StyleGuide = () => {
             <br/>
             <Typography variant="caption">Caption</Typography>
             <br/>
-            <Link href="/app">
-                <a style={{textDecoration:'none'}}>
-                    <Button
-                    variant="contained"
-                    size="large"
-                    color="primary"
-                    >
-                        large Button
-                    </Button>
-                </a>
-            </Link>
+            
             
             <br/>
             <br/>

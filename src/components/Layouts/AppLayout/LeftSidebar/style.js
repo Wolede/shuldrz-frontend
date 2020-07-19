@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
     drawer: {
         width: 160,
+        borderRight: "none !important",
         // [theme.breakpoints.up('lg')]: {
         //     marginTop: 64,
         //     height: 'calc(100% - 64px)'

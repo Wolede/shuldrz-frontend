@@ -38,33 +38,54 @@ const colorPicker = (color, theme) => {
 
 const useStyles = makeStyles(theme => ({
     
+    headerButtons : {
+        '& > *' : {
+            marginLeft: '.5rem'
+        }
+    },
 
     userSent: {
-        float: 'right',
-        clear: 'both',
-        padding: '1.5rem 2rem',
-        boxSizing: 'border-box',
-        wordWrap: 'break-word',
-        marginTop: '10px',
-        backgroundColor: '#F3B700',
-        color: 'white',
-        width: '50%',
-        borderRadius: '1.8rem 0.6rem 0.6rem 1.8rem',
-        boxShadow: `0px 15px 20px rgba(63, 50, 102, 0.25)`,
+        display: 'flex',
+        justifyContent: 'flex-end',
+
+        [' & > div '] : {
+            backgroundColor: '#F3B700',
+            color: 'white',
+            width: 'fit-content',
+            maxWidth: '90%',
+            borderRadius: '1.8rem 0.6rem 0.6rem 1.8rem',
+            padding: '1rem 1.5rem',
+            wordWrap: 'break-word',
+            marginTop: '1rem',
+        },
+
+        '& .timestamp' : {
+            fontSize: '.7rem',
+            fontWeight: '500',
+            textAlign: 'right'
+        },
     },
 
     friendSent: {
-        float: 'left',
-        clear: 'both',
-        padding: '1.5rem 2rem',
-        boxSizing: 'border-box',
-        wordWrap: 'break-word',
-        marginTop: '10px',
-        backgroundColor: '#00C766',
-        color: 'white',
-        width: '50%',
-        borderRadius: '0.6rem 1.8rem 1.8rem 0.6rem',
-        boxShadow: `0px 15px 20px rgba(63, 50, 102, 0.25)`,
+        display: 'flex',
+        justifyContent: 'flex-start',
+
+        [' & > div '] : {
+            backgroundColor: '#00C766',
+            color: 'white',
+            width: 'fit-content',
+            maxWidth: '90%',
+            borderRadius: '0.6rem 1.8rem 1.8rem 0.6rem',
+            padding: '1rem 1.5rem',
+            wordWrap: 'break-word',
+            marginTop: '1rem',
+        },
+
+        '& .timestamp' : {
+            fontSize: '.7rem',
+            fontWeight: '500',
+            textAlign: 'right'
+        },
     },
 
     chatHeader: {
@@ -100,9 +121,7 @@ const useStyles = makeStyles(theme => ({
 
     },
 
-    chatContainer:{
-        paddingTop: `8rem`
-    },
+
 
     secondary:{  
         backgroundColor:'#9D8CD4' 

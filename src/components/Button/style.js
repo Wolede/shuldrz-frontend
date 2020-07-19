@@ -15,12 +15,12 @@ const sizePicker = (size) => {
             }
         case 'small':
             return {
-                padding: '0.4rem 1rem',
+                padding: '0.53em 1.33em',
                 fontSize: '0.75rem'
             }
         case 'tiny':
             return{
-                padding: '0.4rem 0.85rem',
+                padding: '0.62em 1.3em',
                 fontSize: '0.65rem',
                 fontWeight: '100'                
             }
@@ -79,6 +79,15 @@ const colorPicker = (color, theme) => {
                 boxShadow: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
                 boxShadowHover: `0px 30px 60px rgba(237, 123, 132, 0.50)`,
                 boxShadowActive: `0px 30px 60px rgba(237, 123, 132, 0.60)`,
+            }
+        case 'error-light':
+            return {
+                mainColor: theme.palette.error.main,
+                darkColor: theme.palette.error.dark,
+                textColor: theme.palette.error.contrastText,
+                boxShadow: `0px 30px 60px rgba(237, 123, 132, 0.10)`,
+                boxShadowHover: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
+                boxShadowActive: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
             }
         default:
             return {
