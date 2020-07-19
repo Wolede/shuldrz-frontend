@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Grid, Box, Typography } from '@material-ui/core'
+import { Grid, Box, Typography, useMediaQuery, Hidden } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles';
 import { Skeleton } from '@material-ui/lab'
 import Paper from 'components/Paper'
 import ChatList from 'components/ChatList'
@@ -10,6 +11,7 @@ import useAuth from 'contexts/Auth'
 import { SelectedUserContext } from 'contexts/SelectedUserContext';
 import { ChatContext } from 'contexts/ChatContext';
 import { useStyles } from './style'
+import MiniDrawer from '../../MiniDrawer';
 
 const firebase = require("firebase");
 
@@ -19,6 +21,25 @@ const Sessions = (props) => {
     const classes = useStyles()
     
     const { user, loading } = useAuth()
+
+    // Sidebar stuff
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+        defaultMatches: true
+    });
+
+    const [openLeftSidebar, setOpenLeftSidebar] = useState(false);
+
+    const handleLeftSidebarOpen = () => {
+      setOpenLeftSidebar(true);
+    };
+  
+    const handleLeftSidebarClose = () => {
+      setOpenLeftSidebar(false);
+    };
+
+    const shouldOpenLeftSidebar = isDesktop ? true : openLeftSidebar;
+
 
     
     // const [chats, updateChatList] = useState()
@@ -30,14 +51,9 @@ const Sessions = (props) => {
         console.log('new chat clicked')
     }
 
-    // function scrollToEnd(){
-    //     var chatList = document.getElementById("chatview-container");
-    //     chatList.scrollTop = chatList.scrollHeight;
-    // }
 
     const chatContainer = useRef()
     const scrollToMyRef = () => {
-        console.log(chatContainer)
         const scroll = chatContainer.current.scrollHeight - chatContainer.current.clientHeight;
         chatContainer.current.scrollTo(0, scroll)
     }
@@ -257,7 +273,14 @@ const Sessions = (props) => {
                     alignItems="center"
                     className={classes.root}
                 >
-                    <Paper height="100%" borderRadius='30px 0 0 30px' width='30%' padding="0">
+                    <MiniDrawer
+                        direction='right'
+                        open={shouldOpenLeftSidebar}
+                        width={isDesktop ? '30%' : '100%'}
+                        backgroundPaper
+                        overflow='auto'
+                    >
+                    <Paper height="100%" width='100%' padding="0">
                         {
                             !chats ? (
                                 <>
@@ -293,6 +316,7 @@ const Sessions = (props) => {
                                         user={user}
                                         history={props.history}
                                         selectChatFn={selectChat}
+                                        closeChatList={handleLeftSidebarClose}
                                         newChatFn={newChatFn}
                                         chats={chats ? chats : null}
                                         selectedChatIndex={selectedChat}
@@ -303,33 +327,44 @@ const Sessions = (props) => {
                         }
 
                     </Paper>
-                    {/* <div > */}
-                        <Box className={classes.chatContainer} ref={chatContainer} 
-                        display='flex' flexDirection='column' justifyContent='flex-end' overflow="auto" position="relative" height='100%' borderRadius='0 30px 30px 0' width='70%' padding='0 3rem 3rem 3rem' >
-                            {
-                                loading ? (
-                                    <Box marginTop={3}>
-                                        <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
-                                        <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
-                                        <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
-                                    </Box>
-                                ) :
-                                    (
-                                        chats !== undefined ?
-                                            <ChatView 
-                                                endBtn={
-                                                    chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1].session === 'ended' ? true : false
-                                                } 
-                                                endSessionFn={endSession} 
-                                                user={user.email} 
-                                                chat={chats[selectedChat]} 
-                                                submitMessage={submitMessage}
-                                            /> 
-                                            : <div> No chat available select a profile to chat with </div>
-                                    )
-                            }
-                        </Box>
-                    {/* </div> */}
+                    </MiniDrawer>
+                    <Box 
+                        className={classes.chatContainer} 
+                        ref={chatContainer} 
+                        display={!isDesktop && shouldOpenLeftSidebar ? 'none' : 'flex'} 
+                        flexDirection='column' 
+                        justifyContent='flex-end' 
+                        overflow="auto" 
+                        position="relative" 
+                        height='100%' 
+                        borderRadius={isDesktop ? '0 1.875rem 1.875rem 0' : '1.875rem'}  
+                        width={isDesktop ? '70%' : '100%'} 
+                        padding={isDesktop ? '1.5rem 3rem 3rem 3rem' : '1rem 1rem 1rem 1rem'}
+                    >
+                        {
+                            loading ? (
+                                <Box marginTop={3}>
+                                    <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
+                                    <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
+                                    <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
+                                </Box>
+                            ) :
+                                (
+                                    chats !== undefined ?
+                                        <ChatView 
+                                            endBtn={
+                                                chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1].session === 'ended' ? true : false
+                                            } 
+                                            backBtn={handleLeftSidebarOpen}
+                                            endSessionFn={endSession} 
+                                            user={user.email} 
+                                            chat={chats[selectedChat]} 
+                                            submitMessage={submitMessage}
+                                        /> 
+                                        : <div> No chat available select a profile to chat with </div>
+                                )
+                        }
+                    </Box>
                     
                     
                 </Grid>

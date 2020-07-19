@@ -39,7 +39,9 @@ const ProfileBox = () => {
                     <Typography variant="body1" className={classes.text}>{userData.occupation ? userData.occupation : 'Occupation not set'}</Typography>
 
                     <Box display="flex" justifyContent="center" flexWrap="wrap">
-                        <Chip label={userData.ranking ? userData.ranking.name : 'Bronze'} rank={userData.ranking ? userData.ranking.colourCode : '#cd7f32'} color="paper"/>
+                        { user.userType === 'Volunteer'  && (
+                            <Chip label={userData.ranking ? userData.ranking.name : 'Bronze'} rank={userData.ranking ? userData.ranking.colourCode : '#cd7f32'} color="paper"/>
+                        )}
                         <Chip label={userData.heart ? userData.heart.count.toString() : 'No hearts yet'} heart color="paper"/>
                     </Box>
                     

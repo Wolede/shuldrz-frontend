@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
-import { Drawer, Typography, Hidden } from '@material-ui/core'
+import { Drawer, Hidden, Fab } from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close';
 import ProfileBox from '../ProfileBox'
 import UpcomingBox from '../UpcomingBox'
 
@@ -23,7 +24,15 @@ const RightSidebar = props => {
                 <ProfileBox />
                 <UpcomingBox />
                 <Hidden lgUp>
-                    <Typography variant="body1" onClick={onClose} align="center" >{'close >>>'}</Typography>
+                    <Fab 
+                        size="small" 
+                        aria-label="back" 
+                        color='secondary' 
+                        onClick={onClose} 
+                        className={classes.closeIcon}
+                        >
+                        <CloseIcon />
+                    </Fab>
                 </Hidden>
             </div>
         </Drawer>

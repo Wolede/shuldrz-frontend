@@ -6,6 +6,7 @@ import SidebarNav from './SidebarNav';
 import Logout from 'components/Logout'
 import useAuth from 'contexts/Auth'
 import SponsoredAdBox from '../../../SponsoredAdBox';
+import { Home, MessageSquare, Clipboard, MessageCircle, Users } from 'react-feather';
 
 const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
@@ -17,40 +18,40 @@ const LeftSidebar = props => {
         {
           title: 'Home',
           href: '/app',
-          icon: <DashboardIcon />
+          icon: <Home />
         },
         {
           title: 'Sessions',
           href: '/app/sessions',
-          icon: <DashboardIcon />
+          icon: <MessageCircle />
         },
         {
           title: 'Trainings',
           href: '/app/trainings',
-          icon: <DashboardIcon />
+          icon: <Clipboard />
         },
         {
           title: 'Reviews',
           href: '/app/reviews',
-          icon: <DashboardIcon />
+          icon: <MessageSquare />
         },
     ] : [
        {
         title: 'Home',
         href: '/app',
-        icon: <DashboardIcon />
+        icon: <Home />
+       },
+       {
+        title: 'Buddies',
+        href: '/app/buddies',
+        icon: <Users />
        },
        {
         title: 'Sessions',
         href: '/app/sessions',
-        icon: <DashboardIcon />
-     },
-       {
-        title: 'Buddies',
-        href: '/app/buddies',
-        icon: <DashboardIcon />
-     },
-       ];
+        icon: <MessageCircle />
+       },    
+    ];
 
     return (
         <Drawer

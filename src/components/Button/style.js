@@ -15,12 +15,12 @@ const sizePicker = (size) => {
             }
         case 'small':
             return {
-                padding: '0.4rem 1rem',
+                padding: '0.53em 1.33em',
                 fontSize: '0.75rem'
             }
         case 'tiny':
             return{
-                padding: '0.4rem 0.85rem',
+                padding: '0.62em 1.3em',
                 fontSize: '0.65rem',
                 fontWeight: '100'                
             }

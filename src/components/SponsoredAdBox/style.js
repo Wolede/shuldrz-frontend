@@ -8,7 +8,8 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '10px',
         backgroundColor: theme.palette.background.default,
         boxShadow: 'none',
-        marginBottom: '1rem'
+        marginTop: 'auto',
+        marginBottom: '3rem'
     },
     media: {
         height: '50px'
