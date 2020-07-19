@@ -75,7 +75,7 @@ const JourneyLayout = () => {
 
             ) : feeds.length === 0 ? (
 
-                <Box textAlign="center" paddingTop="100"> 
+                 <Box textAlign="center" paddingTop="100"> 
                     <Typography align="center" variant="body1">Your feed is empty</Typography>
                 </Box>
                 
@@ -124,11 +124,10 @@ const JourneyLayout = () => {
                         )
                     })
                 )
-
             }
 
 
-            {/* Load Custom Modal COmponent */}
+            /* Load Custom Modal COmponent */
             {openModal === true &&
                 (
                     <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />

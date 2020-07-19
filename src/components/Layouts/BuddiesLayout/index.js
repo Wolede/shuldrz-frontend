@@ -1,11 +1,11 @@
-import React from 'react'
-import { Box, Typography, Grid } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
-import useAuth from 'contexts/Auth'
-import useSWR, { mutate } from 'swr'
-import api from 'services/Api'
-import { useStyles } from './style'
 import ProfileCard from 'components/ProfileCard'
+import useAuth from 'contexts/Auth'
+import React from 'react'
+import api from 'services/Api'
+import useSWR from 'swr'
+import { useStyles } from './style'
 
 
 const BuddiesLayout = () => {
@@ -34,7 +34,7 @@ const BuddiesLayout = () => {
                 <Grid container spacing={4}>
                 {
                 buddies.map(( buddy, key ) => { 
-                    const { username, profileImage, occupation, heart, ranking, id } = buddy
+                    const { username, profileImage, occupation, heart, ranking, id, email } = buddy
 
                     return (
                         <Grid item xl={4} md={4} sm={6} xs={12} key={key}>
@@ -45,6 +45,7 @@ const BuddiesLayout = () => {
                                 heart={heart}
                                 id={id}
                                 ranking={ranking}
+                                email={email}
                             />
                         </Grid>
                     )

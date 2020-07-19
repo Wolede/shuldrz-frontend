@@ -10,6 +10,8 @@ import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 
+const firebase = require("firebase");
+
 const SignupForm = ({volunteer}) => {
     const classes = useStyles()
     const { setUser } = useAuth()
@@ -54,6 +56,20 @@ const SignupForm = ({volunteer}) => {
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
                 const user = res.data
+                const userObj = {
+                    username: user.username
+                };
+                // sendUserDataToFirestore(user)
+                            
+                firebase.firestore().collection('users').doc(user.username).set(userObj)
+                .then(() => {
+                    console.log('logged user')
+                }, err => {
+                    console.log('user not stored:' + err)
+                }
+                    
+                )
+                
                 setUser(user)
                 console.log("Got user", user)
                 Router.push('/app')
