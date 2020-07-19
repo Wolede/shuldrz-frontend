@@ -127,7 +127,7 @@ const JourneyLayout = () => {
             }
 
 
-            /* Load Custom Modal COmponent */
+           {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
                     <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />

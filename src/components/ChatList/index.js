@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Badge } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import Avatar from 'components/Avatar'
 import Paper from 'components/Paper'
@@ -12,7 +12,6 @@ import { useStyles } from './styles'
 
 
 const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }) => {
-
 
 
     const classes = useStyles()
@@ -40,9 +39,10 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
                     <>
                         {
                             
-                            chat.receiverHasRead === false && !userIsSender(chat) ?
-                            <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
+                            // chat.receiverHasRead === false && !userIsSender(chat) ?
+                            // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
                         }
+                        
                         <Grid
                             key={i}
                             onClick={() => selectChat(i)}
@@ -53,9 +53,18 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
                             className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
                         >
                             
-
-                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`/images/${chat.img}`} size="small" variant='rounded' />
-                            {/* <img src='/images/happy-woman.png'/> */}
+                            <Badge 
+                                color="error" 
+                                variant="dot" 
+                                invisible={false}
+                                overlap='Avatar'
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }} 
+                            >
+                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />
+                            </Badge>
                             <Grid
                                 container
                                 direction="column"
@@ -67,9 +76,6 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
                                 </Typography>
                                 
                             </Grid>
-
-
-
                         </Grid>
                     </>
                 )

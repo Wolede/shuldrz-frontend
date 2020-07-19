@@ -57,7 +57,9 @@ const SignupForm = ({volunteer}) => {
                 const res = await api.get('users/me')
                 const user = res.data
                 const userObj = {
-                    username: user.username
+                    username: user.username,
+                    id: user.id,
+                    profileImage: user.profileImage?.url
                 };
                 // sendUserDataToFirestore(user)
                             

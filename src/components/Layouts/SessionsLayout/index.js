@@ -4,7 +4,6 @@ import { Skeleton } from '@material-ui/lab'
 import Paper from 'components/Paper'
 import ChatList from 'components/ChatList'
 import ChatView from 'components/ChatView'
-import ChatInput from 'components/ChatInput'
 import Link from 'next/link'
 import Button from 'components/Button'
 import useAuth from 'contexts/Auth'
@@ -256,9 +255,9 @@ const Sessions = (props) => {
                     direction="row"
                     justify="center"
                     alignItems="center"
-                    className={useStyles.root}
+                    className={classes.root}
                 >
-                    <Paper height='95vh' borderRadius='30px 0 0 30px' width='30%' padding="0">
+                    <Paper height="100%" borderRadius='30px 0 0 30px' width='30%' padding="0">
                         {
                             !chats ? (
                                 <>
@@ -305,7 +304,8 @@ const Sessions = (props) => {
 
                     </Paper>
                     {/* <div > */}
-                        <Box className={classes.chatContainer} ref={chatContainer} overflow="auto" height='95vh' borderRadius='0 30px 30px 0' width='70%' padding='0 3rem 3rem 3rem' >
+                        <Box className={classes.chatContainer} ref={chatContainer} 
+                        display='flex' flexDirection='column' justifyContent='flex-end' overflow="auto" position="relative" height='100%' borderRadius='0 30px 30px 0' width='70%' padding='0 3rem 3rem 3rem' >
                             {
                                 loading ? (
                                     <Box marginTop={3}>
@@ -316,19 +316,22 @@ const Sessions = (props) => {
                                 ) :
                                     (
                                         chats !== undefined ?
-                                            <ChatView endBtn={
-                                                chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1].session === 'ended' ? true : false
-                                            } 
-                                            endSessionFn={endSession} 
-                                            user={user.email} 
-                                            chat={chats[selectedChat]} /> 
+                                            <ChatView 
+                                                endBtn={
+                                                    chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1].session === 'ended' ? true : false
+                                                } 
+                                                endSessionFn={endSession} 
+                                                user={user.email} 
+                                                chat={chats[selectedChat]} 
+                                                submitMessage={submitMessage}
+                                            /> 
                                             : <div> No chat available select a profile to chat with </div>
                                     )
                             }
                         </Box>
                     {/* </div> */}
                     
-                    <ChatInput submitMessageFn={submitMessage} />
+                    
                 </Grid>
 
             

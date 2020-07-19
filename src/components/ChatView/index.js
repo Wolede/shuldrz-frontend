@@ -1,20 +1,15 @@
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Box } from '@material-ui/core'
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
 import React, { useState, useEffect } from 'react'
 import { useStyles } from './styles'
 import Divider from 'components/Divider'
+import moment from 'moment'
 
 
-
-
-const ChatView = ({ user, chat, endSessionFn, endBtn }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
     const classes = useStyles()
-
-    const [sessionStart, updateSessionStart] = useState(true)
-    const [sessionEnd, updateSessionEnd] = useState(true)
-
 
     const setSchedule = () => {
         console.log('schedule has been set')
@@ -49,69 +44,71 @@ const ChatView = ({ user, chat, endSessionFn, endBtn }) => {
     } else {
         console.log(chat)
         return (
-            <div>
+            <>
 
-                <Grid
-                    // container
-                    direction="row"
-                    className={classes.chatHeader}
-                    justify="space-between"
-                    alignItems="center"
-                    
+                <Box 
+                    position='sticky'
+                    top='0.1px'
+                    display="flex"
+                    style={{ backgroundColor: '#3f316b' }}
+                    padding='2rem 2rem 1rem 2rem'
                 >
-                    <div className={classes.chatHeaderLink}>
+                    <Box flexGrow='1' display='flex'>
                         <Avatar className={classes.chatAvatar} alt={chat.users.filter(_user => _user !== user)[0]} src={`/images/${chat.img}`} size="tiny" variant='rounded' />
                         <Button size="small" color="warning">More info</Button>
-                    </div>
-
-
-                    <div className={classes.chatHeaderSession}>
+                    </Box>
+                    <div className={classes.headerButtons}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
-                        <Button onClick={startSession} variant="contained" size="tiny" color="secondary-light">Start session</Button>
-                        <Button onClick={endSession} variant="contained" size="tiny" disabled={endBtn}>End session</Button>
+                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn}>End session</Button>
                     </div>
-                </Grid>
-                <div  id="chatview-container" className={classes.chatContainer}>
+                </Box>
+                <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
                     
                     {
                         chat.messages.map((msg, i) => {   
 
                             return (
                                 <div key={i}>
+                                    {                                       
+                                        msg.session === 'started' && (
+                                            <Divider>
+                                                <Typography variant="body1">Session Started</Typography>
+                                            </Divider>
+                                        )
+                                    }
+
                                     {
                                         msg.message && (
                                             <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
-
-                                            <Typography variant="h6">{msg.message}</Typography>
-
+                                                <div>
+                                                    <Typography variant="body1">{msg.message}</Typography>
+                                                    <Typography color="secondary" className='timestamp'>
+                                                        {moment(msg.timestamp).calendar()}
+                                                    </Typography>
+                                                </div>
                                             </div>
                                         )
                                     }
-                                    {                                       
-                                        msg.session === 'started' && (<Divider>Session Started</Divider>)
-                                    }
 
                                     {   
-                                        msg.session === 'ended' && (<Divider>Session Ended</Divider>)
+                                        msg.session === 'ended' && (
+                                            <Divider>
+                                                <Typography variant="body1">Session Ended</Typography>
+                                            </Divider>
+                                        )
                                     }
                                 </div>
                             )                         
                            
-                           {/* return msg.message ? (
-                                
-                                
-                            ) : null                                   */}
                             
                         })
                     }
 
-                    {/* {sessionEnd ? <Divider>Session Ended</Divider> : null} */}
+                </Box>
 
-                </div>
-
+                <ChatInput submitMessageFn={submitMessage} />
                 
-                
-            </div>
+            </>
         )
     }
 

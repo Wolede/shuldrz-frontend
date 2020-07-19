@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        
+        height: 'calc(100vh - 7rem)'
     },
     chatContainer: {
         backgroundColor: theme.palette.secondary.main,

@@ -80,6 +80,15 @@ const colorPicker = (color, theme) => {
                 boxShadowHover: `0px 30px 60px rgba(237, 123, 132, 0.50)`,
                 boxShadowActive: `0px 30px 60px rgba(237, 123, 132, 0.60)`,
             }
+        case 'error-light':
+            return {
+                mainColor: theme.palette.error.main,
+                darkColor: theme.palette.error.dark,
+                textColor: theme.palette.error.contrastText,
+                boxShadow: `0px 30px 60px rgba(237, 123, 132, 0.10)`,
+                boxShadowHover: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
+                boxShadowActive: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
+            }
         default:
             return {
                 mainColor: null,
