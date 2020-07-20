@@ -17,23 +17,29 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
     const classes = useStyles()
     const mockChats = [0, 1, 2, 3]
 
-    // const selectChat = (index) => {
-    //     selectedChat(index)        
-    // }
-
-    const userIsSender = (chat) => {
-        
-        chat.messages.length > 0 ? 
-        chat.messages[chat.messages.length - 1].sender === user.email : 
-        chat.messages[chat.messages].sender === user.email
+    const badgeHandler = () => {
+                
     }
+
+    const userIsSender = (chat) => {   
+        const a = false;     
+        console.log('userIsSender', 
+            chat.messages[chat.messages.length - 1].sender === user.email  )
+        console.log('testing',  a === false && true ? 'no badge' : 'badge')
+        chat.messages[chat.messages.length - 1].sender === user.email  
+             
+    }
+
+    
 
     const selectChat = (index) => selectChatFn(index);
 
     if (chats) {
         return (
             chats.map((chat, i) => {
-                console.log(chat.messages)
+
+                
+                 
                 return (
 
                     <>
@@ -52,19 +58,26 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn }
                             alignItems="center"
                             className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
                         >
+                            {
+                                chat.receiverHasRead === false && !userIsSender(chat)
+                                 ? 
+                                    <Badge 
+                                        color="error" 
+                                        variant="dot" 
+                                        invisible={false}
+                                        overlap='Avatar'
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'left',
+                                        }} 
+                                        >
+                                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />
+                                    </Badge>
+                                :                                      
+                                    
+                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />  
+                            }
                             
-                            <Badge 
-                                color="error" 
-                                variant="dot" 
-                                invisible={false}
-                                overlap='Avatar'
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }} 
-                            >
-                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />
-                            </Badge>
                             <Grid
                                 container
                                 direction="column"

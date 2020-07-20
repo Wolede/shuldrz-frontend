@@ -8,21 +8,19 @@ import Divider from 'components/Divider'
 import moment from 'moment'
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClickedInput }) => {
     const classes = useStyles()
 
     const setSchedule = () => {
         console.log('schedule has been set')
     }
 
-    const startSession = () => {
-        console.log('session has started')
-    }
-
+    
     const endSession = () => {
         endSessionFn()
     }
 
+    
     // function scrollToEnd(){
     //     var chatList = document.getElementById("chatview-container");
     //     chatList.scrollTop = chatList.scrollHeight;
@@ -42,7 +40,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
             </div>
         )
     } else {
-        console.log(chat)
+        console.log('disable button', endBtn())
         return (
             <>
 
@@ -59,7 +57,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
                     </Box>
                     <div className={classes.headerButtons}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
-                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn}>End session</Button>
+                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
                     </div>
                 </Box>
                 <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
@@ -106,7 +104,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
 
                 </Box>
 
-                <ChatInput submitMessageFn={submitMessage} />
+                <ChatInput userClickedInput = {userClickedInput} submitMessageFn={submitMessage} />
                 
             </>
         )

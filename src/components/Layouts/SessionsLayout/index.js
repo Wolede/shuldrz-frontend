@@ -58,15 +58,13 @@ const Sessions = (props) => {
         }
 
         if (selectedUser) {           
-            submitNewChat()  
+            submitNewChat()              
         }
 
+        
+        
 
-        if (selectedChat) {
-            messageRead();
-        }
-
-        console.log('chats', chats)
+        
         console.log('selected chat', selectedChat)        
         console.log('sessions message', selectedUser);
 
@@ -75,10 +73,9 @@ const Sessions = (props) => {
 
     
 
-    const selectChat = (chatIndex) => {        
-        
+    const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
-        
+        messageRead();      
     }
 
     const buildDocKey = (friend) => [user.email, friend].sort().join(':');
@@ -109,39 +106,34 @@ const Sessions = (props) => {
                 receiverHasRead: false
             });
 
-        updateSelectedChat(0)
+        updateSelectedChat(0)   
+        
+        
     }
 
     useEffect(() => {
         scrollToMyRef()
+        if (chats) {
+            btnDisabled()
+        }
     }, [chats, selectedChat])
 
     
 
     const clickedMessageWhereNotSender = (chatIndex) =>  {
-        if (chats[chatIndex].messages.length !== 0) {
-            return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.email 
-        } else {
-            console.log(chats[chatIndex].messages[chats[chatIndex].messages.length].sender !== user.email)
-            return chats[chatIndex].messages[chats[chatIndex].messages.length].sender !== user.email;
-        } 
+        return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.email         
     }
 
     const messageRead = () => {
-        console.log(chats)
-        const chatIndex = selectedChat === -1 ? 0 : selectedChat ;
-        console.log(chatIndex)
-        const docKey = buildDocKey(chats[chatIndex].users.filter(_usr => _usr !== user.email)[0]);   
-        console.log(clickedMessageWhereNotSender(chatIndex))
-        if (clickedMessageWhereNotSender(chatIndex)) {
+        const docKey = buildDocKey(chats[selectedChat].users.filter(_usr => _usr !== user.email)[0]);   
+        console.log('clicked message where I am not the sender', clickedMessageWhereNotSender(selectedChat))
+        if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
                 .firestore()
                 .collection('chats')
                 .doc(docKey)
                 .update({ receiverHasRead: true });
-        } else {
-            console.log('Clicked message where the user was the sender');
-        }
+        } 
     }
 
 
@@ -173,8 +165,7 @@ const Sessions = (props) => {
                 .firestore()
                 .collection('chats')
                 .doc(docKey)
-                .get();
-            console.log(chat.exists);
+                .get();           
             return chat.exists;
         }
 
@@ -184,10 +175,8 @@ const Sessions = (props) => {
             updateSelectedChat(chats.indexOf(chat));
         }
 
-        const newChatSubmit = async (chatObj) => {
-            console.log('i am here')
-            const docKey = newBuildDocKey();
-            
+        const newChatSubmit = async (chatObj) => {            
+            const docKey = newBuildDocKey();            
             await 
             firebase
             .firestore()
@@ -209,7 +198,6 @@ const Sessions = (props) => {
         const userExist = await userExists();
         if (userExist) {
             const chatExist = await chatExists();
-            console.log(chatExist, 'I exist')
             chatExist ? goToChat(newBuildDocKey()) : newChatSubmit({
                 sendTo: selectedUser.email,                
             });
@@ -218,8 +206,8 @@ const Sessions = (props) => {
 
     }
 
-    const startSession = () => {
-        
+    const userInputFn = () => {
+        messageRead()
     }
 
     const endSession = () => {   
@@ -236,11 +224,22 @@ const Sessions = (props) => {
                 }),
                 currentTime: Date.now(),
                 receiverHasRead: false
-            });
-            
+            });      
           
     }
 
+    const btnDisabled = () => {
+         if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='none'){
+             return true
+         } 
+         else if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='ended'){
+            return true
+       } else {
+           return false
+       }
+    }
+
+    
 
     // <!-- new chat -->
   
@@ -317,9 +316,8 @@ const Sessions = (props) => {
                                     (
                                         chats !== undefined ?
                                             <ChatView 
-                                                endBtn={
-                                                    chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1].session === 'ended' ? true : false
-                                                } 
+                                                endBtn={btnDisabled}   
+                                                userClickedInput={userInputFn}
                                                 endSessionFn={endSession} 
                                                 user={user.email} 
                                                 chat={chats[selectedChat]} 
