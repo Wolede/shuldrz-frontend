@@ -14,7 +14,7 @@ import ChatProfile from '../ChatProfile';
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClickedInput }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -165,7 +165,6 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClicked
 
 
 }
-
 
 ChatView.propTypes = {
     backBtn: PropTypes.func,
