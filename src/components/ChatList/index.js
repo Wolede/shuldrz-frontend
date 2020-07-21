@@ -58,7 +58,6 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                             alignItems="center"
                             className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
                         >
-<<<<<<< HEAD
                             {
                                 chat.receiverHasRead === false && !userIsSender(chat)
                                  ? 
@@ -90,31 +89,6 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                 </Typography>
                                 
                             </Grid>
-=======
-                                <Badge 
-                                    color="error" 
-                                    variant="dot" 
-                                    invisible={false}
-                                    overlap='Avatar'
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'left',
-                                    }} 
-                                >
-                                <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />
-                                </Badge>
-                                <Grid
-                                    container
-                                    direction="column"
-                                    className={classes.typography}
-                                >
-                                    <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.email)[0].substring(0, 8)}</Typography>
-                                    <Typography variant="body2">
-                                        {chat.messages[chat.messages.length -1].message  ? chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...' : null}
-                                    </Typography>
-                                    
-                                </Grid>
->>>>>>> 70f189ed002839b4d16a4ab0e748cf1d80d05801
                         </Grid>
                         </div>
                     </>

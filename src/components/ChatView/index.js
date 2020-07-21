@@ -13,11 +13,8 @@ import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
 
 
-<<<<<<< HEAD
 const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClickedInput }) => {
-=======
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) => {
->>>>>>> 70f189ed002839b4d16a4ab0e748cf1d80d05801
+
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -168,6 +165,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) 
 
 
 }
+
 
 ChatView.propTypes = {
     backBtn: PropTypes.func,

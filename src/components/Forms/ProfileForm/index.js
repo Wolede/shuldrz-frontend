@@ -14,6 +14,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
 import { useStyles } from './style'
+const firebase = require("firebase");
 
 const ProfileForm = ({ user }) => {
     // console.log(user, 'in profile');
@@ -99,9 +100,12 @@ const ProfileForm = ({ user }) => {
 
     const onSubmit = async (values) => {
         try {
-            const res = await api.put(`users/${id}`, values)
+            console.log(values)
+            const res = await api.put(`users/${id}`, values)             
+          
             
             console.log('letsee', res);
+
             
         } catch (error) {
             //error state Login Unsuccessful 

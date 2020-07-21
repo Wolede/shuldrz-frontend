@@ -59,7 +59,7 @@ const SignupForm = ({volunteer}) => {
                 const userObj = {
                     username: user.username,
                     id: user.id,
-                    profileImage: user.profileImage?.url
+                    profileImage: null
                 };
                 // sendUserDataToFirestore(user)
                             
