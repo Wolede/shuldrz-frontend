@@ -1,28 +1,54 @@
-import { Grid, Typography, Box } from '@material-ui/core'
+import React, { useState, useEffect } from 'react'
+import { Grid, Typography, Box, Fab, useMediaQuery, Button as MuiButton } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles';
+import PropTypes from 'prop-types'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
-import React, { useState, useEffect } from 'react'
 import { useStyles } from './styles'
 import Divider from 'components/Divider'
 import moment from 'moment'
+import MiniDrawer from 'components/MiniDrawer';
+import ChatProfile from '../ChatProfile';
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
+<<<<<<< HEAD
+const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClickedInput }) => {
+=======
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) => {
+>>>>>>> 70f189ed002839b4d16a4ab0e748cf1d80d05801
     const classes = useStyles()
+
+    // More sidebar profile stuff 
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+        defaultMatches: true
+    });
+
+    const [openRightSidebar, setOpenRightSidebar] = useState(false);
+
+    const handleRightSidebarOpen = () => {
+        setOpenRightSidebar(true);
+    };
+    
+    const handleRightSidebarClose = () => {
+        setOpenRightSidebar(false);
+    };
+
+    // const shouldOpenRightSidebar = isDesktop ? false : openRightSidebar;
+
 
     const setSchedule = () => {
         console.log('schedule has been set')
     }
 
-    const startSession = () => {
-        console.log('session has started')
-    }
-
+    
     const endSession = () => {
         endSessionFn()
     }
 
+    
     // function scrollToEnd(){
     //     var chatList = document.getElementById("chatview-container");
     //     chatList.scrollTop = chatList.scrollHeight;
@@ -42,24 +68,52 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
             </div>
         )
     } else {
-        console.log(chat)
+        console.log('disable button', endBtn())
         return (
             <>
+                {
+                    <MiniDrawer
+                        direction='left'
+                        open={openRightSidebar}
+                        width='100%'
+                        position='absolute'
+                    >
+                        <ChatProfile
+                            closeChatProfile={handleRightSidebarClose}
+                        />
+                    </MiniDrawer>
+                }
 
                 <Box 
                     position='sticky'
                     top='0.1px'
                     display="flex"
                     style={{ backgroundColor: '#3f316b' }}
-                    padding='2rem 2rem 1rem 2rem'
+                    padding='0rem 0rem 1rem 0rem'
                 >
-                    <Box flexGrow='1' display='flex'>
-                        <Avatar className={classes.chatAvatar} alt={chat.users.filter(_user => _user !== user)[0]} src={`/images/${chat.img}`} size="tiny" variant='rounded' />
-                        <Button size="small" color="warning">More info</Button>
+                    <Box flexGrow='1' display='flex' alignItems='center'>
+                        {  !isDesktop && (
+                            <Fab size="small" aria-label="back" color="secondary" onClick={backBtn} style={{ marginRight: '1rem' }}>
+                                <ArrowBackIcon />
+                            </Fab>
+                            )
+                        }
+                        <MuiButton
+                            variant="contained"
+                            color="secondary"
+                            size='small'
+                            startIcon={
+                                <Avatar className={classes.chatAvatar} alt={chat.users.filter(_user => _user !== user)[0]} src={`/images/${chat.img}`} size="tiny" variant='rounded' />
+                            }
+                            onClick={handleRightSidebarOpen}
+                        >
+                            More
+                        </MuiButton>
+                        
                     </Box>
                     <div className={classes.headerButtons}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
-                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn}>End session</Button>
+                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
                     </div>
                 </Box>
                 <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
@@ -106,7 +160,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
 
                 </Box>
 
-                <ChatInput submitMessageFn={submitMessage} />
+                <ChatInput userClickedInput = {userClickedInput} submitMessageFn={submitMessage} />
                 
             </>
         )
@@ -114,5 +168,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage }) => {
 
 
 }
+
+ChatView.propTypes = {
+    backBtn: PropTypes.func,
+    endBtn: PropTypes.bool
+};
 
 export default ChatView

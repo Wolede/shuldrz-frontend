@@ -1,17 +1,26 @@
-import { useContext } from 'react'
 import useAuth from 'contexts/Auth'
-import { Button } from '@material-ui/core'
+import { useStyles } from './style';
+import { Button, Typography } from '@material-ui/core'
+import { LogOut } from 'react-feather';
 
 const Logout = () => {
     const { logout } = useAuth()
+    const classes = useStyles()
 
     const logoutHandler = () => {
         logout()
     }
 
     return (
-        <div>
-            <Button onClick={logoutHandler} variant="outlined" color="primary" size="small">Logout</Button>
+        <div style={{ textAlign: "center" }}>
+            <Button onClick={logoutHandler} className={classes.button} size="small">
+                <div 
+                    className={classes.icon}
+                >
+                    <LogOut />
+                </div>
+                <Typography className={classes.menuText} >Logout</Typography>
+            </Button>
         </div>
     )
 }

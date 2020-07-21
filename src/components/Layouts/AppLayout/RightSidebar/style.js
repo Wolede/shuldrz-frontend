@@ -20,6 +20,11 @@ const useStyles = makeStyles(theme => ({
     },
     divider: {
         margin: theme.spacing(2, 0)
+    },
+    closeIcon: {
+        position: 'absolute',
+        bottom: theme.spacing(4),
+        right: theme.spacing(4),
     }
 }))
 
