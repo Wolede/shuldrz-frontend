@@ -13,8 +13,8 @@ import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClickedInput }) => {
 
+const ChatView = ({ user, chat, endSessionFn, endBtn, submitMessage, userClickedInput }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
