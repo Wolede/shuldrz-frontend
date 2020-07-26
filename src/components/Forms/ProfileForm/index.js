@@ -104,7 +104,7 @@ const ProfileForm = ({ user }) => {
             if (topicObject) {
                 acc.push(topicObject);
             }
-            return acc;
+            return acc; 
         }, [])
 
         values = {
