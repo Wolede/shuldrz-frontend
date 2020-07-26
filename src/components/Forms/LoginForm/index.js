@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography } from '@material-ui/core'
 import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useStyles } from './style'
@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 const firebase = require("firebase");
+import Modal from 'components/Modal'
 
 const LoginForm = () => {
     const classes = useStyles()
@@ -70,6 +71,17 @@ const LoginForm = () => {
         event.preventDefault();
     };
 
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleOpen = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
+
+
     return (
         <div>
             <Formik
@@ -122,7 +134,9 @@ const LoginForm = () => {
                         }}
                         />
                     </FormControl>
-                    
+                    <Box>
+                        <Typography onClick={handleOpen}>Forgot Password?</Typography>
+                    </Box>
                     <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 
@@ -153,6 +167,13 @@ const LoginForm = () => {
                 </Form>
             )}
             </Formik>
+
+            {/* Load Custom Modal COmponent */}
+            {openModal === true &&
+                (
+                    <Modal handleClose={handleClose} openModal={openModal} view='forgotPassword' />
+                )
+            }
         </div>
     )
 }
