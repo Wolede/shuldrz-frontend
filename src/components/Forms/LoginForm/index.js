@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography } from '@material-ui/core'
 import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useStyles } from './style'
@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 const firebase = require("firebase");
+import Modal from 'components/Modal'
 
 const LoginForm = () => {
     const classes = useStyles()
@@ -49,9 +50,13 @@ const LoginForm = () => {
                 Router.push('/app')
             }
         } catch (error) {
-            //error state Login Unsuccessful 
-            console.log(error, 'error')
-            setIsSuccessful(false)
+            //error state Login Unsuccessful
+            const message = error.response.data.message[0].messages[0].message
+            // console.log('error')
+            setIsSuccessful({
+                status: false,
+                message: message === 'Identifier or password invalid.' ? 'Invalid Email or Password. Please Try Again!' : message
+            })
         }
 
     }
@@ -65,6 +70,17 @@ const LoginForm = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleOpen = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
+
 
     return (
         <div>
@@ -118,7 +134,9 @@ const LoginForm = () => {
                         }}
                         />
                     </FormControl>
-                    
+                    <Box>
+                        <Typography onClick={handleOpen}>Forgot Password?</Typography>
+                    </Box>
                     <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 
@@ -132,12 +150,30 @@ const LoginForm = () => {
                     </FormControl>
                     
                     <FormControl className={classes.formControl}>
-                        <FormHelperText style={{ textAlign: 'center' }} error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                        <FormHelperText 
+                            style={{ textAlign: 'center' }} 
+                            error={true}
+                        >
+                            {
+                                isSuccessful?.status === false ? 
+                                    isSuccessful.message ? 
+                                        isSuccessful.message
+                                    : 'an error occured' 
+                                : null
+                            }
+                        </FormHelperText>
                     </FormControl>
                     
                 </Form>
             )}
             </Formik>
+
+            {/* Load Custom Modal COmponent */}
+            {openModal === true &&
+                (
+                    <Modal handleClose={handleClose} openModal={openModal} view='forgotPassword' />
+                )
+            }
         </div>
     )
 }

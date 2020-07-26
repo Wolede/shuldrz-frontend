@@ -3,7 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
     root: {
         position: 'relative',
-        wordBreak: 'break-word'
+        wordBreak: 'break-word',
+        '& p':{
+            margin: 0,
+        }
     },
     iconButtons: {
         position: 'absolute',

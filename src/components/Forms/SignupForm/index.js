@@ -28,12 +28,12 @@ const SignupForm = ({volunteer}) => {
     }
     
     const validationSchema = Yup.object({
-        firstName: Yup.string().required('First name is empty'),
-        lastName: Yup.string().required('Last name is empty'),
-        username: Yup.string().required('Username is empty'),
+        firstName: Yup.string().max(20, 'Maximum of 20 characters').required('First name is empty'),
+        lastName: Yup.string().max(20, 'Maximum of 20 characters').required('Last name is empty'),
+        username: Yup.string().min(4, "Can't be less than 4 characters").max(12, 'Maximum of 12 characters').required('Username is empty'),
         // occupation: Yup.string().required('Occupation is empty'),
         email: Yup.string().email('Invalid email format!').required('Email is empty!'),
-        password: Yup.string().required('Password is empty')
+        password: Yup.string().required('Password is empty').matches(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@[\]\^_`\{\|}~])[a-zA-Z0-9 !"#\$%&'\(\)\*\+,-\.\/:;<=>\?@[\]\^_`\{\|}~]{6,}$/, 'Minimum of 6 characters and at least one lowercase letter, one uppercase letter, one number and one special character')
     })
 
     const onSubmit = async (values) => {
@@ -77,8 +77,12 @@ const SignupForm = ({volunteer}) => {
                 Router.push('/app')
             }
         } catch (error) {
-            console.log(error, 'error')
-            setIsSuccessful(false)
+            const message = error.response.data.message[0].messages[0].message
+            // console.log('error')
+            setIsSuccessful({
+                status: false,
+                message: message
+            })
         }
     }
 
@@ -214,7 +218,18 @@ const SignupForm = ({volunteer}) => {
                     </FormControl>
                     
                     <FormControl>
-                        <FormHelperText style={{ textAlign: 'center' }} error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                        <FormHelperText 
+                            style={{ textAlign: 'center' }} 
+                            error={true}
+                        >
+                            {
+                                isSuccessful?.status === false ? 
+                                    isSuccessful.message ? 
+                                        isSuccessful.message
+                                    : 'an error occured' 
+                                : null
+                            }
+                        </FormHelperText>
                     </FormControl>
 
                 </Form>

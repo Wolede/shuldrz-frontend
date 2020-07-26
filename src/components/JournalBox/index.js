@@ -5,6 +5,7 @@ import Paper from 'components/Paper'
 import BoxMenu from 'components/BoxMenu'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import ReactMarkdown from "react-markdown"
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LockIcon from '@material-ui/icons/Lock';
@@ -89,9 +90,11 @@ const JournalBox = ( { journal } ) => {
 
                     <Typography 
                         variant="subtitle1" 
-                        dangerouslySetInnerHTML={{ __html : notes }} 
-                        style={{ fontWeight: 400 }}    
-                    />
+                        // dangerouslySetInnerHTML={{ __html : notes }} 
+                        style={{ fontSize: '1.2rem', fontWeight: 400 }} 
+                    >
+                        <ReactMarkdown source={notes} />
+                    </Typography>
                 </Box>
             </Box>
         </Paper>
