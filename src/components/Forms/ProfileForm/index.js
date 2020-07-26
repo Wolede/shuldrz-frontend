@@ -65,7 +65,7 @@ const ProfileForm = ({ user }) => {
         lastName: lastName ? lastName : '',
         username: username ? username : '',
         phoneNumber: phoneNumber ? phoneNumber : '',
-        dateOfBirth: DateOfBirth ? new Date(DateOfBirth) : new Date(),
+        DateOfBirth: DateOfBirth ? new Date(DateOfBirth) : new Date('1995-08-18T21:11:54'),
         gender: gender ? gender : '',
         maritalStatus: maritalStatus ? maritalStatus : '',
         personality_type: personality_type ? personality_type.id : '',
@@ -80,17 +80,17 @@ const ProfileForm = ({ user }) => {
     }
 
     const validationSchema = Yup.object({
-        firstName: Yup.string().required('First name is empty'),
-        lastName: Yup.string().required('Last name is empty'),
-        username: Yup.string().required('Username is empty'),
-        phoneNumber: Yup.string(),
-        dateOfBirth: Yup.date().nullable(),
+        firstName: Yup.string().max(20, 'Maximum of 20 characters').required('First name is empty'),
+        lastName: Yup.string().max(20, 'Maximum of 20 characters').required('Last name is empty'),
+        username: Yup.string().min(4, "Can't be less than 4 characters").max(12, 'Maximum of 12 characters').required('Username is empty'),
+        phoneNumber: Yup.string().max(15, 'too long...'),
+        DateOfBirth: Yup.date().nullable(),
         gender: Yup.string(),
         maritalStatus: Yup.string(),
         personality_type: Yup.string(),
-        occupation: Yup.string(),
-        reference: Yup.string(),
-        experience: Yup.string(),
+        occupation: Yup.string().max(20, 'Maximum of 20 characters'),
+        reference: Yup.string().max(50, 'Maximum of 50 characters'),
+        experience: Yup.string().max(50, 'Maximum of 50 characters'),
         availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string(),
@@ -101,12 +101,17 @@ const ProfileForm = ({ user }) => {
         try {
             const res = await api.put(`users/${id}`, values)
             
-            console.log('letsee', res);
-            
+            // console.log('letsee', res);
+            setIsSuccessful({
+                status: true,
+            })
         } catch (error) {
-            //error state Login Unsuccessful 
-            console.log(error, 'error')
-            setIsSuccessful(false)
+            const message = error.response.data.message[0].messages[0].message
+            // console.log('error')
+            setIsSuccessful({
+                status: false,
+                message: message
+            })
         }
 
     }
@@ -170,6 +175,7 @@ const ProfileForm = ({ user }) => {
                                 { ...getFieldProps('phoneNumber')}
                                 variant="outlined"
                                 type="number"
+                                className={classes.numberInput}
                                 error={errors.phoneNumber && touched.phoneNumber ? true : false}
                                 helperText={ errors.phoneNumber && touched.phoneNumber ?
                                     errors.phoneNumber : null
@@ -179,14 +185,14 @@ const ProfileForm = ({ user }) => {
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
                                     <KeyboardDatePicker
                                     // disableToolbar
-                                    variant="inline"
+                                    // variant="inline"
                                     inputVariant="outlined"
-                                    format="Do/MMMM/YYYY"
-                                    // margin="normal"
-                                    id="dateOfBirth"
-                                    label="dateOfBirth"
-                                    value={values.dateOfBirth}
-                                    onChange={value => setFieldValue("dateOfBirth", value.toDate())}
+                                    format="DD/MM/YYYY"
+                                    margin="normal"
+                                    id="DateOfBirth"
+                                    label="DateOfBirth"
+                                    value={values.DateOfBirth}
+                                    onChange={value => setFieldValue("DateOfBirth", value.toDate())}
                                     KeyboardButtonProps={{
                                         'aria-label': 'change date',
                                     }}
@@ -278,12 +284,27 @@ const ProfileForm = ({ user }) => {
                                     }
                                 />
 
+                            </div>
+                        </Box>
+
+
+                        <Box>
+                            <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
+                                About
+                            </Typography>
+                            
+                            <div className={classes.fieldWrapper}>
+
                                 <TextField 
                                     name="experience" 
                                     id="experience" 
-                                    label="Tell us a bit about your work experience"
+                                    label="Tell us something unique about you (short description)"
                                     { ...getFieldProps('experience')}
                                     variant="outlined"
+                                    placeholder="...I'm a mother to 2 Autistic kids"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                     multiline
                                     rows={4}
                                     style={{ width: '100%' }}
@@ -432,7 +453,30 @@ const ProfileForm = ({ user }) => {
                             </FormControl>
                             
                             <FormControl className={classes.formControl}>
-                                <FormHelperText style={{ textAlign: 'center' }} error={isSuccessful === false ? true : false}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : 'Saved!'}</FormHelperText>
+                                <Box>
+                                    <FormHelperText 
+                                            style={{ textAlign: 'center' }} 
+                                            error={isSuccessful?.status === false ? true : false}
+                                        >
+                                            {
+                                                isSuccessful?.status === false ? 
+                                                    isSuccessful.message ? 
+                                                        isSuccessful.message
+                                                    : 'an error occured' 
+                                                : null
+                                            }
+                                        </FormHelperText>
+                                        <FormHelperText 
+                                            style={{ textAlign: 'center' }} 
+                                            error={isSuccessful?.status === false ? true : false}
+                                        >
+                                            {
+                                                isSuccessful?.status === true ? 
+                                                    'Saved!'
+                                                : null
+                                            }
+                                        </FormHelperText>
+                                </Box>
                             </FormControl>
                         </Box>
 

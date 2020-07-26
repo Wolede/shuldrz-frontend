@@ -4,6 +4,7 @@ import { Typography, Box, useMediaQuery } from '@material-ui/core'
 import Paper from 'components/Paper'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import ReactMarkdown from "react-markdown"
 
 const AnnouncementBox = ( { announcement } ) => {
     const classes = useStyles()
@@ -16,12 +17,12 @@ const AnnouncementBox = ( { announcement } ) => {
 
     return (
         <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="primary">
-            <Box display="flex">
+            <Box display="flex" className={classes.root}>
                 <Box>
                     <Paper 
                         width={isMobile ? '8rem' : '3.125rem'} 
                         borderRadius={isMobile ? null : '1.25rem'} 
-                        height={isMobile ? '100%' : '3.125rem'} 
+                        height={isMobile ? '6.25rem' : '3.125rem'} 
                         padding=".5rem"
                     >
                         <Box display='flex' alignItems='center' justifyContent='center' height='100%'>
@@ -39,9 +40,11 @@ const AnnouncementBox = ( { announcement } ) => {
 
                     <Typography 
                         variant="subtitle1" 
-                        dangerouslySetInnerHTML={{ __html : message }} 
-                        style={{ fontWeight: 400 }}    
-                    />
+                        // dangerouslySetInnerHTML={{ __html : message }} 
+                        style={{ fontSize: '1.2rem', fontWeight: 400 }} 
+                    >
+                        <ReactMarkdown source={message} />
+                    </Typography>
                 </Box>
             </Box>
         </Paper>

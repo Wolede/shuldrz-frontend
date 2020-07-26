@@ -49,9 +49,13 @@ const LoginForm = () => {
                 Router.push('/app')
             }
         } catch (error) {
-            //error state Login Unsuccessful 
-            console.log(error, 'error')
-            setIsSuccessful(false)
+            //error state Login Unsuccessful
+            const message = error.response.data.message[0].messages[0].message
+            // console.log('error')
+            setIsSuccessful({
+                status: false,
+                message: message === 'Identifier or password invalid.' ? 'Invalid Email or Password. Please Try Again!' : message
+            })
         }
 
     }
@@ -132,7 +136,18 @@ const LoginForm = () => {
                     </FormControl>
                     
                     <FormControl className={classes.formControl}>
-                        <FormHelperText style={{ textAlign: 'center' }} error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                        <FormHelperText 
+                            style={{ textAlign: 'center' }} 
+                            error={true}
+                        >
+                            {
+                                isSuccessful?.status === false ? 
+                                    isSuccessful.message ? 
+                                        isSuccessful.message
+                                    : 'an error occured' 
+                                : null
+                            }
+                        </FormHelperText>
                     </FormControl>
                     
                 </Form>
