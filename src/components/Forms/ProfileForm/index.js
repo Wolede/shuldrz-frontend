@@ -76,7 +76,7 @@ const ProfileForm = ({ user }) => {
         availableTime: availableTime ? availableTime : '',
         charity: charity ? charity.id : '',
         // topics: topics ? topics.map((option) => option.name) : [],
-        topics: topics ? topics : [],
+        topics: topics ? topics.map(topic => topic.name) : [],
     }
 
     const validationSchema = Yup.object({
@@ -98,6 +98,20 @@ const ProfileForm = ({ user }) => {
     })
 
     const onSubmit = async (values) => {
+
+        const newTopics = values.topics.reduce((acc, curr) => {
+            const topicObject = formOptions.topics.find(top => top.name === curr);
+            if (topicObject) {
+                acc.push(topicObject);
+            }
+            return acc; 
+        }, [])
+
+        values = {
+            ...values,
+            topics: newTopics
+        }
+
         try {
             const res = await api.put(`users/${id}`, values)
             
@@ -115,6 +129,8 @@ const ProfileForm = ({ user }) => {
         }
 
     }
+
+    console.log('form', formOptions)
 
     return (
         <>
@@ -412,10 +428,10 @@ const ProfileForm = ({ user }) => {
                                     multiple
                                     id="topics"
                                     options={
-                                        formOptions ? formOptions.topics : [] 
+                                        formOptions ? formOptions.topics.map(topic => topic.name) : [] 
                                     }
                                     disableCloseOnSelect
-                                    getOptionLabel={(option) => option.name}
+                                    getOptionLabel={(option) => option}
                                     value={values.topics}
                                     onChange={(event, newValue) => {setFieldValue("topics", newValue)} }
                                     renderOption={(option, { selected }) => (
@@ -426,7 +442,7 @@ const ProfileForm = ({ user }) => {
                                             style={{ marginRight: 8 }}
                                             checked={selected}
                                         />
-                                        {option.name}
+                                        {option}
                                         </React.Fragment>
                                     )}
                                     // style={{ width: 500 }}
