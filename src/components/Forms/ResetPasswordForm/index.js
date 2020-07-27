@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { Container, Box, Typography, TextField, InputAdornment, IconButton, FormControl, FormHelperText } from '@material-ui/core'
@@ -11,12 +12,13 @@ import { useStyles } from './style'
 import api from 'services/Api'
 
 const ResetPasswordForm = () => {
+    const router = useRouter()
     const classes = useStyles()
     const [isSuccessful, setIsSuccessful] = useState()
 
-    
+    // console.log(router.query.code);
     const initialValues = {
-        code: 'privateCode',
+        code: router.query?.code,
         password: '',
         passwordConfirmation: '',
     }
@@ -28,9 +30,10 @@ const ResetPasswordForm = () => {
 
 
     const onSubmit = async (values) => {
+        console.log(initialValues.code, 'code')
         try {
             const res = await api.post(`auth/reset-password`, {
-                    code: values.code,
+                    code: initialValues.code,
                     password: values.password,
                     passwordConfirmation: values.passwordConfirmation
             })
@@ -76,6 +79,7 @@ const ResetPasswordForm = () => {
                         >
                         {({values, errors, touched, getFieldProps, setFieldValue, isSubmitting}) => (
                             <Form noValidate autoComplete="off">
+                                {console.log(values)}
                                 <FormControl className={classes.formControl}>
                                     <TextField 
                                     name="password" 
@@ -108,11 +112,11 @@ const ResetPasswordForm = () => {
 
                                 <FormControl className={classes.formControl}>
                                     <TextField 
-                                    name="password" 
-                                    id="password" 
+                                    name="passwordConfirmation" 
+                                    id="passwordConfirmation" 
                                     type={showPassword ? 'text' : 'password'}
                                     label="Confirm Password"
-                                    { ...getFieldProps('password')}
+                                    { ...getFieldProps('passwordConfirmation')}
                                     variant="outlined"
                                     error={errors.passwordConfirmation && touched.passwordConfirmation ? true : false}
                                     helperText={ errors.passwordConfirmation && touched.passwordConfirmation ?
@@ -170,7 +174,7 @@ const ResetPasswordForm = () => {
                                             >
                                                 {
                                                     isSuccessful?.status === true ? 
-                                                        'Email Sent! Kindly check your email to reset your password'
+                                                        'Your password has been reset!'
                                                     : null
                                                 }
                                             </FormHelperText>

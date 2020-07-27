@@ -4,7 +4,7 @@ export const SelectedUserContext = createContext();
 
 const SelectedUserContextProvider = ({ children }) => {
     const [ selectedUser, setSelectedUser ] = useState()
-    console.log(selectedUser, 'incontext');
+    // console.log(selectedUser, 'incontext');
     
     return (
         <SelectedUserContext.Provider value={[selectedUser, setSelectedUser]}>

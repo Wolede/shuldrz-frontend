@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography, Hidden } from '@material-ui/core'
 import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useStyles } from './style'
@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 const firebase = require("firebase");
+import Link from 'next/link'
 import Modal from 'components/Modal'
 
 const LoginForm = () => {
@@ -134,9 +135,13 @@ const LoginForm = () => {
                         }}
                         />
                     </FormControl>
-                    <Box>
-                        <Typography onClick={handleOpen}>Forgot Password?</Typography>
+
+
+                    <Box textAlign='left' marginBottom='1rem'>
+                        <Typography variant='caption' className={classes.forgotPassword} onClick={handleOpen}>Forgot Password?</Typography>
                     </Box>
+
+
                     <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 
@@ -149,7 +154,7 @@ const LoginForm = () => {
                         </Button>
                     </FormControl>
                     
-                    <FormControl className={classes.formControl}>
+                    <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
                         <FormHelperText 
                             style={{ textAlign: 'center' }} 
                             error={true}
@@ -163,6 +168,15 @@ const LoginForm = () => {
                             }
                         </FormHelperText>
                     </FormControl>
+
+                    <Hidden mdUp>
+                        <Box marginTop='4rem'>
+                            <Typography variant='body2'>
+                                New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
+                            </Typography>
+                        </Box>
+                    </Hidden>
+                    
                     
                 </Form>
             )}

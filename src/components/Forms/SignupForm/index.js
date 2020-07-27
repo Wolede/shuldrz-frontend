@@ -2,12 +2,13 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography, Hidden } from '@material-ui/core'
 import { useStyles } from './style'
 import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
+import Link from 'next/link'
 import api from 'services/Api'
 
 const firebase = require("firebase");
@@ -231,6 +232,16 @@ const SignupForm = ({volunteer}) => {
                             }
                         </FormHelperText>
                     </FormControl>
+
+
+                    <Hidden mdUp>
+                        <Box marginTop='4rem'>
+                            <Typography variant='body2'>
+                                Already have an account? <Link href="login"><a className={classes.link}>Login</a></Link>
+                            </Typography>
+                        </Box>
+                    </Hidden>
+
 
                 </Form>
             )}
