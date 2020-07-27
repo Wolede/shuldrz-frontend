@@ -8,6 +8,7 @@ import { useStyles } from './style'
 import Button from 'components/Button'
 import JournalBox from 'components/JournalBox'
 import AnnouncementBox from 'components/AnnouncementBox'
+import ProfileCompletionBox from 'components/ProfileCompletionBox'
 import SessionLogBox from 'components/SessionLogBox'
 import moment from 'moment'
 import Modal from 'components/Modal'
@@ -36,15 +37,16 @@ const JourneyLayout = () => {
     var feedsFlatten = [].concat(...feedsNested) // flatten array of objects
     const feeds = feedsFlatten.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
 
-    // console.log(feeds);
+    // console.log('user', user);
     
 
-    const profileCompletion = {
-        isCompleted: true,
-        percentage: null
-    }
+    // const profileCompletion = {
+    //     isCompleted: true,
+    //     percentage: null
+    // }
     
     const [openModal, setOpenModal] = useState(false);
+    const [showProfileBox, setShowProfileBox] = useState(true);
 
     const handleOpen = () => {
         setOpenModal(true);
@@ -54,11 +56,42 @@ const JourneyLayout = () => {
         setOpenModal(false);
     };
 
+    const getProfileCompletion = () => {
+        const profileKeys = [
+            'profileImage' ,'firstName', 'lastName', 'username', 'phoneNumber', 'DateOfBirth',
+            'gender', 'maritalStatus', 'personality_type', 'occupation', 'reference',
+            'experience', 'availableDays', 'availableTime', 'charity', 'topics'
+        ]
+
+        const profileScore = profileKeys.reduce((acc, curr) => {
+            if (user && user[curr]){
+                acc += 1
+            }
+            return acc
+        }, 0)
+
+        const profilePercentage = `${Math.round((profileScore / profileKeys.length) * 100)}%`
+
+        return profilePercentage
+    }
+
+    const handleProfileBoxClose = () => {
+        setShowProfileBox(false)
+    }
+
     return (
         <div>
-            { !profileCompletion.isCompleted && (
-                <p>completed!</p> //profile box goes here!
-            )}
+            { (getProfileCompletion() !== '100%' && showProfileBox) &&
+                <ProfileCompletionBox 
+                    announcement={{
+                        message: 'Complete your profile to get 100 heart points',
+                        title: 'Profile Completion',
+                        logo: getProfileCompletion(),
+                    }}
+                    onCancel={handleProfileBoxClose}
+                    destination='/app/profile'
+                />
+            }
 
             <Box marginBottom="2rem" display="flex">
                 <Box className={classes.headerText}>
