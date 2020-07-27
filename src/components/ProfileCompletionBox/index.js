@@ -19,7 +19,7 @@ const ProfileCompletionBox = ({ announcement, onCancel, destination }) => {
     const { message, title, logo } = announcement
 
     return (
-        <Paper borderRadius="1.875rem" padding="1rem" marginBottom="3.0rem" color="warning">
+        <Paper borderRadius="1.875rem" padding="1rem" marginBottom="2.5rem" color="warning">
             <Box display="flex" className={classes.root}>
                 <Box>
                     <Paper 
@@ -38,7 +38,7 @@ const ProfileCompletionBox = ({ announcement, onCancel, destination }) => {
 
                     <div className={classes.iconButtons}>
                         <CloseIcon 
-                            style={{ color: '#ffffff', fontSize: '1.4rem', cursor: 'pointer' }}
+                            style={{ color: '#3f316b', fontSize: '1.4rem', cursor: 'pointer' }}
                             onClick={onCancel}
                         />
                     </div>
