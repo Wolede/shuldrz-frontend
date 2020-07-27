@@ -12,6 +12,7 @@ module.exports = {
         config.resolve.alias['styles'] = path.join(__dirname, 'src/styles')
         config.resolve.alias['contexts'] = path.join(__dirname, 'src/contexts')
         config.resolve.alias['services'] = path.join(__dirname, 'src/services')
+        config.resolve.alias['helpers'] = path.join(__dirname, 'src/helpers')
         config.module.rules.push({
             test: /\.svg$/,
             issuer: {

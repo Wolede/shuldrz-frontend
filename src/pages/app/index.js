@@ -12,7 +12,7 @@ const Home = () => {
                 <title>Shuldrz | App Home</title>
             </Head>
             <AppLayout withRightSidebar>
-                <JourneyLayout />
+                <JourneyLayout/>
             </AppLayout>
         </div>
     )
