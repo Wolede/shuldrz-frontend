@@ -73,7 +73,7 @@ const ForgotPasswordForm = props => {
                                 disabled={isSubmitting}
                                 loading={isSubmitting}
                                 >
-                                    Reset Password
+                                    Send Password Reset Email
                                 </Button>
                             </FormControl>
                         </Box>

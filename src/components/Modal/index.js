@@ -18,7 +18,7 @@ const Modal = props => {
         onClose={handleClose}
         disableBackdropClick={disableBackdropClick}
         >
-            <Container maxWidth={view === 'video' ? 'md' : 'sm'} >
+            <Container maxWidth={view === 'video' ? 'md' : 'sm'} style={{ outline: 0 }} >
                 <Box marginTop="8rem">
                 { view === "video" && 
                     (
