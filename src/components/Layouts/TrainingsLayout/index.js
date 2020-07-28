@@ -12,16 +12,14 @@ const TrainingsLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
-    const [pageConstants] = useState({
-        pageLimit: 2,
-        startPositionInRes: 18
-    })
+    const PAGE_SIZE = 2;
+    const START_POSITION_IN_CONFIG_URL = 18;
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "trainings",
         ({ offset, withSWR }) => {
             console.log('off', offset)
-            const url = offset || `/trainings?_start=0&_limit=${pageConstants.pageLimit}`;
+            const url = offset || `/trainings?_start=0&_limit=${PAGE_SIZE}`;
             const {data} = withSWR(useSWR( url, api.get));
 
             if (!data) return null;
@@ -31,20 +29,16 @@ const TrainingsLayout = () => {
             ))
         },
         SWR => {
-            console.log('dat2', SWR.data, SWR.data.config.url[pageConstants.startPositionInRes])
+            console.log('dat2', SWR.data, SWR.data.config.url[START_POSITION_IN_CONFIG_URL])
             if(SWR.data?.data?.length < 1) {
                 setIsMoreData(false);
             }
-            const previousStart = parseInt(SWR.data.config.url[pageConstants.startPositionInRes])
-            return `/trainings?_start=${previousStart + pageConstants.pageLimit}&_limit=${pageConstants.pageLimit}`
+            const previousStart = parseInt(SWR.data.config.url[START_POSITION_IN_CONFIG_URL])
+            return `/trainings?_start=${previousStart + PAGE_SIZE}&_limit=${PAGE_SIZE}`
         },
         []
     )
 
-    let error = {}
-    // const { data, error, isValidating } = trainings;
-    const trainings = null
-    // console.log(trainings, 'trainings')
     const loader = useRef(loadMore)
     const observer = useRef(null)
     const [element, setElement] = useState(null);
