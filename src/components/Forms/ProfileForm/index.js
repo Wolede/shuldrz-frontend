@@ -14,6 +14,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
 import { useStyles } from './style'
+import {getProfileCompletion} from 'helpers';
 
 const ProfileForm = ({ user }) => {
     // console.log(user, 'in profile');
@@ -113,9 +114,24 @@ const ProfileForm = ({ user }) => {
         }
 
         try {
-            const res = await api.put(`users/${id}`, values)
+            let res;
+            res = await api.put(`users/${id}`, values)
+
+            const profileCompletion = getProfileCompletion(res.data)
+
+            if (profileCompletion === '100%' && !res.data.isProfileCompleted) {
+                //update the hearts count
+                if (res.data.heart) {
+                    res = await api.put(`/hearts/${res.data.heart.id}`, { user: res.data.id, count: 20 })
+                } else {
+                    res = await api.post(`/hearts`, { user: res.data.id, count: 20 })
+                }
+                //update the isProfileCompleted property
+                values.isProfileCompleted = true;
+                res = await api.put(`users/${id}`, values)
+            }
             
-            // console.log('letsee', res);
+            // console.log('letsee', res, profileCompletion);
             setIsSuccessful({
                 status: true,
             })
