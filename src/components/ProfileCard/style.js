@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: `center`
     },
     buttonGroup: {
-        '& > button' : {
+        '& > div, > a' : {
             margin: '1.5rem .5rem 0 0'
         }
     },
@@ -18,7 +18,11 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '.5rem'
     },
     text: {
-        marginBottom: '.5rem'
+        marginBottom: '.5rem',
+        width: '100%',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     }
     
 }));

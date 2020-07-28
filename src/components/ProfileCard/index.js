@@ -1,18 +1,19 @@
 import { Box, Typography } from '@material-ui/core';
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import Paper from 'components/Paper'
 import Avatar from 'components/Avatar'
 import Chip from 'components/Chip'
 import Button from 'components/Button'
-import { useStyles } from './styles';
+import { useStyles } from './style';
 import { SelectedUserContext } from 'contexts/SelectedUserContext';
 const firebase = require("firebase");
 
 const ProfileCard = (props) => {
     const router = useRouter()
     const classes = useStyles()
-    const { username, email, profileImage, occupation, heart, ranking, id } = props
+    const { username, email, profileImage, occupation, experience, heart, ranking, id } = props
 
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
     // if (journalRes) setJournal(journalRes.data?.data);
@@ -58,7 +59,7 @@ const ProfileCard = (props) => {
                 />
                 <Typography variant="h4" className={classes.headerText}>{username}</Typography>
 
-                <Typography variant="body1" className={classes.text}>{occupation ? occupation : 'Occupation not set'}</Typography>
+                <Typography variant="body1" className={classes.text}>{experience ? experience : '- - -'}</Typography>
 
                 <Box display="flex" justifyContent="center" flexWrap="wrap">
                     <Chip label={ranking ? ranking.name : 'Bronze'} rank={ranking ? ranking.colourCode : '#cd7f32'} color="paper" margin=".25rem .25rem .25rem 0" />
@@ -66,12 +67,14 @@ const ProfileCard = (props) => {
                 </Box>
 
                 <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
-                    <Button variant="contained" size="small" color="primary" marginTop='1rem' onClick={handleMessageUser}>message</Button>
-                    {/* <Link href="/app/profile">
-                    <a style={{textDecoration:'none'}}> */}
-                    <Button variant="contained" size="small" color="secondary" marginTop='1rem'>View Profile</Button>
-                    {/* </a>
-                    </Link> */}
+                    <div>
+                        <Button variant="contained" size="small" color="primary" onClick={handleMessageUser}>message</Button>
+                    </div>
+                    <Link href="/app/users/[username]" as={`/app/users/${username}`}>
+                        <a style={{textDecoration:'none'}}>
+                            <Button variant="contained" size="small" color="secondary" >View Profile</Button>
+                        </a>
+                    </Link>
 
                 </Box>
             </Box>

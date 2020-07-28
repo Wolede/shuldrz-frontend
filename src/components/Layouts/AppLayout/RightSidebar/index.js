@@ -4,9 +4,10 @@ import { Drawer, Hidden, Fab } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import ProfileBox from '../ProfileBox'
 import UpcomingBox from '../UpcomingBox'
+import AvailabilityBox from '../AvailabilityBox';
 
 const RightSidebar = props => {
-    const { open, variant, onClose, className, ...rest } = props
+    const { open, variant, onClose, className, otherUser, ...rest } = props
     const classes = useStyles(props)
 
     return (
@@ -21,8 +22,15 @@ const RightSidebar = props => {
             {...rest}
             className={classes.root}
             >
-                <ProfileBox />
-                <UpcomingBox />
+                <ProfileBox otherUser={otherUser}/>
+                {!otherUser ? (
+                    <UpcomingBox />
+                ) : (
+                    <AvailabilityBox/>
+                )
+
+                }
+                
                 <Hidden lgUp>
                     <Fab 
                         size="small" 
@@ -43,7 +51,8 @@ RightSidebar.propTypes = {
     className: PropTypes.string,
     onClose: PropTypes.func,
     open: PropTypes.bool.isRequired,
-    variant: PropTypes.string.isRequired
+    variant: PropTypes.string.isRequired,
+    otherUser: PropTypes.string
 }
 
 export default RightSidebar

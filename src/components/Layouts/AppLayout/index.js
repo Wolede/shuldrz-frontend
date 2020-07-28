@@ -13,7 +13,7 @@ import Topbar from './Topbar';
 
 
 const AppLayout = (props) => {
-    const { children, withRightSidebar } = props
+    const { children, withRightSidebar, otherUser } = props
     const classes = useStyles(props)
 
     const theme = useTheme();
@@ -84,6 +84,7 @@ const AppLayout = (props) => {
                     onClose={handleRightSidebarClose}
                     open={shouldOpenRightSidebar}
                     variant={isDesktop ? 'persistent' : 'temporary'}
+                    otherUser={otherUser}
                     />
                 </>
             )}
@@ -95,6 +96,7 @@ const AppLayout = (props) => {
 
 AppLayout.propTypes = {
     children: PropTypes.node,
-    withRightSidebar: PropTypes.bool
+    withRightSidebar: PropTypes.bool,
+    otherUser: PropTypes.string
 };
 export default AppLayout

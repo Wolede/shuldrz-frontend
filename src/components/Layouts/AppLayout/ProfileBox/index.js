@@ -11,14 +11,22 @@ import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
 import Link from 'next/link'
 
-const ProfileBox = () => {
+const ProfileBox = (props) => {
     const { user, loading } = useAuth()
     const classes = useStyles()
 
-    const { data, error, isValidating } = useSWR(loading ? false : `/users/${user?.id}`, api.get, {revalidateOnFocus: false})
+    // other user means we're on a user profile page
+    const requestUrl = props.otherUser ? `/users?username=${props.otherUser}` : `/users/${user?.id}`
+
+    const { data, error, isValidating } = useSWR(loading ? false : requestUrl, api.get, {revalidateOnFocus: false})
     
-    const userData = data ? data.data : null
-    // console.log(userData, 'user data in profile')
+    // store the first array of data if it's another user
+    const userData = data ? 
+                        props.otherUser ?
+                            data.data[0] :
+                            data.data : 
+                    null
+    console.log(userData, 'user data in profile')
     
     return (
         <Paper padding="2rem 2rem 1.5rem 2rem" marginBottom="2rem">
@@ -45,11 +53,14 @@ const ProfileBox = () => {
                         <Chip label={userData.heart ? userData.heart.count.toString() : 'No hearts yet'} heart color="paper"/>
                     </Box>
                     
-                    <Link href="/app/profile">
-                    <a style={{textDecoration:'none'}}>
-                    <Button variant="contained" size="small" color="secondary" marginTop='1rem'>Edit Profile</Button>
-                    </a>
-                    </Link>
+                    {/* // don't show edit profile if we're showing another user */}
+                    {!props.otherUser && (
+                        <Link href="/app/profile">
+                        <a style={{textDecoration:'none'}}>
+                            <Button variant="contained" size="small" color="secondary" marginTop='1rem'>Edit Profile</Button>
+                        </a>
+                        </Link>
+                    )}
                     </>
                 )}
                 
