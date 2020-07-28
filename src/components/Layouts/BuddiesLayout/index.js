@@ -12,7 +12,8 @@ const BuddiesLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
 
-    const { data, error } = useSWR(loading ? false : `/users?userType=Volunteer&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    const { data, error } = useSWR(loading ? false : `/users?_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    // const { data, error } = useSWR(loading ? false : `/users?userType=Volunteer&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
 
     const buddies = data ? data.data : null
 
