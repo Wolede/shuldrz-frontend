@@ -12,6 +12,8 @@ import ProfileCompletionBox from 'components/ProfileCompletionBox'
 import SessionLogBox from 'components/SessionLogBox'
 import moment from 'moment'
 import Modal from 'components/Modal'
+import {getProfileCompletion} from 'helpers'
+
 
 const JourneyLayout = () => {
     const classes = useStyles()
@@ -37,7 +39,7 @@ const JourneyLayout = () => {
     var feedsFlatten = [].concat(...feedsNested) // flatten array of objects
     const feeds = feedsFlatten.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
 
-    // console.log('user', user);
+    console.log('user', user);
     
 
     // const profileCompletion = {
@@ -56,24 +58,7 @@ const JourneyLayout = () => {
         setOpenModal(false);
     };
 
-    const getProfileCompletion = () => {
-        const profileKeys = [
-            'profileImage' ,'firstName', 'lastName', 'username', 'phoneNumber', 'DateOfBirth',
-            'gender', 'maritalStatus', 'personality_type', 'occupation', 'reference',
-            'experience', 'availableDays', 'availableTime', 'charity', 'topics'
-        ]
-
-        const profileScore = profileKeys.reduce((acc, curr) => {
-            if (user && user[curr]){
-                acc += 1
-            }
-            return acc
-        }, 0)
-
-        const profilePercentage = `${Math.round((profileScore / profileKeys.length) * 100)}%`
-
-        return profilePercentage
-    }
+    
 
     const handleProfileBoxClose = () => {
         setShowProfileBox(false)
@@ -81,12 +66,12 @@ const JourneyLayout = () => {
 
     return (
         <div>
-            { (getProfileCompletion() !== '100%' && showProfileBox) &&
+            { (getProfileCompletion(user) !== '100%' && showProfileBox) &&
                 <ProfileCompletionBox 
                     announcement={{
-                        message: 'Complete your profile to get 100 heart points',
+                        message: 'Complete your profile to get 20 heart points',
                         title: 'Profile Completion',
-                        logo: getProfileCompletion(),
+                        logo: getProfileCompletion(user),
                     }}
                     onCancel={handleProfileBoxClose}
                     destination='/app/profile'
