@@ -1,5 +1,5 @@
 import { useStyles } from './style'
-import Paper from 'components/Paper'
+import Paper from '../PersonalityBox/node_modules/components/Paper'
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import { Box, Typography, Card, CardContent, Button as MuiButton } from '@material-ui/core'

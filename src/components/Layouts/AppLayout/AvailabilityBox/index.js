@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
-import Paper from 'components/Paper'
+import Paper from '../PersonalityBox/node_modules/components/Paper'
 import Chip from 'components/Chip'
 import { Box, Typography} from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'

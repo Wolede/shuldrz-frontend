@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import Paper from 'components/Paper'
+import Paper from '../Layouts/AppLayout/PersonalityBox/node_modules/components/Paper'
 import Avatar from 'components/Avatar'
 import Chip from 'components/Chip'
 import Button from 'components/Button'
