@@ -87,7 +87,7 @@ const JourneyLayout = () => {
                 </Box>
             </Box>
 
-            {feeds[0] === undefined ? (
+            {feedsNested[feedsNested.length -1] === undefined ? ( //check if last value in feedNested is empty. Means data is still loading
                 
                 <Skeleton variant="rect" height={150} animation="wave"/>
 

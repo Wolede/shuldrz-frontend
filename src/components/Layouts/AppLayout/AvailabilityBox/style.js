@@ -2,9 +2,10 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        // overflowY: 'scroll',
-        // height: '19.75rem'
+
     },
+    text: {marginBottom: '0.5rem' },
+    chipBox: {marginBottom: '0.5rem' },
 }))
 
 export { useStyles }

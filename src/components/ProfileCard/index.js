@@ -34,9 +34,6 @@ const ProfileCard = (props) => {
     // }
 
     const handleMessageUser =  async (e) => {
-        console.log()
-
-        
         
         setSelectedUser({
             username,
