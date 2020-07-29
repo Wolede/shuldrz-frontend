@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
-import Paper from '../PersonalityBox/node_modules/components/Paper'
+import Paper from 'components/Paper'
 import Avatar from 'components/Avatar'
 import Chip from 'components/Chip'
 import Button from 'components/Button'

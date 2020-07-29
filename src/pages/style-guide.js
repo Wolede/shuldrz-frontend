@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Typography, Box } from '@material-ui/core'
 import Button from 'components/Button'
-import Paper from '../components/Layouts/AppLayout/PersonalityBox/node_modules/components/Paper'
+import Paper from '../components/Paper'
 import Chip from 'components/Chip'
 import BackButton from 'components/BackButton'
 import CharityBox from 'components/CharityBox'
