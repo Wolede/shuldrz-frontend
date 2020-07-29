@@ -13,7 +13,8 @@ import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) => {
+
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -39,14 +40,12 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) 
         console.log('schedule has been set')
     }
 
-    const startSession = () => {
-        console.log('session has started')
-    }
-
+    
     const endSession = () => {
         endSessionFn()
     }
 
+    
     // function scrollToEnd(){
     //     var chatList = document.getElementById("chatview-container");
     //     chatList.scrollTop = chatList.scrollHeight;
@@ -66,7 +65,6 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) 
             </div>
         )
     } else {
-        console.log(chat)
         return (
             <>
                 {
@@ -77,6 +75,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) 
                         position='absolute'
                     >
                         <ChatProfile
+                            chatProfile={volunteer}
                             closeChatProfile={handleRightSidebarClose}
                         />
                     </MiniDrawer>
@@ -111,7 +110,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) 
                     </Box>
                     <div className={classes.headerButtons}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
-                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn}>End session</Button>
+                        <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
                     </div>
                 </Box>
                 <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
@@ -158,7 +157,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage }) 
 
                 </Box>
 
-                <ChatInput submitMessageFn={submitMessage} />
+                <ChatInput userClickedInput = {userClickedInput} submitMessageFn={submitMessage} />
                 
             </>
         )
