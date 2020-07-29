@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import useAuth from 'contexts/Auth'
@@ -48,7 +48,14 @@ const JourneyLayout = () => {
     // }
     
     const [openModal, setOpenModal] = useState(false);
+    const [openTopicsModal, setOpenTopicsModal] = useState(false);
     const [showProfileBox, setShowProfileBox] = useState(true);
+
+    useEffect(() => {
+        if ( user && (!user?.topics || user?.topics?.length < 1)) {
+            setOpenTopicsModal(true)
+        }
+    }, [user])
 
     const handleOpen = () => {
         setOpenModal(true);
@@ -149,6 +156,12 @@ const JourneyLayout = () => {
             {openModal === true &&
                 (
                     <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />
+                )
+            }
+
+            {openTopicsModal &&
+                (
+                    <Modal handleClose={() => setOpenTopicsModal(false)} openModal={openTopicsModal} view='addInterestedTopics' embedUrl={null}/>
                 )
             }
 

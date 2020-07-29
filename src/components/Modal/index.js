@@ -4,7 +4,9 @@ import { Modal as MuiModal, Container, Box } from '@material-ui/core'
 import { useStyles } from './style'
 import Paper from 'components/Paper'
 import AddJournalForm from '../Forms/AddJournalForm'
+import ReviewForm from '../Forms/ReviewForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
+import AddTopicsForm from '../Forms/AddTopicsForm'
 
 const Modal = props => {
     const classes = useStyles()
@@ -35,11 +37,25 @@ const Modal = props => {
                         </Paper>
                     )
                 }
-
+                {
+                    view === 'review' && (
+                        <Paper>
+                            <ReviewForm chatProfile={props.chatProfile}/>
+                        </Paper>
+                    )
+                }
                 { view === "forgotPassword" &&
                     (
                         <Paper padding="1.5rem">
                             <ForgotPasswordForm onClose={handleClose} />
+                        </Paper>
+                    )
+                }
+
+                { view === "addInterestedTopics" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddTopicsForm onClose={handleClose}/>
                         </Paper>
                     )
                 }
@@ -55,6 +71,7 @@ Modal.propTypes = {
     disableBackdropClick: PropTypes.bool,
     view: PropTypes.string,
     embedUrl: PropTypes.string,
+    user: PropTypes.object,
 }
 
 export default Modal
