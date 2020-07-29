@@ -9,15 +9,15 @@ import { useStyles } from './style'
 
 const ReviewBox = props => {
     const classes = useStyles()
-    const { comment, hearts, userImage, username } = props
+    const { comment, hearts, userImage, username, otherUser } = props
 
-    console.log(comment, hearts, userImage, username);
+    // console.log(comment, hearts, userImage, username);
 
     const theme = useTheme();
     const isMobile= useMediaQuery(theme.breakpoints.up('sm'));
     
     return (
-        <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="3rem" color="secondary">
+        <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="secondary">
                 <Box display="flex">
                     <Box>
                         <Avatar 
@@ -28,7 +28,11 @@ const ReviewBox = props => {
                     </Box>
                     <Box flexGrow="1" paddingLeft={isMobile ? '2rem' : '1rem'}>
                         <Box>
+                            {otherUser ? (
+                                <Typography variant="subtitle1" gutterBottom>{username} left {otherUser} a review</Typography>
+                            ) : (
                             <Typography variant="subtitle1" gutterBottom>{username} left you a review</Typography>
+                            )}
                         </Box>
                         <Box marginBottom=".5rem">
                             <Chip label={hearts.toString()} heart/>
@@ -58,6 +62,7 @@ ReviewBox.propTypes = {
     hearts: PropTypes.number,
     userImage: PropTypes.string,
     username: PropTypes.string,
+    otherUser: PropTypes.string
 }
 
 export default ReviewBox

@@ -15,7 +15,7 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 
 
-const JournalBox = ( { journal } ) => {
+const JournalBox = ( { journal, otherUser } ) => {
     const classes = useStyles()
     const { user } = useAuth();
 
@@ -71,6 +71,8 @@ const JournalBox = ( { journal } ) => {
                     </Paper>
                 </Box>
                 <Box flexGrow="1" paddingLeft={isMobile ? '2rem' : '1rem'} paddingRight={isMobile ? '2rem' : '1rem'} paddingTop={isMobile ? '.8rem' : '1.4rem'}>
+                    {/* dont show this if you're viewing someone's profile */}
+                    {!otherUser && (
                     <div className={classes.iconButtons}>
 
                         { isVisible ? (
@@ -87,6 +89,7 @@ const JournalBox = ( { journal } ) => {
                         deleteSnippet={deleteSnippet}
                         />
                     </div>
+                    )}
 
                     <Typography 
                         variant="subtitle1" 
@@ -102,7 +105,8 @@ const JournalBox = ( { journal } ) => {
 }
 
 JournalBox.propTypes = {
-    journal: PropTypes.object
+    journal: PropTypes.object,
+    otherUser: PropTypes.bool
 }
 
 export default JournalBox

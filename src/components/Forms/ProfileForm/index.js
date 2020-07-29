@@ -25,7 +25,7 @@ const ProfileForm = ({ user }) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
 
-    const { id, firstName, lastName, username, phoneNumber, DateOfBirth, gender, maritalStatus, personality_type, occupation, reference, experience, availableDays, availableTime, charity, topics } = user
+    const { id, firstName, lastName, username, phoneNumber, DateOfBirth, gender, maritalStatus, personality_type, occupation, reference, experience, availableDays, availableTime, charity, topics, userType } = user
     // availableTime: "07:00:00.000"
 
     // console.log('FOFO', formOptions);
@@ -91,7 +91,7 @@ const ProfileForm = ({ user }) => {
         personality_type: Yup.string(),
         occupation: Yup.string().max(20, 'Maximum of 20 characters'),
         reference: Yup.string().max(50, 'Maximum of 50 characters'),
-        experience: Yup.string().max(50, 'Maximum of 50 characters'),
+        experience: Yup.string().max(74, 'Maximum of 74 characters'),
         availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string(),
@@ -391,8 +391,10 @@ const ProfileForm = ({ user }) => {
                                     { ...getFieldProps('availableTime')}
                                     label="Available Time"
                                     >
-                                    <MenuItem value={'07:00:00.000'}>7:00</MenuItem>
-                                    <MenuItem value={'08:00:00.000'}>8:00</MenuItem>
+                                    <MenuItem value={'All Day'}>All Day</MenuItem>
+                                    <MenuItem value={'Mornings'}>Mornings</MenuItem>
+                                    <MenuItem value={'Afternoons'}>Afternoons</MenuItem>
+                                    <MenuItem value={'Evenings'}>Evenings</MenuItem>
                                     </Select>
                                 </FormControl>
 
@@ -436,7 +438,7 @@ const ProfileForm = ({ user }) => {
                             </Typography>
 
                             <Typography variant="body1" style={{ marginBottom: '1rem' }}>
-                            These are the topics we'd use to match you with guests.
+                            These are the topics we'd use to match you with {userType === 'Volunteer' ? 'buds' : 'buddies'}.
                             </Typography>
                             
                             <div className={classes.fieldWrapper}>

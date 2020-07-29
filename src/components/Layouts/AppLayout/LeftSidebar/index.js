@@ -21,6 +21,11 @@ const LeftSidebar = props => {
           icon: <Home />
         },
         {
+          title: 'Buddies',
+          href: '/app/buddies',
+          icon: <Users />
+        },
+        {
           title: 'Sessions',
           href: '/app/sessions',
           icon: <MessageCircle />

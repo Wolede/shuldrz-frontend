@@ -18,7 +18,7 @@ const UpcomingBox = () => {
     const upcomings = data ? data.data : null
 
     return (
-        <Paper padding="2rem 1.1rem 2rem 1.5rem">
+        <Paper padding="2rem 1.1rem 2rem 1.5rem" marginBottom="1.5rem">
             <Box className={classes.root}>
                 <Typography variant="h4" className={classes.text}>Upcoming Sessions</Typography>
                 {!upcomings ? (
