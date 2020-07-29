@@ -91,7 +91,7 @@ const ProfileForm = ({ user }) => {
         personality_type: Yup.string(),
         occupation: Yup.string().max(20, 'Maximum of 20 characters'),
         reference: Yup.string().max(50, 'Maximum of 50 characters'),
-        experience: Yup.string().max(50, 'Maximum of 50 characters'),
+        experience: Yup.string().max(74, 'Maximum of 74 characters'),
         availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string(),

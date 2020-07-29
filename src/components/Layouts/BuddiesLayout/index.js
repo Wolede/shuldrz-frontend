@@ -16,7 +16,6 @@ const BuddiesLayout = () => {
     const PAGE_SIZE = 6;
     const START_POSITION_IN_CONFIG_URL = 35; // index location of the first digit of the start position in the config url
 
-
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "buddies",
         ({ offset, withSWR }) => {

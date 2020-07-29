@@ -6,6 +6,7 @@ import useSWR, { useSWRPages } from 'swr'
 import api from 'services/Api'
 import { useStyles } from './style'
 import ReviewBox from '../../ReviewBox'
+import moment from 'moment'
 
 // WHEN YOU REFRESH THE PAGE THE USER-ID IS UNDEFINED SO NOTHING IS FETCHED
 
