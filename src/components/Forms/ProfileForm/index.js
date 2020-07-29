@@ -146,7 +146,7 @@ const ProfileForm = ({ user }) => {
 
     }
 
-    console.log('form', formOptions)
+    // console.log('form', formOptions, fetchedValues)
 
     return (
         <>
