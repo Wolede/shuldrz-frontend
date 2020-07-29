@@ -5,6 +5,7 @@ import { useStyles } from './style'
 import Paper from 'components/Paper'
 import AddJournalForm from '../Forms/AddJournalForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
+import AddTopicsForm from '../Forms/AddTopicsForm'
 
 const Modal = props => {
     const classes = useStyles()
@@ -43,6 +44,14 @@ const Modal = props => {
                         </Paper>
                     )
                 }
+
+                { view === "addInterestedTopics" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddTopicsForm onClose={handleClose}/>
+                        </Paper>
+                    )
+                }
                 </Box>
             </Container>
         </MuiModal>
@@ -55,6 +64,7 @@ Modal.propTypes = {
     disableBackdropClick: PropTypes.bool,
     view: PropTypes.string,
     embedUrl: PropTypes.string,
+    user: PropTypes.object,
 }
 
 export default Modal
