@@ -16,11 +16,11 @@ const ReviewsLayout = () => {
     const PAGE_SIZE = 5;
     const START_POSITION_IN_CONFIG_URL = 16; // index location of the first digit of the start position in the config url
 
-
+    console.log('pag', useSWRPages);
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "reviews",
         ({ offset, withSWR }) => {
-            console.log('off', offset)
+            console.log('off', offset, user)
             const url = offset || `/reviews?_start=0&review_users.id=${user?.id}&_limit=${PAGE_SIZE}`;
             const {data} = withSWR(useSWR( url, api.get));
 
@@ -44,7 +44,7 @@ const ReviewsLayout = () => {
             const previousStart = parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7))
             return `/reviews?_start=${previousStart + PAGE_SIZE}&review_users.id=${user?.id}&_limit=${PAGE_SIZE}` 
         },
-        []
+        [loading]
     )
 
     const loader = useRef(loadMore)

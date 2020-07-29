@@ -49,7 +49,7 @@ const BuddiesLayout = () => {
             const previousStart = parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7))
             return `/users?_sort=createdAt:desc&_start=${previousStart + PAGE_SIZE}&_limit=${PAGE_SIZE}`
         },
-        []
+        [loading]
     )
 
     const loader = useRef(loadMore)
