@@ -32,6 +32,12 @@ const colorPicker = (color, theme) => {
                 color: theme.palette.primary.contrastText,
                 boxShadow: `0px 30px 60px rgba(13, 206, 158, 0.1)`,
             }
+        case 'transWarning':
+            return {
+                backgroundColor: '#D4A106',
+                color: theme.palette.primary.contrastText,
+                boxShadow: `0px 30px 60px rgba(243, 183, 0, 0.15)`,
+            }
         default: 
             return {
             backgroundColor: theme.palette.background.paper,

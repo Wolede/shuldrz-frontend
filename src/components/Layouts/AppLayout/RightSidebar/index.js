@@ -4,10 +4,35 @@ import { Drawer, Hidden, Fab } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import ProfileBox from '../ProfileBox'
 import UpcomingBox from '../UpcomingBox'
+import AvailabilityBox from '../AvailabilityBox';
+import PersonalityBox from '../PersonalityBox';
+import useAuth from 'contexts/Auth'
+import api from 'services/Api'
+import useSWR from 'swr'
+
 
 const RightSidebar = props => {
-    const { open, variant, onClose, className, ...rest } = props
+    const { open, variant, onClose, className, otherUser, ...rest } = props
     const classes = useStyles(props)
+
+    // Get data for profile box, availability box and charity box 
+    const { user, loading } = useAuth()
+
+    // for profile box 
+    // other user means we're on a user profile page
+    const requestUrl = props.otherUser ? `/users?username=${props.otherUser}` : `/users/${user?.id}`
+
+    const { data, error, isValidating } = useSWR(loading ? false : requestUrl, api.get, {revalidateOnFocus: false})
+    
+    // store the first array of data if it's another user
+    const userData = data ? 
+                        props.otherUser ?
+                            data.data[0] :
+                            data.data : 
+                    null
+
+    console.log(userData, 'user data in profile')
+
 
     return (
         <Drawer
@@ -21,8 +46,24 @@ const RightSidebar = props => {
             {...rest}
             className={classes.root}
             >
-                <ProfileBox />
-                <UpcomingBox />
+                <ProfileBox 
+                    otherUser={otherUser}
+                    userData={userData}
+                />
+
+                {!otherUser ? (
+                    <UpcomingBox />
+                ) : (
+                    <AvailabilityBox
+                        userData={userData}
+                    />
+                )}
+
+                <PersonalityBox
+                    userData={userData}
+                    otherUser={otherUser}
+                />
+                
                 <Hidden lgUp>
                     <Fab 
                         size="small" 
@@ -43,7 +84,8 @@ RightSidebar.propTypes = {
     className: PropTypes.string,
     onClose: PropTypes.func,
     open: PropTypes.bool.isRequired,
-    variant: PropTypes.string.isRequired
+    variant: PropTypes.string.isRequired,
+    otherUser: PropTypes.string
 }
 
 export default RightSidebar

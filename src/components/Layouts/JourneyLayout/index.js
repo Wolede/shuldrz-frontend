@@ -8,9 +8,12 @@ import { useStyles } from './style'
 import Button from 'components/Button'
 import JournalBox from 'components/JournalBox'
 import AnnouncementBox from 'components/AnnouncementBox'
+import ProfileCompletionBox from 'components/ProfileCompletionBox'
 import SessionLogBox from 'components/SessionLogBox'
 import moment from 'moment'
 import Modal from 'components/Modal'
+import {getProfileCompletion} from 'helpers'
+
 
 const JourneyLayout = () => {
     const classes = useStyles()
@@ -36,15 +39,16 @@ const JourneyLayout = () => {
     var feedsFlatten = [].concat(...feedsNested) // flatten array of objects
     const feeds = feedsFlatten.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
 
-    // console.log(feeds);
+    console.log('user', user);
     
 
-    const profileCompletion = {
-        isCompleted: true,
-        percentage: null
-    }
+    // const profileCompletion = {
+    //     isCompleted: true,
+    //     percentage: null
+    // }
     
     const [openModal, setOpenModal] = useState(false);
+    const [showProfileBox, setShowProfileBox] = useState(true);
 
     const handleOpen = () => {
         setOpenModal(true);
@@ -54,11 +58,25 @@ const JourneyLayout = () => {
         setOpenModal(false);
     };
 
+    
+
+    const handleProfileBoxClose = () => {
+        setShowProfileBox(false)
+    }
+
     return (
         <div>
-            { !profileCompletion.isCompleted && (
-                <p>completed!</p> //profile box goes here!
-            )}
+            { (getProfileCompletion(user) !== '100%' && showProfileBox) &&
+                <ProfileCompletionBox 
+                    announcement={{
+                        message: 'Complete your profile to get 20 heart points',
+                        title: 'Profile Completion',
+                        logo: getProfileCompletion(user),
+                    }}
+                    onCancel={handleProfileBoxClose}
+                    destination='/app/profile'
+                />
+            }
 
             <Box marginBottom="2rem" display="flex">
                 <Box className={classes.headerText}>
@@ -69,7 +87,7 @@ const JourneyLayout = () => {
                 </Box>
             </Box>
 
-            {feeds[0] === undefined ? (
+            {feedsNested[feedsNested.length -1] === undefined ? ( //check if last value in feedNested is empty. Means data is still loading
                 
                 <Skeleton variant="rect" height={150} animation="wave"/>
 

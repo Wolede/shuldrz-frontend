@@ -20,6 +20,19 @@ const useStyles = makeStyles(theme => ({
     },
     grouping: {
         flexDirection: 'row'
+    },
+    numberInput: {
+        '& ::-webkit-outer-spin-button, & ::-webkit-inner-spin-button' : {
+            '-webkit-appearance': 'none',
+            'margin': 0
+        },
+        '& ::-webkit-inner-spin-button' : {
+            '-webkit-appearance': 'none',
+            'margin': 0
+        },
+        '& [type=number]' : {
+            '-moz-appearance': 'textfield'
+        },
     }
 }))
 

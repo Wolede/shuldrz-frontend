@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, InputAdornment, IconButton, TextField } from '@material-ui/core'
+import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography, Hidden } from '@material-ui/core'
 import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useStyles } from './style'
@@ -10,6 +10,8 @@ import Cookies from 'js-cookie'
 import useAuth from 'contexts/Auth'
 import api from 'services/Api'
 const firebase = require("firebase");
+import Link from 'next/link'
+import Modal from 'components/Modal'
 
 const LoginForm = () => {
     const classes = useStyles()
@@ -49,9 +51,13 @@ const LoginForm = () => {
                 Router.push('/app')
             }
         } catch (error) {
-            //error state Login Unsuccessful 
-            console.log(error, 'error')
-            setIsSuccessful(false)
+            //error state Login Unsuccessful
+            const message = error.response.data.message[0].messages[0].message
+            // console.log('error')
+            setIsSuccessful({
+                status: false,
+                message: message === 'Identifier or password invalid.' ? 'Invalid Email or Password. Please Try Again!' : message
+            })
         }
 
     }
@@ -65,6 +71,17 @@ const LoginForm = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleOpen = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
+
 
     return (
         <div>
@@ -118,7 +135,13 @@ const LoginForm = () => {
                         }}
                         />
                     </FormControl>
-                    
+
+
+                    <Box textAlign='left' marginBottom='1rem'>
+                        <Typography variant='caption' className={classes.forgotPassword} onClick={handleOpen}>Forgot Password?</Typography>
+                    </Box>
+
+
                     <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 
@@ -131,13 +154,40 @@ const LoginForm = () => {
                         </Button>
                     </FormControl>
                     
-                    <FormControl className={classes.formControl}>
-                        <FormHelperText style={{ textAlign: 'center' }} error={true}>{isSuccessful === false ? 'Invalid Email or Password. Please Try Again!' : null}</FormHelperText>
+                    <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
+                        <FormHelperText 
+                            style={{ textAlign: 'center' }} 
+                            error={true}
+                        >
+                            {
+                                isSuccessful?.status === false ? 
+                                    isSuccessful.message ? 
+                                        isSuccessful.message
+                                    : 'an error occured' 
+                                : null
+                            }
+                        </FormHelperText>
                     </FormControl>
+
+                    <Hidden mdUp>
+                        <Box marginTop='4rem'>
+                            <Typography variant='body2'>
+                                New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
+                            </Typography>
+                        </Box>
+                    </Hidden>
+                    
                     
                 </Form>
             )}
             </Formik>
+
+            {/* Load Custom Modal COmponent */}
+            {openModal === true &&
+                (
+                    <Modal handleClose={handleClose} openModal={openModal} view='forgotPassword' />
+                )
+            }
         </div>
     )
 }

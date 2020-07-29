@@ -5,6 +5,7 @@ import Paper from 'components/Paper'
 import BoxMenu from 'components/BoxMenu'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import ReactMarkdown from "react-markdown"
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LockIcon from '@material-ui/icons/Lock';
@@ -14,7 +15,7 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 
 
-const JournalBox = ( { journal } ) => {
+const JournalBox = ( { journal, otherUser } ) => {
     const classes = useStyles()
     const { user } = useAuth();
 
@@ -70,6 +71,8 @@ const JournalBox = ( { journal } ) => {
                     </Paper>
                 </Box>
                 <Box flexGrow="1" paddingLeft={isMobile ? '2rem' : '1rem'} paddingRight={isMobile ? '2rem' : '1rem'} paddingTop={isMobile ? '.8rem' : '1.4rem'}>
+                    {/* dont show this if you're viewing someone's profile */}
+                    {!otherUser && (
                     <div className={classes.iconButtons}>
 
                         { isVisible ? (
@@ -86,12 +89,15 @@ const JournalBox = ( { journal } ) => {
                         deleteSnippet={deleteSnippet}
                         />
                     </div>
+                    )}
 
                     <Typography 
                         variant="subtitle1" 
-                        dangerouslySetInnerHTML={{ __html : notes }} 
-                        style={{ fontWeight: 400 }}    
-                    />
+                        // dangerouslySetInnerHTML={{ __html : notes }} 
+                        style={{ fontSize: '1.2rem', fontWeight: 400 }} 
+                    >
+                        <ReactMarkdown source={notes} />
+                    </Typography>
                 </Box>
             </Box>
         </Paper>
@@ -99,7 +105,8 @@ const JournalBox = ( { journal } ) => {
 }
 
 JournalBox.propTypes = {
-    journal: PropTypes.object
+    journal: PropTypes.object,
+    otherUser: PropTypes.bool
 }
 
 export default JournalBox

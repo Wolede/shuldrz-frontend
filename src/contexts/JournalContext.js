@@ -4,7 +4,7 @@ export const JournalContext = createContext();
 
 const JournalContextProvider = ({ children }) => {
     const [ journal, setJournal ] = useState()
-    console.log(journal, 'incontext');
+    // console.log(journal, 'incontext');
     
     return (
         <JournalContext.Provider value={[journal, setJournal]}>

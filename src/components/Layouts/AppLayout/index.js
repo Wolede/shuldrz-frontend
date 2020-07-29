@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar';
-import ProfileBox from './ProfileBox'
-import CharityBox from './CharityBox'
-import UpcomingBox from './UpcomingBox'
 import { useMediaQuery, Hidden, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import Topbar from './Topbar';
@@ -13,7 +10,7 @@ import Topbar from './Topbar';
 
 
 const AppLayout = (props) => {
-    const { children, withRightSidebar } = props
+    const { children, withRightSidebar, otherUser } = props
     const classes = useStyles(props)
 
     const theme = useTheme();
@@ -63,13 +60,13 @@ const AppLayout = (props) => {
 
 
             <div className={classes.root}>
-                <Grid container spacing={4}>
+                <Grid container spacing={'4 0 4 0'}>
                     <Grid 
                       item 
-                      lg={withRightSidebar ? 8 : 11} 
-                      md={withRightSidebar ? 12 : 12} 
-                      xl={withRightSidebar ? 8 : 11} 
                       xs={12}
+                      md={withRightSidebar ? 12 : 12} 
+                      lg={withRightSidebar ? 9 : 11} 
+                      xl={withRightSidebar ? 8 : 11} 
                       >
 
                         {children}
@@ -84,6 +81,7 @@ const AppLayout = (props) => {
                     onClose={handleRightSidebarClose}
                     open={shouldOpenRightSidebar}
                     variant={isDesktop ? 'persistent' : 'temporary'}
+                    otherUser={otherUser}
                     />
                 </>
             )}
@@ -95,6 +93,7 @@ const AppLayout = (props) => {
 
 AppLayout.propTypes = {
     children: PropTypes.node,
-    withRightSidebar: PropTypes.bool
+    withRightSidebar: PropTypes.bool,
+    otherUser: PropTypes.string
 };
 export default AppLayout

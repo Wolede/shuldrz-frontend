@@ -6,6 +6,7 @@ import useSWR, { mutate } from 'swr'
 import api from 'services/Api'
 import { useStyles } from './style'
 import ReviewBox from '../../ReviewBox'
+import moment from 'moment'
 
 const ReviewsLayout = () => {
     const classes = useStyles()
@@ -36,14 +37,18 @@ const ReviewsLayout = () => {
                     const { comment, hearts, review_users } = review
                     
                     return (
-         
+                        <>
+                        <Box paddingLeft="1rem" marginBottom=".5rem">
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(review.createdAt).calendar()}</Typography>
+                        </Box>
                         <ReviewBox 
-                        key={key} 
-                        comment={comment} 
-                        hearts={hearts} 
-                        userImage={review_users[1].profileImage ? review_users[1].profileImage.url : null} 
-                        username={review_users[1].username} />
-
+                            key={key} 
+                            comment={comment} 
+                            hearts={hearts} 
+                            userImage={review_users[1].profileImage ? review_users[1].profileImage.url : null} 
+                            username={review_users[1].username} 
+                        />
+                        </>
                     )
                 })
             }

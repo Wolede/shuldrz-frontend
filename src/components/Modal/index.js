@@ -5,6 +5,7 @@ import { useStyles } from './style'
 import Paper from 'components/Paper'
 import AddJournalForm from '../Forms/AddJournalForm'
 import ReviewForm from '../Forms/ReviewForm'
+import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 
 const Modal = props => {
     const classes = useStyles()
@@ -18,7 +19,7 @@ const Modal = props => {
         onClose={handleClose}
         disableBackdropClick={disableBackdropClick}
         >
-            <Container maxWidth={view === 'video' ? 'md' : 'sm'} >
+            <Container maxWidth={view === 'video' ? 'md' : 'sm'} style={{ outline: 0 }} >
                 <Box marginTop="8rem">
                 { view === "video" && 
                     (
@@ -39,6 +40,13 @@ const Modal = props => {
                     view === 'review' && (
                         <Paper>
                             <ReviewForm chatProfile={props.chatProfile}/>
+                        </Paper>
+                    )
+                }
+                { view === "forgotPassword" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <ForgotPasswordForm onClose={handleClose} />
                         </Paper>
                     )
                 }

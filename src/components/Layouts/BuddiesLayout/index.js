@@ -12,7 +12,8 @@ const BuddiesLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
 
-    const { data, error } = useSWR(loading ? false : `/users?userType=Volunteer&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
+    const { data, error } = useSWR(loading ? false : `/users?_sort=createdAt:desc&_limit=10`, api.get, {revalidateOnFocus: true})
+    // const { data, error } = useSWR(loading ? false : `/users?userType=Volunteer&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
 
     const buddies = data ? data.data : null
 
@@ -34,14 +35,15 @@ const BuddiesLayout = () => {
                 <Grid container spacing={4}>
                 {
                 buddies.map(( buddy, key ) => { 
-                    const { username, profileImage, occupation, heart, ranking, id, email } = buddy
+                    const { username, profileImage, occupation, experience, heart, ranking, id, email } = buddy
 
                     return (
-                        <Grid item xl={4} md={4} sm={6} xs={12} key={key}>
+                        <Grid item xl={4} lg={4} md={6} sm={6} xs={12} key={key}>
                             <ProfileCard 
                                 username={username}
                                 profileImage={profileImage}
                                 occupation={occupation}
+                                experience={experience}
                                 heart={heart}
                                 id={id}
                                 ranking={ranking}
