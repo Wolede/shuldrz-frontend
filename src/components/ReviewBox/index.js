@@ -11,8 +11,6 @@ const ReviewBox = props => {
     const classes = useStyles()
     const { comment, hearts, userImage, username } = props
 
-    console.log(comment, hearts, userImage, username);
-
     const theme = useTheme();
     const isMobile= useMediaQuery(theme.breakpoints.up('sm'));
     
