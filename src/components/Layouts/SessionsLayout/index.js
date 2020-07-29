@@ -82,10 +82,10 @@ const Sessions = (props) => {
         }
 
         if(chats){
-            selectChat(0);
+            selectChat(1);
         }
         
-        console.log('selected chat', selectedChat)        
+               
         console.log('sessions message', selectedUser);
 
 
@@ -95,18 +95,18 @@ const Sessions = (props) => {
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
+        console.log('selected chat', selectedChat) 
         messageRead();    
-        const chatReceiver = chats[selectedChat].users.filter(_usr => _usr !== user.username)[0]
+        const chatReceiver = chats[chatIndex].users.filter(_usr => _usr !== user.username)[0]
+        console.log('chatReceiver', chatReceiver)
         firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
 
         const userInfo = (doc) =>{
             console.log('username', doc.data().username)
-            console.log(doc.data().username === chatReceiver )
             doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null
-            console.log('chatReceiverId', chatReceiverID)            
-            
+            console.log('chatReceiverId', chatReceiverID)               
         }                
 
        
