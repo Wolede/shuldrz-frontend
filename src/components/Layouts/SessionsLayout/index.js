@@ -65,26 +65,25 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-        if (user !== null || undefined) {
-           
+        if (user !== null || undefined) {           
 
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
                 console.log('firebase chats', firebase_chats)       
                 setChats(firebase_chats)    
-
-            })           
+                chats ? selectChat(0) : null
+            })                 
+            
         }
+
+        
+        
 
         if (selectedUser) {           
             submitNewChat()                 
         }
-
-        if(chats){
-            selectChat(1);
-        }
-        
+       
                
         console.log('sessions message', selectedUser);
 
@@ -295,7 +294,6 @@ const Sessions = (props) => {
 
     // <!-- new chat -->
   
-
 
     return (
         <div>

@@ -67,7 +67,7 @@ const ChatProfile = (props) => {
             {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
-                    <Modal handleClose={handleClose} openModal={openModal} view='review' embedUrl={null} />
+                    <Modal chatProfile={chatProfile} handleClose={handleClose} openModal={openModal} view='review' embedUrl={null} />
                 )
             }
         </div>

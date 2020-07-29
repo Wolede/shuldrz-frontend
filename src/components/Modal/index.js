@@ -38,7 +38,7 @@ const Modal = props => {
                 {
                     view === 'review' && (
                         <Paper>
-                            <ReviewForm/>
+                            <ReviewForm chatProfile={props.chatProfile}/>
                         </Paper>
                     )
                 }
