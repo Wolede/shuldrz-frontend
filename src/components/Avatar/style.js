@@ -46,6 +46,7 @@ const useStyles = makeStyles(theme => ({
         width: props => {const size = sizePicker(props.size); return props.autoWidth ? '100%' : size.width;},
         height: props => {const size = sizePicker(props.size); return size.height},
         marginBottom: props =>  props.marginBottom,
+        margin: props => props.margin,
         boxShadow: `0px 15px 20px rgba(63, 49, 107, 0.25)`,
     }
 }))

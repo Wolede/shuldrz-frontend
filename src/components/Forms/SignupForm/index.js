@@ -62,7 +62,7 @@ const SignupForm = ({volunteer}) => {
                     profileImage: null
                 };
                 // sendUserDataToFirestore(user)
-                            
+                          
                 firebase.firestore().collection('users').doc(user.username).set(userObj)
                 .then(() => {
                     console.log('logged user')

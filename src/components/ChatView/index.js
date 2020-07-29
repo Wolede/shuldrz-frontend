@@ -14,7 +14,7 @@ import ChatProfile from '../ChatProfile';
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -65,7 +65,6 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
             </div>
         )
     } else {
-        console.log('disable button', endBtn())
         return (
             <>
                 {
@@ -76,6 +75,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                         position='absolute'
                     >
                         <ChatProfile
+                            chatProfile={volunteer}
                             closeChatProfile={handleRightSidebarClose}
                         />
                     </MiniDrawer>

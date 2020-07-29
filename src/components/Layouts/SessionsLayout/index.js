@@ -12,6 +12,8 @@ import { SelectedUserContext } from 'contexts/SelectedUserContext';
 import { ChatContext } from 'contexts/ChatContext';
 import { useStyles } from './style'
 import MiniDrawer from '../../MiniDrawer';
+import useSWR from 'swr'
+import api from 'services/Api'
 
 const firebase = require("firebase");
 
@@ -21,6 +23,7 @@ const Sessions = (props) => {
     const classes = useStyles()
     
     const { user, loading } = useAuth()
+    
 
     // Sidebar stuff
     const theme = useTheme();
@@ -45,6 +48,8 @@ const Sessions = (props) => {
     // const [chats, updateChatList] = useState()
     const [selectedChat, updateSelectedChat] = useState(0)
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
+    const [chatProfileInfo, setChatProfileInfo] = useState()
+    const [chatReceiverID, setChatReceiverID] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
 
     const newChatFn = () => {
@@ -63,23 +68,22 @@ const Sessions = (props) => {
         if (user !== null || undefined) {
            
 
-            firebase.firestore().collection('chats').where('users', 'array-contains', user.email).orderBy('currentTime', 'desc')
+            firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
                 console.log('firebase chats', firebase_chats)       
                 setChats(firebase_chats)    
 
-            })
-           
+            })           
         }
 
         if (selectedUser) {           
-            submitNewChat()              
+            submitNewChat()                 
         }
 
-        
-        
-
+        if(chats){
+            selectChat(0);
+        }
         
         console.log('selected chat', selectedChat)        
         console.log('sessions message', selectedUser);
@@ -87,14 +91,49 @@ const Sessions = (props) => {
 
     }, [user]);
 
-    
+   
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
-        messageRead();      
+        messageRead();    
+        const chatReceiver = chats[selectedChat].users.filter(_usr => _usr !== user.username)[0]
+        firebase.firestore().collection('users').get().then((snapshot) => {
+            snapshot.docs.map(doc => userInfo(doc))
+        })
+
+        const userInfo = (doc) =>{
+            console.log('username', doc.data().username)
+            console.log(doc.data().username === chatReceiver )
+            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null
+            console.log('chatReceiverId', chatReceiverID)            
+            
+        }                
+
+       
     }
 
-    const buildDocKey = (friend) => [user.email, friend].sort().join(':');
+    useEffect(() => {
+        
+        const getUserInfo = async() => {            
+            try{
+                const { data } = await api.get(`/users/${chatReceiverID}`)            
+                console.log('user info', data);
+                setSelectedUser(data)
+            } catch(error){
+                console.log(error)
+            }                
+        }
+        
+        if(chatReceiverID){
+            getUserInfo()
+        }
+        
+    }, [chatReceiverID])
+  
+
+    const buildDocKey = (friend) => [user.username, friend].sort((a, b) =>
+        a.toLowerCase().localeCompare(b.toLowerCase())
+    ).join(':');
 
     const submitMessage = (msg) => {
         // console.log('submitMessageChats', selectedChat.messages.length)
@@ -107,23 +146,22 @@ const Sessions = (props) => {
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
 
         
-        const docKey = buildDocKey((chats[selectedChat]).users.filter(_usr => _usr !== user.email)[0])
+        const docKey = buildDocKey((chats[selectedChat]).users.filter(_usr => _usr !== user.username)[0])
         
        
         firebase.firestore().collection('chats').doc(docKey)
-            .update({
-                messages: firebase.firestore.FieldValue.arrayUnion({
-                    sender: user.email,
-                    message: msg,
-                    session: session,
-                    timestamp: Date.now()
-                }),
-                currentTime: Date.now(),
-                receiverHasRead: false
-            });
+        .update({
+            messages: firebase.firestore.FieldValue.arrayUnion({
+                sender: user.username,
+                message: msg,
+                session: session,
+                timestamp: Date.now()
+            }),
+            currentTime: Date.now(),
+            receiverHasRead: false
+        }); 
 
-        updateSelectedChat(0)   
-        
+        updateSelectedChat(0)       
         
     }
 
@@ -137,18 +175,18 @@ const Sessions = (props) => {
     
 
     const clickedMessageWhereNotSender = (chatIndex) =>  {
-        return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.email         
+        return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.username        
     }
 
     const messageRead = () => {
-        const docKey = buildDocKey(chats[selectedChat].users.filter(_usr => _usr !== user.email)[0]);   
+        const docKey = buildDocKey(chats[selectedChat].users.filter(_usr => _usr !== user.username)[0]);   
         console.log('clicked message where I am not the sender', clickedMessageWhereNotSender(selectedChat))
         if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
-                .firestore()
-                .collection('chats')
-                .doc(docKey)
-                .update({ receiverHasRead: true });
+            .firestore()
+            .collection('chats')
+            .doc(docKey)
+            .update({ receiverHasRead: true });
         } 
     }
 
@@ -156,10 +194,8 @@ const Sessions = (props) => {
 
     // <!-- Submit new chat when user cliks on the chat button on a profile --> 
     const submitNewChat = async () => {
-        const newBuildDocKey = () =>  [user.email, selectedUser.email].sort().join(':');
+        const newBuildDocKey = () =>  [user.username, selectedUser.username].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
         
-        
-
         const userExists = async () => {
             const usersSnapshot = await
                 firebase
@@ -200,11 +236,11 @@ const Sessions = (props) => {
             .doc(docKey)
             .set({
                 messages: [{
-                    sender: user.email,
+                    sender: user.username,
                     session: 'none'
                 }],
                 currentTime: Date.now(),
-                users: [user.email, chatObj.sendTo],
+                users: [user.username, chatObj.sendTo],
                 receiverHasRead: false
             })
 
@@ -215,7 +251,7 @@ const Sessions = (props) => {
         if (userExist) {
             const chatExist = await chatExists();
             chatExist ? goToChat(newBuildDocKey()) : newChatSubmit({
-                sendTo: selectedUser.email,                
+                sendTo: selectedUser.username,                
             });
         }
 
@@ -226,28 +262,28 @@ const Sessions = (props) => {
         messageRead()
     }
 
-    const endSession = () => {   
-        
+    const endSession = () => {           
 
-        const docKey = [user.email, chats[selectedChat].users.filter(_user => _user !== user.email)].sort().join(':');
+        const docKey = [user.username, chats[selectedChat].users.filter(_user => _user !== user.username)].sort((a, b) => 
+        a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
 
         firebase.firestore().collection('chats').doc(docKey)
-            .update({
-                messages: firebase.firestore.FieldValue.arrayUnion({
-                    sender: user.email,                    
-                    session: 'ended',
-                    timestamp: Date.now()
-                }),
-                currentTime: Date.now(),
-                receiverHasRead: false
-            });      
+        .update({
+            messages: firebase.firestore.FieldValue.arrayUnion({
+                sender: user.username,                    
+                session: 'ended',
+                timestamp: Date.now()
+            }),
+            currentTime: Date.now(),
+            receiverHasRead: false
+        });      
           
     }
 
     const btnDisabled = () => {
-         if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='none'){
-             return true
-         } 
+        if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='none'){
+            return true
+        } 
          else if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='ended'){
             return true
        } else {
@@ -351,14 +387,12 @@ const Sessions = (props) => {
                                 (
                                     chats !== undefined ?
                                         <ChatView 
-                                            endBtn={
-                                                chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1].session === 'ended' ? true : false
-                                            } 
-                                            backBtn={handleLeftSidebarOpen}
+                                            endBtn={btnDisabled}                                            
                                             endSessionFn={endSession} 
-                                            user={user.email} 
+                                            user={user.username} 
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
+                                            volunteer={selectedUser}
                                         /> 
                                         : <div> No chat available select a profile to chat with </div>
                                 )
