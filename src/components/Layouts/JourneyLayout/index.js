@@ -1,8 +1,8 @@
-import React, {useState, useContext, useEffect} from 'react'
-import { Box, Typography } from '@material-ui/core'
+import React, {useState, useContext, useEffect, useRef} from 'react'
+import { Box, Typography, Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import useAuth from 'contexts/Auth'
-import useSWR, { mutate } from 'swr'
+import useSWR, { useSWRPages } from 'swr'
 import api from 'services/Api'
 import { useStyles } from './style'
 import Button from 'components/Button'
@@ -13,49 +13,141 @@ import SessionLogBox from 'components/SessionLogBox'
 import moment from 'moment'
 import Modal from 'components/Modal'
 import {getProfileCompletion} from 'helpers'
+import ProfileCard from 'components/ProfileCard';
 
 
 const JourneyLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
+    const [isMoreData, setIsMoreData] = useState(true);
 
-    const journalRes = useSWR(loading ? false : `/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
-    const announcementRes = useSWR(loading ? false : `/announcements?userType=${user?.userType}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
-    const sessionLogRes = useSWR(loading ? false : `/session-logs?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get, {revalidateOnFocus: true})
-    
-    // const [ , setJournal ] = useContext(JournalContext)
-    // if (journalRes) setJournal(journalRes.data?.data);
-
-    const journals = journalRes ? journalRes.data?.data : null
-    const announcements = announcementRes ? announcementRes.data?.data : null
-    const sessionLogs = sessionLogRes ? sessionLogRes.data?.data : null
-
-    const feedsNested = [
-        journals,
-        announcements,
-        sessionLogs,
-    ]
-
-    var feedsFlatten = [].concat(...feedsNested) // flatten array of objects
-    const feeds = feedsFlatten.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
-
-    console.log('user', user);
-    
-
-    // const profileCompletion = {
-    //     isCompleted: true,
-    //     percentage: null
-    // }
-    
     const [openModal, setOpenModal] = useState(false);
     const [openTopicsModal, setOpenTopicsModal] = useState(false);
     const [showProfileBox, setShowProfileBox] = useState(true);
+    const [suggestedBuddies, setSuggestedBuddies] = useState([]);
+
+    const PAGE_SIZE = 7;
+    const START_POSITION_IN_CONFIG_URL = 16; // index location of the first digit of the start position in the config url
+
+
+    // console.log('user',user)
+
+
+    const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
+        "journey",
+        ({ offset, withSWR }) => {
+            // console.log('off', offset)
+            const url = offset || `/journey?_start=0&_limit=${PAGE_SIZE}&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`;
+            const {data} = withSWR(useSWR( url, api.get));
+
+            if (!data) return null;
+            // console.log('dat',data)
+            return data.data.map((val, index) => (
+                <div key={index}>
+
+                    { val?.sessionUser && ( // a unique key to session logs
+                        <>
+                        <Box paddingLeft="1rem" marginBottom=".5rem">
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                        </Box>
+
+                        <SessionLogBox sessionLog={val}/>
+
+                        </>
+                    )}
+
+                    { val?.message && val?.userType && ( //a unique key to Announcements
+                        <>
+                        <Box paddingLeft="1rem" marginBottom=".5rem">
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                        </Box>
+
+                        <AnnouncementBox announcement={val} />
+                        
+                        </>
+                    )}
+
+                    { val?.notes && ( // a unique key to only journals.journalSnippet
+                        <>
+                        <Box paddingLeft="1rem" marginBottom=".5rem">
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                        </Box>
+                        
+                        <JournalBox journal={val} />
+                        
+                        </>
+                    )}
+
+                </div>
+            ))
+        },
+        SWR => {
+            // console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
+            if(SWR.data.data.length < 1 && user && !SWR.data.config.url.includes('undefined')) {
+                setIsMoreData(false);
+            }
+            const previousStart = parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7))
+            return `/journey?_start=${previousStart + PAGE_SIZE}&_limit=${PAGE_SIZE}&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`
+        },
+        [loading]
+    )
+
+    const loader = useRef(null)
+    const observer = useRef(null)
+    const [element, setElement] = useState(null);
+
+    useEffect(() => {
+        observer.current = new IntersectionObserver(
+            entries => {
+                const first = entries[0];
+                if (first.isIntersecting) {
+                    // console.log('bottom reaced')
+                    loader.current()
+                }
+            },
+            { threshold: 1 }
+        )
+    }, [])
+
+    useEffect(() => {
+        loader.current = loadMore;
+    }, [loadMore, loading])
+
+    useEffect(() => {
+        const currentElement = element;
+        const currentObserver = observer.current;
+        // console.log('i made it here')
+        if (currentElement) {
+            currentObserver.observe(currentElement);
+        }
+
+        return () => {
+            if (currentElement) {
+                // console.log('also made i there')
+                currentObserver.unobserve(currentElement);
+            }
+        }
+
+    }, [element])
+
 
     useEffect(() => {
         if ( user && (!user?.topics || user?.topics?.length < 1)) {
             setOpenTopicsModal(true)
         }
-    }, [user])
+
+        //maybe we keep the following lines, maybe we don't
+        if (user) {
+            getSuggestedBuddies(user?.topics)
+        }
+    }, [loading])
+
+    // const journeyRes = useSWR(loading ? false : `/journey?_limit=-1&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get, {revalidateOnFocus: true})
+
+    // const feeds = journeyRes?.data?.data.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
+
+    // console.log('journeyRes', journeyRes.data?.data, feeds);
+
 
     const handleOpen = () => {
         setOpenModal(true);
@@ -65,11 +157,45 @@ const JourneyLayout = () => {
         setOpenModal(false);
     };
 
-    
+    // console.log('user', user)
 
     const handleProfileBoxClose = () => {
         setShowProfileBox(false)
     }
+
+    const getSuggestedBuddies = async (selectedTopics) => {
+        try {
+            const buddies = await api.get(`/users?userType=Volunteer`)
+            // console.log(buddies.data)
+            const suggestedBuds = selectedTopics.reduce((acc, curr) => {
+                    const matchedBud = buddies.data.filter(bud => bud.topics.some(topic => topic._id === curr))
+                    if (matchedBud.length > 0) {
+                        acc.push(...matchedBud)
+                    }
+                    return acc;
+                }, [])
+                //make unique
+                .reduce((acc, curr) => {
+                    const exists = acc.find(item => item._id === curr._id);
+                    if(!exists){
+                        acc.push(curr);
+                    }
+                    return acc;
+                }, [])
+                // randomize 
+                .sort(() => Math.random() - 0.5)
+                //truncate to 3
+                .filter((bud, idx) => idx < 3)
+
+            setSuggestedBuddies(suggestedBuds);
+            // console.log(suggestedBuds)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    // console.log('things', isMoreData, isLoadingMore, )
 
     return (
         <div>
@@ -85,7 +211,35 @@ const JourneyLayout = () => {
                 />
             }
 
-            <Box marginBottom="2rem" display="flex">
+            { (suggestedBuddies.length > 0) &&
+                <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}>
+                    <Box marginBottom="1.5rem" display="flex">
+                        <Box className={classes.headerText}>
+                            <Typography variant="h3">Suggested Buddies</Typography>
+                        </Box>
+                    </Box>
+                    <Grid container spacing={4}>
+                        {
+                            suggestedBuddies.map(bud => (
+                                <Grid item xl={4} md={4} sm={6} xs={12} key={bud._id}>
+                                    <ProfileCard 
+                                        username={bud.username}
+                                        profileImage={bud.profileImage}
+                                        occupation={bud.occupation}
+                                        experience={bud.experience}
+                                        heart={bud.heart}
+                                        id={bud.id}
+                                        ranking={bud.ranking}
+                                        email={bud.email}
+                                    />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+                </div>
+            }
+
+            <Box marginBottom="2rem" display="flex" marginTop={user?.userType === "Guest" ? '0' : '-32rem'}>
                 <Box className={classes.headerText}>
                     <Typography variant="h3">Journey</Typography>
                 </Box>
@@ -94,63 +248,7 @@ const JourneyLayout = () => {
                 </Box>
             </Box>
 
-            {feedsNested[feedsNested.length -1] === undefined ? ( //check if last value in feedNested is empty. Means data is still loading
-                
-                <Skeleton variant="rect" height={150} animation="wave"/>
-
-            ) : feeds.length === 0 ? (
-
-                 <Box textAlign="center" paddingTop="100"> 
-                    <Typography align="center" variant="body1">Your feed is empty</Typography>
-                </Box>
-                
-            ) : //feed goes here
-                
-                (
-                    feeds.map((val, index) => {
-
-                        return (
-                            <div key={index}>
-
-                            { val?.sessionUser && ( // a unique key to session logs
-                                <>
-                                <Box paddingLeft="1rem" marginBottom=".5rem">
-                                    <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
-                                </Box>
-
-                                <SessionLogBox sessionLog={val}/>
-
-                                </>
-                            )}
-
-                            { val?.message && val?.userType && ( //a unique key to Announcements
-                                <>
-                                <Box paddingLeft="1rem" marginBottom=".5rem">
-                                    <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
-                                </Box>
-
-                                <AnnouncementBox announcement={val} />
-                                
-                                </>
-                            )}
-
-                            { val?.notes && ( // a unique key to only journals.journalSnippet
-                                <>
-                                <Box paddingLeft="1rem" marginBottom=".5rem">
-                                    <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
-                                </Box>
-                                
-                                <JournalBox journal={val} />
-                                
-                                </>
-                            )}
-        
-                            </div>
-                        )
-                    })
-                )
-            }
-
+            <div>{pages}</div>
 
            {/* Load Custom Modal COmponent */}
             {openModal === true &&
@@ -161,8 +259,20 @@ const JourneyLayout = () => {
 
             {openTopicsModal &&
                 (
-                    <Modal handleClose={() => setOpenTopicsModal(false)} openModal={openTopicsModal} view='addInterestedTopics' embedUrl={null}/>
+                    <Modal handleClose={() => setOpenTopicsModal(false)} openModal={openTopicsModal} view='addInterestedTopics' embedUrl={null} disableBackdropClick callback={getSuggestedBuddies}/>
                 )
+            }
+
+            { isMoreData &&
+                <div ref={setElement}>
+                    { isLoadingMore &&
+                        <Skeleton variant="rect" height={150} animation="wave"/>
+                    }
+                </div>
+            }
+
+            { isMoreData && !isLoadingMore &&
+                <div>Load more</div>
             }
 
         </div>
