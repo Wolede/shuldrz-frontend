@@ -33,7 +33,12 @@ const useStyles = makeStyles(theme => ({
         '&:hover': {
             color: theme.palette.primary.main,
         }
-    }
+    },
+    scroll: {
+        position: 'fixed',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+    },
 
 }))
 

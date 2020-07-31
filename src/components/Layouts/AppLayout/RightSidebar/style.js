@@ -13,7 +13,9 @@ const useStyles = makeStyles(theme => ({
         background: 'none',
     },
     root: {
-        // backgroundColor: theme.palette.background.default,
+        [theme.breakpoints.down('md')]: {
+            backgroundColor: theme.palette.background.default,
+        },
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
@@ -23,9 +25,10 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2, 0)
     },
     closeIcon: {
-        position: 'absolute',
-        bottom: theme.spacing(4),
-        right: theme.spacing(4),
+        position: 'fixed',
+        backgroundColor: theme.palette.error.main,
+        bottom: theme.spacing(6),
+        right: theme.spacing(6),
     }
 }))
 

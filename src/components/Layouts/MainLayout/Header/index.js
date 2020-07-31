@@ -1,27 +1,73 @@
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import { AppBar, Toolbar, IconButton, Hidden, Typography } from '@material-ui/core'
+import { AppBar, Toolbar, ButtonBase, Hidden, Typography, useScrollTrigger, Fab, Zoom, Slide, Box } from '@material-ui/core'
 import { useStyles } from './style'
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from 'components/Button'
+import Paper from 'components/Paper'
+import Logo from 'components/Logo'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+
+
+function HideOnScroll(props) {
+    const { children } = props;
+  
+    const trigger = useScrollTrigger();
+  
+    return (
+      <Slide appear={false} direction="down" in={!trigger}>
+        {children}
+      </Slide>
+    );
+  }
+  
+    
+  function ScrollTop(props) {
+      const { children } = props;
+      const classes = useStyles();
+  
+      const trigger = useScrollTrigger({
+        disableHysteresis: true,
+        threshold: 100,
+      });
+    
+      const handleClick = (event) => {
+        const anchor = (event.target.ownerDocument || document).querySelector('#top-anchor');
+    
+        if (anchor) {
+          anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      };
+    
+      return (
+        <Zoom in={trigger}>
+          <div onClick={handleClick} role="presentation" className={classes.scroll}>
+            {children}
+          </div>
+        </Zoom>
+      );
+}
+
+
+
 
 const Header = (props) => {
     const { className, onSidebarOpen, isLight, ...rest } = props;
     const classes = useStyles();
 
     return (
+        <>
+        <HideOnScroll {...props}>
         <AppBar color="transparent" className={classes.root} {...rest}>
             <Toolbar disableGutters className={classes.toolBar}>
                 <div className={classes.title}>
-                    <Link href="/">
-                        <a>
-                            <img
-                                className={classes.logo}
-                                alt="Shuldrz-logo"
-                                src="https://uploads-ssl.webflow.com/5d9d02c4b01a536c7d5d4a35/5eb98d6936a3e82bd0e8812b_deliveroo-logo.png"
-                            />
-                        </a>
-                    </Link>
+                    <Box width='9rem'>
+                        <Link href="/">
+                            <a>
+                                <Logo />
+                            </a>
+                        </Link>
+                    </Box>
                 </div>
 
                 <Hidden smDown>
@@ -92,17 +138,31 @@ const Header = (props) => {
                 </Hidden>
 
                 <Hidden mdUp>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
+                    <ButtonBase
+                        focusRipple
+                        className={classes.imageButton}
+                        focusVisibleClassName={classes.imageButton}
                         onClick={onSidebarOpen}
+                        style={{
+                            borderRadius: '1.25rem',
+                            boxShadow: '0px 15px 20px rgba(0, 199, 102, 0.20)'
+                        }}
                     >
-                        <MenuIcon />
-                    </IconButton>
+                        <Paper padding='.8rem .8rem .6rem .8rem' borderRadius="1.25rem" color="primary">
+                            <MenuIcon />
+                        </Paper>
+                    </ButtonBase>
                 </Hidden>
             </Toolbar>
         </AppBar>
+        </HideOnScroll>
+
+        <ScrollTop {...props}>
+            <Fab color="secondary" size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+            </Fab>
+        </ScrollTop>
+        </>
     )
 }
 
