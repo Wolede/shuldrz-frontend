@@ -5,7 +5,7 @@ const useStyles = makeStyles(theme => ({
         boxShadow: 'none',
     },
     toolBar: {
-        padding: theme.spacing(2, 4),
+        padding: theme.spacing(2, 0),
     },
     title: {
         flexGrow: 1

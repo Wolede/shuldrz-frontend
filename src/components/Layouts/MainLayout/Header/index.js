@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import { AppBar, Toolbar, ButtonBase, Hidden, Typography, useScrollTrigger, Fab, Zoom, Slide, Box } from '@material-ui/core'
+import { AppBar, Toolbar, ButtonBase, Hidden, Typography, useScrollTrigger, Fab, Zoom, Slide, Box, Container } from '@material-ui/core'
 import { useStyles } from './style'
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from 'components/Button'
@@ -32,7 +32,7 @@ function HideOnScroll(props) {
       });
     
       const handleClick = (event) => {
-        const anchor = (event.target.ownerDocument || document).querySelector('#top-anchor');
+        const anchor = (event.target.ownerDocument || document).querySelector('#hero-front');
     
         if (anchor) {
           anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -59,6 +59,7 @@ const Header = (props) => {
         <>
         <HideOnScroll {...props}>
         <AppBar color="transparent" className={classes.root} {...rest}>
+        <Container maxWidth="xl">
             <Toolbar disableGutters className={classes.toolBar}>
                 <div className={classes.title}>
                     <Box width='9rem'>
@@ -79,12 +80,12 @@ const Header = (props) => {
                                 variant="body2"
                                 className={isLight ? classes.lightText : null}
                             >
-                                Volunteer 
+                                Become a Buddy 
                             </Typography>
                         </a>
                     </Link>
 
-                    <Link 
+                    {/* <Link 
                         href="#"      
                     >
                         <a className={classes.menuLink}>
@@ -95,10 +96,10 @@ const Header = (props) => {
                                 Donate 
                             </Typography>
                         </a>
-                    </Link>
+                    </Link> */}
 
                     <Link 
-                        href="#"      
+                        href="/faq"      
                     >
                         <a className={classes.menuLink}>
                             <Typography
@@ -154,6 +155,7 @@ const Header = (props) => {
                     </ButtonBase>
                 </Hidden>
             </Toolbar>
+        </Container>
         </AppBar>
         </HideOnScroll>
 
