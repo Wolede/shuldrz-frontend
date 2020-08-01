@@ -12,10 +12,12 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-            <link rel="icon" href="/favicon.ico" />
+            <link rel="icon" type="image/png" href="/images/favicon.png" />   
+            <link rel="apple-touch-icon" href="/images/favicon.png" />  
             {/* PWA primary color */}
             <meta name="theme-color" content={shuldrzTheme.palette.primary.main} />
-            <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&family=Sen:wght@700&display=swap" rel="stylesheet" />        </Head>
+            <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&family=Sen:wght@700&display=swap" rel="stylesheet" />   
+        </Head>
         <body>
           <Main />
           <NextScript />

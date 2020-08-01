@@ -17,7 +17,7 @@ import { useStyles } from './style'
 import {getProfileCompletion} from 'helpers';
 import useAuth from 'contexts/Auth'
 
-const AddTopicsForm = ({ onClose }) => {
+const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
     const { user, loading } = useAuth();
     const classes = useStyles()
     const theme = useTheme();
@@ -74,19 +74,25 @@ const AddTopicsForm = ({ onClose }) => {
             let res;
             res = await api.put(`users/${user.id}`, values)
 
-            const profileCompletion = getProfileCompletion(res.data)
+            // const profileCompletion = getProfileCompletion(res.data)
 
-            if (profileCompletion === '100%' && !res.data.isProfileCompleted) {
-                //update the hearts count
-                if (res.data.heart) {
-                    res = await api.put(`/hearts/${res.data.heart.id}`, { user: res.data.id, count: 20 })
-                } else {
-                    res = await api.post(`/hearts`, { user: res.data.id, count: 20 })
-                }
-                //update the isProfileCompleted property
-                values.isProfileCompleted = true;
-                res = await api.put(`users/${id}`, values)
-            }
+            // if (profileCompletion === '100%' && !res.data.isProfileCompleted) {
+            //     //update the hearts count
+            //     if (res.data.heart) {
+            //         res = await api.put(`/hearts/${res.data.heart.id}`, { user: res.data.id, count: 20 })
+            //     } else {
+            //         res = await api.post(`/hearts`, { user: res.data.id, count: 20 })
+            //     }
+            //     //update the isProfileCompleted property
+            //     values.isProfileCompleted = true;
+            //     res = await api.put(`users/${id}`, values)
+            // }
+
+            const topicIds = values.topics.map((topic) => topic._id)
+
+            getSuggestedBuddies(topicIds)
+            
+            console.log('focus here', topicIds)
             
             // console.log('letsee', res, profileCompletion);
             onClose()

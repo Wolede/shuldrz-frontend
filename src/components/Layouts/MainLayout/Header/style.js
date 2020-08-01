@@ -5,7 +5,7 @@ const useStyles = makeStyles(theme => ({
         boxShadow: 'none',
     },
     toolBar: {
-        padding: theme.spacing(2, 4),
+        padding: theme.spacing(2, 0),
     },
     title: {
         flexGrow: 1
@@ -33,7 +33,12 @@ const useStyles = makeStyles(theme => ({
         '&:hover': {
             color: theme.palette.primary.main,
         }
-    }
+    },
+    scroll: {
+        position: 'fixed',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+    },
 
 }))
 

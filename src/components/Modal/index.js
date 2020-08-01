@@ -10,7 +10,7 @@ import AddTopicsForm from '../Forms/AddTopicsForm'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback } = props
 
     return (
         <MuiModal
@@ -55,7 +55,7 @@ const Modal = props => {
                 { view === "addInterestedTopics" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddTopicsForm onClose={handleClose}/>
+                            <AddTopicsForm onClose={handleClose} getSuggestedBuddies={callback}/>
                         </Paper>
                     )
                 }
