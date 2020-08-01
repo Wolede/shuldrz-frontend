@@ -95,7 +95,7 @@ const ProfileForm = ({ user }) => {
         availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string(),
-        topics: Yup.array(),
+        topics: Yup.array().required('Interested topics is empty'),
     })
 
     const onSubmit = async (values) => {
@@ -465,9 +465,16 @@ const ProfileForm = ({ user }) => {
                                     )}
                                     // style={{ width: 500 }}
                                     renderInput={(params) => (
-                                        <TextField {...params} name="topics" variant="outlined" label="Topics" placeholder="Interested Topics"
-                                        
-                                       />
+                                        <TextField {...params} 
+                                            name="topics" 
+                                            variant="outlined" 
+                                            label="Topics" 
+                                            placeholder="Interested Topics"
+                                            error={errors.topics && touched.topics ? true : false}
+                                            helperText={ errors.topics && touched.topics ?
+                                                errors.topics : null
+                                            }
+                                        />
                                     )}
                                 />
                             </div>
