@@ -31,6 +31,7 @@ const ChatInput = (props) => {
                 id='chattextbox'
                 placeholder='Say something nice...'
                 autoComplete={false}
+                onFocus={props.userClickedInput}
                 InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">

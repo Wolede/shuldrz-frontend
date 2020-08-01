@@ -29,7 +29,7 @@ const TrainingsLayout = () => {
             ))
         },
         SWR => {
-            console.log('dat2', SWR.data, SWR.data.config.url[START_POSITION_IN_CONFIG_URL])
+            // console.log('dat2', SWR.data, SWR.data.config.url[START_POSITION_IN_CONFIG_URL])
             if(SWR.data?.data?.length < 1) {
                 setIsMoreData(false);
             }
