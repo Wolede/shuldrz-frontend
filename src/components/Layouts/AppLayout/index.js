@@ -48,6 +48,7 @@ const AppLayout = (props) => {
                 <Topbar 
                 onLeftSidebarOpen={handleLeftSidebarOpen} 
                 onRightSidebarOpen={handleRightSidebarOpen} 
+                withRightSidebar={withRightSidebar}
                 />
             </Hidden>
 

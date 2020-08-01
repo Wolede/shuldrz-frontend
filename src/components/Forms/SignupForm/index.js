@@ -42,7 +42,7 @@ const SignupForm = ({volunteer}) => {
             const res = await api.post(`auth/local/register`, {
                 firstName: values.firstName.charAt(0).toUpperCase() + values.firstName.slice(1), //Capitalize first letter
                 lastName: values.lastName.charAt(0).toUpperCase() + values.lastName.slice(1),
-                username: values.username,
+                username: values.username.charAt(0).toUpperCase() + values.username.slice(1),
                 // occupation: values.occupation,
                 email: values.email,
                 password: values.password,
@@ -60,10 +60,10 @@ const SignupForm = ({volunteer}) => {
                 const userObj = {
                     username: user.username,
                     id: user.id,
-                    profileImage: user.profileImage?.url
+                    profileImage: null
                 };
                 // sendUserDataToFirestore(user)
-                            
+                          
                 firebase.firestore().collection('users').doc(user.username).set(userObj)
                 .then(() => {
                     console.log('logged user')
