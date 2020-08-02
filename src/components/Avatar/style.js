@@ -24,7 +24,7 @@ const sizePicker = (size) => {
             return {
                 width: '13.75rem',
                 height: '13.75rem',
-                borderRadius: '1.875rem',
+                borderRadius: '3.75rem',
             }
         case 'huge':
             return {
