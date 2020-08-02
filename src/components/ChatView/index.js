@@ -11,6 +11,7 @@ import Divider from 'components/Divider'
 import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
+import Modal from 'components/Modal';
 
 
 
@@ -24,6 +25,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     });
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
 
     const handleRightSidebarOpen = () => {
         setOpenRightSidebar(true);
@@ -38,12 +40,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
     const setSchedule = () => {
         console.log('schedule has been set')
+        setOpenModal(true);
     }
 
     
     const endSession = () => {
         endSessionFn()
     }
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
 
     
     // function scrollToEnd(){
@@ -158,6 +165,12 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                 </Box>
 
                 <ChatInput userClickedInput = {userClickedInput} submitMessageFn={submitMessage} />
+
+                {openModal &&
+                    (
+                        <Modal handleClose={handleClose} openModal={openModal} view='schedule' embedUrl={null} formProps={{ volunteer }} />
+                    )
+                }
                 
             </>
         )

@@ -7,10 +7,11 @@ import AddJournalForm from '../Forms/AddJournalForm'
 import ReviewForm from '../Forms/ReviewForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
+import ScheduleForm from '../Forms/ScheduleForm'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps } = props
 
     return (
         <MuiModal
@@ -56,6 +57,13 @@ const Modal = props => {
                     (
                         <Paper padding="1.5rem">
                             <AddTopicsForm onClose={handleClose} getSuggestedBuddies={callback}/>
+                        </Paper>
+                    )
+                }
+                { view === "schedule" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <ScheduleForm onClose={handleClose} formProps={formProps}/>
                         </Paper>
                     )
                 }
