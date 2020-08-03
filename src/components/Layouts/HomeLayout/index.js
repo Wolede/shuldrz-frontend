@@ -4,6 +4,7 @@ import About from './About'
 import Comms from './Comms'
 import HeroesWall from './HeroesWall'
 import JoinBoxes from './JoinBoxes'
+import FAQ from './FAQ'
 
 const HomeLayout = () => {
     return (
@@ -12,6 +13,7 @@ const HomeLayout = () => {
             <About/>
             <Comms/>
             <HeroesWall/>
+            <FAQ/>
             <JoinBoxes/>
         </>
     )

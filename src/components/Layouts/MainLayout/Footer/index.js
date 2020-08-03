@@ -28,9 +28,9 @@ const Footer = () => {
                     </Typography>
                 </Box>
                 <Box id='doc-links' display='flex' justifyContent='center' marginBottom='2.5rem'>
-                    <Typography variant="body2">
+                    {/* <Typography variant="body2">
                         <Link href='/privacy-policy'><a className={classes.link}>Privacy Policy</a></Link>
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="body2">
                         <Link href='/terms-and-conditions'><a className={classes.link}>Terms & Conditions</a></Link>
                     </Typography>
