@@ -6,12 +6,6 @@ const useStyles = makeStyles(theme => ({
             fontSize: '3.8rem'
         },
     },
-    gridOne: {
-        paddingBottom: '0 !important'
-    },
-    gridTwo: {
-        paddingTop: '0 !important'
-    }
 }))
 
 export { useStyles }

@@ -13,8 +13,8 @@ const Hero = () => {
 
     return (
         <Container maxWidth={isDesktop ? 'xl' : 'lg'}>
-            <Box id='hero' position='relative'>
-                <Box id='hero-back' paddingTop={isDesktop ? '11.25rem' : '9.25rem'} display="flex" justifyContent='center' alignItems='center'>
+            <Box id='hero' position='relative' paddingBottom={isDesktop ? '10rem' : '12rem'}>
+                <Box id='hero-back' paddingTop={isDesktop ? '11.25rem' : '9.25rem'} display="flex" justifyContent='center' alignItems='center' className={classes.circleBox}>
                     <div className={classes.circleWrapper}>
                         <div id='circle' className={classes.circle}>
 
@@ -24,7 +24,7 @@ const Hero = () => {
                 <div className={classes.textWrap}>
                     {/* <Grid container> */}
                         {/* <Grid xs={12} sm={12} md={7} item> */}
-                            <Box compon id='hero-front' paddingTop={isDesktop ? '18rem' : '16rem'} paddingBottom='5rem'>
+                            <Box id='hero-front' paddingTop={isDesktop ? '18rem' : '16rem'}>
                                 <Typography variant='h1' gutterBottom className={classes.heroJumbo}>
                                     Do you need someone to talk to?
                                 </Typography>

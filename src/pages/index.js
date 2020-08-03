@@ -9,7 +9,7 @@ const Home = () => {
       <Head>
         <title>Shuldrz | Here for a lean-on</title>
       </Head>
-      <MainLayout>
+      <MainLayout withFooter>
         <HomeLayout/>
       </MainLayout>
     </div>
