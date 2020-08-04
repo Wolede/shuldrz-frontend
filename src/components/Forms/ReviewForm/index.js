@@ -9,32 +9,40 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 import api from 'services/Api'
 
-const ReviewForm = (props) => {
+const ReviewForm = ({chatProfile, prevReview }) => {
     const classes = useStyles()
     const { user } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
 
     const initialValues = {
-        comment: '',
-        hearts: 1,
-        review_users: [props.chatProfile.id, user.id],
-        names: `${user.username} left ${props.chatProfile.username} a review`
+        comment: prevReview ? prevReview.comment : '',
+        hearts: prevReview ? prevReview.hearts : 1,
+        review_users: [chatProfile.id, user.id],
+        names: `${user.username} left ${chatProfile.username} a review`
     }
     const validationSchema = Yup.object({
         comment: Yup.string().max(150, "You've hit the 1000 character limit. Add another entry").required("Comment section cannot be empty"),
         hearts: Yup.number('give hearts').required('give hearts')
     })
 
-    const onSubmit = async (values) => {
-        try {
-            const res = await api.post(`reviews`, {
-                comment: values.comment,
-                hearts: values.hearts,
-                review_users: values.review_users,
-                names: values.names
-            })
-            setIsSuccessful({ status: true,})
 
+    
+
+    const onSubmit = async (values) => {
+        const request = prevReview ? api.put(`reviews/${prevReview.id}`, {
+            comment: values.comment,
+            hearts: values.hearts,
+            review_users: values.review_users,
+            names: values.names
+        }) : api.post(`reviews`, {
+            comment: values.comment,
+            hearts: values.hearts,
+            review_users: values.review_users,
+            names: values.names
+        })
+        try {
+            const res = await request
+            setIsSuccessful({ status: true,})
 
         } catch (error) {
             const message = error.response.data.message[0].messages[0].message
@@ -59,8 +67,7 @@ const ReviewForm = (props) => {
             >
                 {({ values, errors, touched, getFieldProps, setFieldValue, isSubmitting }) => (
                     <Form noValidate autoComplete="off">
-                        {/* {console.log(values) } */}
-
+                        
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel id="heart_label">Select heart points</InputLabel>
                             <Select
