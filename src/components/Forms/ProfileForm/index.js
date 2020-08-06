@@ -57,9 +57,16 @@ const ProfileForm = ({ user }) => {
         user ? getFormOptions() : false
     }, [])
 
+    //useEffect for removing button message after 4 seconds
+    useEffect(() => {
+        setTimeout(() => {
+            setIsSuccessful(null);
+        }, 4000);
+    }, [isSuccessful?.status])
 
-    console.log(topics);
-    console.log(formOptions?.topics);
+
+    // console.log(topics);
+    // console.log(formOptions?.topics);
     
     const fetchedValues = {
         firstName: firstName ? firstName : '',
@@ -162,7 +169,7 @@ const ProfileForm = ({ user }) => {
                             <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '1rem' }}>
                                 Personal Information
                             </Typography>
-                            {console.log(values)}
+                            {/* {console.log(values)} */}
                             <div className={classes.fieldWrapper}>
                                 <TextField 
                                 name="firstName" 
