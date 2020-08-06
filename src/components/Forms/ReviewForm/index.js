@@ -14,6 +14,8 @@ const ReviewForm = ({chatProfile, prevReview }) => {
     const { user } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
 
+    console.log('gg', prevReview, chatProfile)
+
     const initialValues = {
         comment: prevReview ? prevReview.comment : '',
         hearts: prevReview ? prevReview.hearts : 1,
@@ -26,10 +28,8 @@ const ReviewForm = ({chatProfile, prevReview }) => {
     })
 
 
-    
-
     const onSubmit = async (values) => {
-        const request = prevReview ? api.put(`reviews/${prevReview.id}`, {
+        const reviewRequest = prevReview ? api.put(`reviews/${prevReview.id}`, {
             comment: values.comment,
             hearts: values.hearts,
             review_users: values.review_users,
@@ -40,8 +40,24 @@ const ReviewForm = ({chatProfile, prevReview }) => {
             review_users: values.review_users,
             names: values.names
         })
+
+        const getHeartCount = () => {
+            let currentHearts = 0
+            if(!prevReview) {
+                currentHearts = values.hearts
+            } else if (values.hearts > prevReview.hearts || values.hearts < prevReview.hearts) {
+                currentHearts = values.hearts - prevReview.hearts
+            }
+
+            return currentHearts + chatProfile?.heart?.count
+        } 
+
+        const heartRequest = api.put(`/hearts/${ chatProfile?.heart?.id}`, { user: chatProfile?.id, count: getHeartCount() })
+
         try {
-            const res = await request
+            let res;
+            res = await reviewRequest
+            res = await heartRequest
             setIsSuccessful({ status: true,})
 
         } catch (error) {
