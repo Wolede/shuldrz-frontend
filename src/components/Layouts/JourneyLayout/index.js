@@ -15,6 +15,7 @@ import Modal from 'components/Modal'
 import {getProfileCompletion} from 'helpers'
 import ProfileCard from 'components/ProfileCard';
 
+const firebase = require("firebase");
 
 const JourneyLayout = () => {
     const classes = useStyles()
@@ -130,7 +131,6 @@ const JourneyLayout = () => {
 
     }, [element])
 
-
     useEffect(() => {
         if ( user && (!user?.topics || user?.topics?.length < 1)) {
             setOpenTopicsModal(true)
@@ -147,6 +147,19 @@ const JourneyLayout = () => {
     // const feeds = journeyRes?.data?.data.sort((a, b) => new Date(b.createdAt) - new Date (a.createdAt)) //sort by date
 
     // console.log('journeyRes', journeyRes.data?.data, feeds);
+
+    const [chats, setChats] = useState([]);
+    useEffect(() => {
+        if (user) {           
+            firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
+            .onSnapshot(res => {
+                const firebase_chats = res.docs.map(doc => doc.data())    
+                console.log('chatz', firebase_chats)
+                setChats(firebase_chats)    
+            })    
+            
+        }
+    }, [user]);
 
 
     const handleOpen = () => {
@@ -211,7 +224,7 @@ const JourneyLayout = () => {
                 />
             }
 
-            { (suggestedBuddies.length > 0) &&
+            { (suggestedBuddies.length > 0 && chats.length < 1) &&
                 <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}>
                     <Box marginBottom="1.5rem" display="flex">
                         <Box className={classes.headerText}>
