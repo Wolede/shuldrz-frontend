@@ -46,10 +46,10 @@ const Sessions = (props) => {
 
     
     // const [chats, updateChatList] = useState()
-    const [selectedChat, updateSelectedChat] = useState(0)
+    const [selectedChat, updateSelectedChat] = useState()
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
-    const [chatProfileInfo, setChatProfileInfo] = useState()
     const [chatReceiverID, setChatReceiverID] = useState()
+    const [prevReview, setPrevReview] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
 
     const newChatFn = () => {
@@ -70,43 +70,37 @@ const Sessions = (props) => {
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
-                console.log('firebase chats', firebase_chats)       
                 setChats(firebase_chats)    
-                chats ? selectChat(0) : null
-            })                 
+                // chats ? selectChat(0) : null
+                // selectChat(0)
+            })    
             
         }
 
-        
-        
-
         if (selectedUser) {           
-            submitNewChat()                 
+            submitNewChat()
         }
-       
-               
-        console.log('sessions message', selectedUser);
-
+         
+        
 
     }, [user]);
 
-   
+     
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
-        console.log('selected chat', selectedChat) 
-        messageRead();    
-        const chatReceiver = chats[chatIndex].users.filter(_usr => _usr !== user.username)[0]
-        console.log('chatReceiver', chatReceiver)
-        firebase.firestore().collection('users').get().then((snapshot) => {
+
+        messageRead(chatIndex);    
+        const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
+                firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
 
-        const userInfo = (doc) =>{
-            console.log('username', doc.data().username)
-            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null
-            console.log('chatReceiverId', chatReceiverID)               
-        }                
+        const userInfo = (doc) =>{            
+            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                       
+        }  
+
+        // loadPrevReview()
 
        
     }
@@ -116,8 +110,9 @@ const Sessions = (props) => {
         const getUserInfo = async() => {            
             try{
                 const { data } = await api.get(`/users/${chatReceiverID}`)            
-                console.log('user info', data);
-                setSelectedUser(data)
+                
+                setSelectedUser(data)                
+
             } catch(error){
                 console.log(error)
             }                
@@ -128,25 +123,37 @@ const Sessions = (props) => {
         }
         
     }, [chatReceiverID])
+
+    const loadPrevReview = async() => {
+        
+
+        try {            
+            const res= await api.get(`/reviews?names=${user.username}%20left%20${selectedUser.username}%20a%20review`)            
+            setPrevReview(res.data[0])                 
+            
+        }catch(error) {
+            console.log(error)
+        }        
+    }
+
+
+    useEffect(() => {       
+        
+        loadPrevReview()
+        
+    }, [selectedUser])
   
 
     const buildDocKey = (friend) => [user.username, friend].sort((a, b) =>
-        a.toLowerCase().localeCompare(b.toLowerCase())
-    ).join(':');
+        a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
 
     const submitMessage = (msg) => {
-        // console.log('submitMessageChats', selectedChat.messages.length)
         const sessionState = chats[selectedChat].messages.length === 0 ? [] : 
         chats[selectedChat].messages[chats[selectedChat].messages.length - 1].session
 
-        console.log('sessionValue', chats[selectedChat].messages[chats[selectedChat].messages.length - 1])
-        console.log('sessionState', sessionState)
-
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
-
         
-        const docKey = buildDocKey((chats[selectedChat]).users.filter(_usr => _usr !== user.username)[0])
-        
+        const docKey = buildDocKey((chats[selectedChat]).users.filter(_usr => _usr !== user.username)[0])        
        
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -177,10 +184,11 @@ const Sessions = (props) => {
         return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.username        
     }
 
-    const messageRead = () => {
-        const docKey = buildDocKey(chats[selectedChat].users.filter(_usr => _usr !== user.username)[0]);   
-        console.log('clicked message where I am not the sender', clickedMessageWhereNotSender(selectedChat))
-        if (clickedMessageWhereNotSender(selectedChat)) {
+    const messageRead = (chatIndex) => {
+       
+        const docKey = buildDocKey(chats[chatIndex].users.filter(_usr => _usr !== user.username)[0]);   
+        
+        if (clickedMessageWhereNotSender(chatIndex)) {
             firebase
             .firestore()
             .collection('chats')
@@ -224,6 +232,7 @@ const Sessions = (props) => {
             const usersInChat = docKey.split(':');
             const chat = chats.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             updateSelectedChat(chats.indexOf(chat));
+            selectChat(chats.indexOf(chat))
         }
 
         const newChatSubmit = async (chatObj) => {            
@@ -242,8 +251,6 @@ const Sessions = (props) => {
                 users: [user.username, chatObj.sendTo],
                 receiverHasRead: false
             })
-
-            
         }
 
         const userExist = await userExists();
@@ -258,12 +265,12 @@ const Sessions = (props) => {
     }
 
     const userInputFn = () => {
-        messageRead()
+        // messageRead(chatIndex)
     }
 
-    const endSession = () => {           
+    const endSession = async () => {           
 
-        const docKey = [user.username, chats[selectedChat].users.filter(_user => _user !== user.username)].sort((a, b) => 
+        const docKey = [user.username, chats[selectedChat].users.filter(_user => _user !== user.username)[0]].sort((a, b) => 
         a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
 
         firebase.firestore().collection('chats').doc(docKey)
@@ -275,7 +282,17 @@ const Sessions = (props) => {
             }),
             currentTime: Date.now(),
             receiverHasRead: false
-        });      
+        })
+
+        try{
+            const res = await api.post(`session-logs`, {
+                user: user.id, 
+                sessionUser: selectedUser.id
+            })
+            
+        } catch (error){
+            console.log(error)
+        }
           
     }
 
@@ -387,10 +404,11 @@ const Sessions = (props) => {
                                         <ChatView 
                                             endBtn={btnDisabled}                                            
                                             endSessionFn={endSession} 
-                                            user={user.username} 
+                                            user={user} 
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
                                             volunteer={selectedUser}
+                                            prevReview={prevReview}
                                         /> 
                                         : <div> No chat available select a profile to chat with </div>
                                 )

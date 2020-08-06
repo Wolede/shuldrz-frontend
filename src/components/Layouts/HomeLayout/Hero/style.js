@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
         //     }
         // }
     },
+    circleBox:{
+        animation: `$bounceSlow 5s ${theme.transitions.easing.sharp} infinite`,
+    },
     circleWrapper: {
         width: '42.5rem',
         height: '42.5rem',
@@ -32,13 +35,12 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '100%',
         backgroundColor: theme.palette.background.paper,
         boxShadow: `0px 60px 80px rgba(133, 206, 158, 0.25)`,
-        transition: '0.2s cubic-bezier(.17,.67,.83,.67)',
-        // transition: '0.2s cubic-bezier(.17,.67,.83,.67)',
+        transition: `.4s ${theme.transitions.easing.sharp}`,
         '&:hover': {
             boxShadow: `0px 60px 80px rgba(0, 199, 102, 0.2)`,
             transform: 'translateX(26rem)',
             ['& #circle']: {
-                backgroundBlendMode: 'normal'
+                backgroundColor: 'transparent'
             }
         },
         [theme.breakpoints.down('sm')]: {
@@ -54,13 +56,36 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '100%',
         height: '100%',
         backgroundColor: 'rgba(245, 246, 250, .45)',
-        backgroundBlendMode: 'soft-light'
+        backgroundBlendMode: 'soft-light',
+        transition: `background-color .6s ${theme.transitions.easing.sharp}`,
     },
     link:{
         color: theme.palette.primary.main,
-        // fontWeight: 500,
         textDecoration: 'none'
-    }
+    },
+    '@keyframes bounceSlow': {
+        '0%': {
+            transform: 'translateY(0)',
+        },
+        '10%': {  
+            transform: 'translateY(-3px)'
+        },
+        '30%': {
+            transform: 'translateY(3px)'
+        },
+        '50%': {
+            transform: 'translateY(-3px)'
+        },
+        '70%': {
+            transform: 'translateY(5px)'
+        },
+        '90%': { 
+            transform: 'translateY(0)'
+        },
+        '100%': {  
+            transform: 'translateY(-5)'
+        },
+    },
 
 }))
 

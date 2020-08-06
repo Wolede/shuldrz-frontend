@@ -12,10 +12,11 @@ import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
 import Modal from 'components/Modal';
+import api from 'services/Api'
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer, prevReview }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -46,6 +47,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     
     const endSession = () => {
         endSessionFn()
+        
     }
 
     const handleClose = () => {
@@ -57,6 +59,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     //     var chatList = document.getElementById("chatview-container");
     //     chatList.scrollTop = chatList.scrollHeight;
     // }
+  
+  
 
     useEffect(() => {        
         const container = document.getElementById('chatview-container');
@@ -65,7 +69,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     })
    
 
-    if (chat === undefined) {
+    if (chat === undefined ) {
         return (
             <div>
                 Select a chat
@@ -82,6 +86,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                         position='absolute'
                     >
                         <ChatProfile
+                            prevReview={prevReview}
                             chatProfile={volunteer}
                             closeChatProfile={handleRightSidebarClose}
                         />
@@ -137,7 +142,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
                                     {
                                         msg.message && (
-                                            <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
+                                            <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
                                                 <div>
                                                     <Typography variant="body1">{msg.message}</Typography>
                                                     <Typography color="secondary" className='timestamp'>
@@ -151,7 +156,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                                     {   
                                         msg.session === 'ended' && (
                                             <Divider>
-                                                <Typography variant="body1">Session Ended</Typography>
+                                                <Typography variant="body1">{user.username} ended the session</Typography>                                                                                     
                                             </Divider>
                                         )
                                     }
