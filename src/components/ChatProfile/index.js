@@ -8,14 +8,16 @@ import Chip from 'components/Chip'
 import Button from 'components/Button'
 import useAuth from 'contexts/Auth'
 import Modal from 'components/Modal'
+import api from 'services/Api'
 
 
 const ChatProfile = (props) => {
     const classes = useStyles(props)
-    const { closeChatProfile, chatProfile } = props
+    const { closeChatProfile, chatProfile, prevReview } = props
     const { user, loading } = useAuth()
 
     const [openModal, setOpenModal] = React.useState(false);
+    
 
     
 
@@ -23,12 +25,16 @@ const ChatProfile = (props) => {
         setOpenModal(false);
     };
 
-    const handleReviewClick = () => {
+    const handleReviewClick = async() => {
+        
         setOpenModal(true);
     }
 
+    
+
     return (
         <div className={classes.root}>
+            
             <Box 
                 position='sticky'
                 top='0.1px'
@@ -67,7 +73,7 @@ const ChatProfile = (props) => {
             {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
-                    <Modal chatProfile={chatProfile} handleClose={handleClose} openModal={openModal} view='review' embedUrl={null} />
+                    <Modal chatProfile={chatProfile} handleClose={handleClose} openModal={openModal} view='review' embedUrl={null} prevReview={prevReview}/>
                 )
             }
         </div>
