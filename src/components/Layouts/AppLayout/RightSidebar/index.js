@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { Drawer, Hidden, Fab } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import ProfileBox from '../ProfileBox'
-import UpcomingBox from '../UpcomingBox'
+// import UpcomingBox from '../UpcomingBox'
 import AvailabilityBox from '../AvailabilityBox';
 import PersonalityBox from '../PersonalityBox';
 import useAuth from 'contexts/Auth'
@@ -52,7 +52,8 @@ const RightSidebar = props => {
                 />
 
                 {!otherUser ? (
-                    <UpcomingBox />
+                    // <UpcomingBox />
+                    <></>
                 ) : (
                     <AvailabilityBox
                         userData={userData}

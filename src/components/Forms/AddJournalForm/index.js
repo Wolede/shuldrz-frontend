@@ -37,7 +37,7 @@ const AddJournalForm = props => {
             })
             
             // console.log('let see', res);
-            trigger(`/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`, api.get)
+            trigger(`/journey?_start=0&_limit=7&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get)
             props.onClose()
             
         } catch (error) {

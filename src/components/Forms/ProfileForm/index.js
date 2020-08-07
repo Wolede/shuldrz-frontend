@@ -15,11 +15,16 @@ import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import {getProfileCompletion} from 'helpers';
+import useAuth from 'contexts/Auth'
+
+
 
 const ProfileForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()
     const theme = useTheme();
+    const { setUser } = useAuth();
+
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -57,9 +62,16 @@ const ProfileForm = ({ user }) => {
         user ? getFormOptions() : false
     }, [])
 
+    //useEffect for removing button message after 4 seconds
+    useEffect(() => {
+        setTimeout(() => {
+            setIsSuccessful(null);
+        }, 4000);
+    }, [isSuccessful?.status])
 
-    console.log(topics);
-    console.log(formOptions?.topics);
+
+    // console.log(topics);
+    // console.log(formOptions?.topics);
     
     const fetchedValues = {
         firstName: firstName ? firstName : '',
@@ -132,6 +144,11 @@ const ProfileForm = ({ user }) => {
             }
             
             // console.log('letsee', res, profileCompletion);
+
+
+            //set global user
+            setUser(res.data)
+            
             setIsSuccessful({
                 status: true,
             })
@@ -162,7 +179,7 @@ const ProfileForm = ({ user }) => {
                             <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '1rem' }}>
                                 Personal Information
                             </Typography>
-                            {console.log(values)}
+                            {/* {console.log(values)} */}
                             <div className={classes.fieldWrapper}>
                                 <TextField 
                                 name="firstName" 

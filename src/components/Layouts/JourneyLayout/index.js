@@ -15,6 +15,7 @@ import Modal from 'components/Modal'
 import {getProfileCompletion} from 'helpers'
 import ProfileCard from 'components/ProfileCard';
 
+const firebase = require("firebase");
 
 const JourneyLayout = () => {
     const classes = useStyles()
@@ -59,7 +60,7 @@ const JourneyLayout = () => {
                     { val?.message && val?.userType && ( //a unique key to Announcements
                         <>
                         <Box paddingLeft="1rem" marginBottom=".5rem">
-                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()} - From Shuldrz</Typography>
                         </Box>
 
                         <AnnouncementBox announcement={val} />
@@ -148,6 +149,19 @@ const JourneyLayout = () => {
 
     // console.log('journeyRes', journeyRes.data?.data, feeds);
 
+    const [chats, setChats] = useState([]);
+    useEffect(() => {
+        if (user) {           
+            firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
+            .onSnapshot(res => {
+                const firebase_chats = res.docs.map(doc => doc.data())    
+                console.log('chatz', firebase_chats)
+                setChats(firebase_chats)    
+            })    
+            
+        }
+    }, [user]);
+
 
     const handleOpen = () => {
         setOpenModal(true);
@@ -211,7 +225,8 @@ const JourneyLayout = () => {
                 />
             }
 
-            { (suggestedBuddies.length > 0) &&
+            { (suggestedBuddies.length > 0 && chats.length < 1) &&
+
                 <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}>
                     <Box marginBottom="1.5rem" display="flex">
                         <Box className={classes.headerText}>
