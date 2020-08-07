@@ -60,7 +60,7 @@ const JourneyLayout = () => {
                     { val?.message && val?.userType && ( //a unique key to Announcements
                         <>
                         <Box paddingLeft="1rem" marginBottom=".5rem">
-                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()} - From Shuldrz</Typography>
                         </Box>
 
                         <AnnouncementBox announcement={val} />

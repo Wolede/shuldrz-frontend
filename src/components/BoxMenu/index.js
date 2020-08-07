@@ -7,17 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 const BoxMenu = (props) => {
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-  
-
-
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-  
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
+    
 
 
     return (
@@ -26,7 +16,7 @@ const BoxMenu = (props) => {
             aria-label="more"
             aria-controls="long-menu"
             aria-haspopup="true"
-            onClick={handleClick}
+            onClick={props.handleClick}
             color='secondary'
             >
                 <MoreVertIcon style={{ color: '#ffffff' }} />
@@ -34,10 +24,10 @@ const BoxMenu = (props) => {
 
             <Menu
             id="simple-menu"
-            anchorEl={anchorEl}
+            anchorEl={props.anchorEl}
             keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
+            open={Boolean(props.anchorEl)}
+            onClose={props.handleClose}
             >
             <MenuItem onClick={props.setVisibility}>Set to {props.isVisible ? 'Private' : 'Public'}</MenuItem>
             <MenuItem onClick={props.deleteSnippet}>Delete</MenuItem>

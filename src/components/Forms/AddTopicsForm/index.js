@@ -18,7 +18,7 @@ import {getProfileCompletion} from 'helpers';
 import useAuth from 'contexts/Auth'
 
 const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
-    const { user, loading } = useAuth();
+    const { user, setUser } = useAuth();
     const classes = useStyles()
     const theme = useTheme();
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -95,6 +95,9 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
             console.log('focus here', topicIds)
             
             // console.log('letsee', res, profileCompletion);
+
+            // set global user
+            setUser(res.data)
             onClose()
 
             setIsSuccessful({
