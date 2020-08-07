@@ -131,6 +131,7 @@ const JourneyLayout = () => {
 
     }, [element])
 
+    const [chats, setChats] = useState([]);
     useEffect(() => {
         if ( user && (!user?.topics || user?.topics?.length < 1)) {
             setOpenTopicsModal(true)
@@ -138,7 +139,9 @@ const JourneyLayout = () => {
 
         //maybe we keep the following lines, maybe we don't
         if (user) {
-            getSuggestedBuddies(user?.topics)
+            getSuggestedBuddies(user?.topics);
+
+            getChats();
         }
     }, [loading])
 
@@ -148,18 +151,7 @@ const JourneyLayout = () => {
 
     // console.log('journeyRes', journeyRes.data?.data, feeds);
 
-    const [chats, setChats] = useState([]);
-    useEffect(() => {
-        if (user) {           
-            firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
-            .onSnapshot(res => {
-                const firebase_chats = res.docs.map(doc => doc.data())    
-                console.log('chatz', firebase_chats)
-                setChats(firebase_chats)    
-            })    
-            
-        }
-    }, [user]);
+    
 
 
     const handleOpen = () => {
@@ -206,6 +198,14 @@ const JourneyLayout = () => {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    const getChats = () => {
+        firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
+            .onSnapshot(res => {
+                const firebase_chats = res.docs.map(doc => doc.data())    
+                setChats(firebase_chats)    
+            })  
     }
 
     // console.log('things', isMoreData, isLoadingMore, )
