@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
       
     border:{
         borderBottom: '2px solid #838A97',
-        width: '65%',
+        width: '80%',
     },
       
     content:{

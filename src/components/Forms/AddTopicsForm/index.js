@@ -18,7 +18,9 @@ import {getProfileCompletion} from 'helpers';
 import useAuth from 'contexts/Auth'
 
 const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
+
     const { user, setUser } = useAuth();
+
     const classes = useStyles()
     const theme = useTheme();
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;

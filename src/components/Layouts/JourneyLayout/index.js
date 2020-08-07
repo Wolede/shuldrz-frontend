@@ -131,6 +131,7 @@ const JourneyLayout = () => {
 
     }, [element])
 
+
     useEffect(() => {
         if ( user && (!user?.topics || user?.topics?.length < 1)) {
             setOpenTopicsModal(true)
@@ -225,6 +226,7 @@ const JourneyLayout = () => {
             }
 
             { (suggestedBuddies.length > 0 && chats.length < 1) &&
+
                 <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}>
                     <Box marginBottom="1.5rem" display="flex">
                         <Box className={classes.headerText}>
