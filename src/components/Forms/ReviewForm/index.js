@@ -9,7 +9,7 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 import api from 'services/Api'
 
-const ReviewForm = ({chatProfile, prevReview }) => {
+const ReviewForm = (props) => {
     const classes = useStyles()
     const { user } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
@@ -17,10 +17,10 @@ const ReviewForm = ({chatProfile, prevReview }) => {
     console.log('gg', prevReview, chatProfile)
 
     const initialValues = {
-        comment: prevReview ? prevReview.comment : '',
-        hearts: prevReview ? prevReview.hearts : 1,
-        review_users: [chatProfile.id, user.id],
-        names: `${user.username} left ${chatProfile.username} a review`
+        comment: '',
+        hearts: 1,
+        review_users: [props.chatProfile.id, user.id],
+        names: `${user.username} left ${props.chatProfile.username} a review`
     }
     const validationSchema = Yup.object({
         comment: Yup.string().max(150, "You've hit the 1000 character limit. Add another entry").required("Comment section cannot be empty"),
@@ -58,7 +58,9 @@ const ReviewForm = ({chatProfile, prevReview }) => {
             let res;
             res = await reviewRequest
             res = await heartRequest
+
             setIsSuccessful({ status: true,})
+
 
         } catch (error) {
             const message = error.response.data.message[0].messages[0].message
@@ -83,7 +85,8 @@ const ReviewForm = ({chatProfile, prevReview }) => {
             >
                 {({ values, errors, touched, getFieldProps, setFieldValue, isSubmitting }) => (
                     <Form noValidate autoComplete="off">
-                        
+                        {/* {console.log(values) } */}
+
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel id="heart_label">Select heart points</InputLabel>
                             <Select

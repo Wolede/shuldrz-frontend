@@ -41,11 +41,11 @@ const Dialog = (props) => {
                                     onChange={(file) => setFile(file) }
                                 />
                                 <DialogActions>
-                                    <MuiButton onClick={props.handleClose} color="primary">
-                                        No
+                                    <MuiButton onClick={props.handleClose}  style={{color: "#FD2D55"}}>
+                                        Cancel
                                     </MuiButton>
-                                    <MuiButton onClick={handleUploadSubmit} style={{color: "#FD2D55"}}>
-                                        Yes
+                                    <MuiButton onClick={handleUploadSubmit} color="primary">
+                                        Upload
                                     </MuiButton>
                                 </DialogActions>
                             </>

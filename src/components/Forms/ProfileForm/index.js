@@ -17,11 +17,16 @@ import Button from 'components/Button'
 import { useStyles } from './style'
 import {getProfileCompletion} from 'helpers';
 import { Users } from 'react-feather'
+import useAuth from 'contexts/Auth'
+
+
 
 const ProfileForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()
     const theme = useTheme();
+    const { setUser } = useAuth();
+
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -138,6 +143,11 @@ const ProfileForm = ({ user }) => {
             }
             
             // console.log('letsee', res, profileCompletion);
+
+
+            //set global user
+            setUser(res.data)
+            
             setIsSuccessful({
                 status: true,
             })

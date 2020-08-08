@@ -60,7 +60,7 @@ const JourneyLayout = () => {
                     { val?.message && val?.userType && ( //a unique key to Announcements
                         <>
                         <Box paddingLeft="1rem" marginBottom=".5rem">
-                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
+                            <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()} - From Shuldrz</Typography>
                         </Box>
 
                         <AnnouncementBox announcement={val} />
@@ -225,6 +225,7 @@ const JourneyLayout = () => {
             }
 
             { (suggestedBuddies.length > 0 && chats.length < 1) &&
+
                 <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}>
                     <Box marginBottom="1.5rem" display="flex">
                         <Box className={classes.headerText}>

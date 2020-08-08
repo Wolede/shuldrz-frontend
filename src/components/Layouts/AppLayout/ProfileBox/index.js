@@ -23,7 +23,7 @@ const ProfileBox = ({userData, otherUser}) => {
                 ) : (
                     <>
                     <Avatar 
-                        alt={userData.firstName} 
+                        alt={userData.username} 
                         src={userData.profileImage ? userData.profileImage.url : '/empty'} 
                         size="medium" 
                         marginBottom="1.5rem" 
