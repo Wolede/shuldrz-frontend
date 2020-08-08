@@ -4,12 +4,13 @@ import Router from 'next/router'
 import api from 'services/Api'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormControlLabel, FormHelperText, FormLabel, Select, MenuItem, InputLabel, RadioGroup, Radio, TextField, Checkbox, Typography, Box, Grid } from '@material-ui/core'
+import { FormControl, FormHelperText, TextField, Checkbox, Typography, Box, Chip } from '@material-ui/core'
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import {Autocomplete} from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
@@ -54,7 +55,7 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
     }
 
     const validationSchema = Yup.object({
-        topics: Yup.array(),
+        topics: Yup.array().required('Interested topics is empty'),
     })
 
     const onSubmit = async (values) => {
@@ -148,22 +149,95 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
                                     disableCloseOnSelect
                                     getOptionLabel={(option) => option}
                                     value={values.topics}
-                                    onChange={(event, newValue) => {setFieldValue("topics", newValue)} }
-                                    renderOption={(option, { selected }) => (
-                                        <React.Fragment>
-                                        <Checkbox
-                                            icon={icon}
-                                            checkedIcon={checkedIcon}
-                                            style={{ marginRight: 8 }}
-                                            checked={selected}
+                                    onChange={(event, newValue) => {
+                                        // console.log('eve', event.currentTarget.getAttribute('data-option-index'), event.currentTarget.getAttribute('aria-selected'), newValue, event.currentTarget)
+                                        if (event.currentTarget.getAttribute('data-option-index') == '0' && event.currentTarget.getAttribute('aria-selected') == 'false') {
+                                            const x = topics
+                                                .map(topic => topic.name)
+                                                .reduce((acc, curr) => {
+                                                    const topicInAcc = acc.find(top => top === curr)
+                                                    if (!topicInAcc) {
+                                                        acc.push(curr)
+                                                    }
+                                                    return acc
+                                                }, [...values.topics])
+                                                
+                                            setFieldValue('topics', x)
+                                            // console.log('evexylo', x, values.topics)
+                                        } else if (event.currentTarget.getAttribute('data-option-index') == '0' && event.currentTarget.getAttribute('aria-selected') == 'true') {
+                                            setFieldValue("topics", newValue)
+
+                                        } else if (event.currentTarget.getAttribute('data-option-index') != '0' && event.currentTarget.getAttribute('aria-selected') == 'true') {
+                                            const y = values.topics.filter(top => top !== 'All' && top !== topics.map(topic => topic.name).find((top, idx) => idx == event.currentTarget.getAttribute('data-option-index')))
+                                            setFieldValue('topics', y)
+                                        } else if (event.currentTarget.getAttribute('data-option-index') != '0' && event.currentTarget.getAttribute('aria-selected') == 'false') { 
+                                            setFieldValue("topics", newValue)
+                                        }
+                                        // setFieldValue("topics", newValue)
+                                    } }
+                                    renderOption={(option, { selected }) => {
+                                        // console.log('opt', option, selected, values?.topics)
+                                        let isAllSelected = false;
+
+                                        if (option == 'All' && selected) {
+                                            isAllSelected = true;
+                                        } else if (option == 'All' && !selected) {
+                                            isAllSelected = false
+                                        } 
+                                        else if (option != 'All' && !selected) {
+                                            isAllSelected = false
+                                        }
+                                        // console.log('isAll', isAllSelected)
+                                        return (
+                                            <React.Fragment>
+                                                <Checkbox
+                                                    icon={icon}
+                                                    checkedIcon={checkedIcon}
+                                                    style={{ marginRight: 8 }}
+                                                    checked={isAllSelected ? true : selected}
+                                                />
+                                                {option}
+                                            </React.Fragment>
+                                        )
+                                    }}
+                                    renderTags={(tagValue, getTagProps) =>
+                                        tagValue.map((option, index) => {
+                                            if (option !== 'All') {
+                                                return (
+                                                    <Chip
+                                                        label={option}
+                                                        {...getTagProps({ index })}
+                                                        onDelete={() => { 
+                                                            // getTagProps({ index }).onDelete(); 
+                                                            const x = values.topics.filter(top => top != 'All' && top != option)
+                                                            setFieldValue('topics', x)
+                                                            // console.log('finally', option, values.topics, x) 
+                                                        }}
+                                                        // disabled={fixedOptions.indexOf(option) !== -1}
+                                                    />
+                                                )
+                                            } else {
+                                                return null
+                                            }
+                                        })
+                                    }
+                                    closeIcon={
+                                        <CloseIcon
+                                            onClick={() => setFieldValue('topics', [])}
                                         />
-                                        {option}
-                                        </React.Fragment>
-                                    )}
+                                    }
                                     // style={{ width: 500 }}
                                     renderInput={(params) => (
-                                        <TextField {...params} name="topics" variant="outlined" label="Topics" placeholder="Interested Topics"
-                                        
+                                        <TextField 
+                                            {...params} 
+                                            name="topics" 
+                                            variant="outlined" 
+                                            label="Topics" 
+                                            placeholder="Interested Topics"
+                                            error={errors.topics && touched.topics ? true : false}
+                                            helperText={ errors.topics && touched.topics ?
+                                                errors.topics : null
+                                            }
                                        />
                                     )}
                                 />
