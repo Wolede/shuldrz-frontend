@@ -86,8 +86,6 @@ const ProfileForm = ({ user }) => {
         topics: topics ? topics.map(topic => topic.name) : [],
     }
 
-    console.log('fetched', fetchedValues)
-
     const validationSchema = Yup.object({
         firstName: Yup.string().max(20, 'Maximum of 20 characters').required('First name is empty'),
         lastName: Yup.string().max(20, 'Maximum of 20 characters').required('Last name is empty'),
