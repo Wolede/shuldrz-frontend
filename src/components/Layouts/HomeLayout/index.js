@@ -6,15 +6,52 @@ import HeroesWall from './HeroesWall'
 import JoinBoxes from './JoinBoxes'
 import FAQ from './FAQ'
 
-const HomeLayout = () => {
+const HomeLayout = ({home}) => {
+    const { 
+        heroTitle,
+        heroImage,
+        qAndA,
+        aboutTitle,
+        aboutContent,
+        featuresTitle,
+        featuresContent,
+        featuresImage,
+        HeroesWallTitle,
+        HeroesWallContent,
+        faqTitle,
+        faqContent, 
+        guestSignupText,
+        volunteerSignupText,
+    } = home
+
     return (
         <>
-            <Hero />
-            <About/>
-            <Comms/>
-            <HeroesWall/>
-            <FAQ/>
-            <JoinBoxes/>
+            <Hero 
+                heroTitle={heroTitle}
+                heroImage={heroImage}
+            />
+            <About
+                aboutTitle={aboutTitle}
+                aboutContent={aboutContent}
+            />
+            <Comms
+                featuresTitle={featuresTitle}
+                featuresContent={featuresContent}
+                featuresImage={featuresImage.url}
+            />
+            <HeroesWall
+                heroesWallTitle={HeroesWallTitle}
+                heroesWallContent={HeroesWallContent}
+            />
+            <FAQ 
+                faqs={qAndA} 
+                faqTitle={faqTitle}
+                faqContent={faqContent}
+            />
+            <JoinBoxes
+                guestSignupText={guestSignupText}
+                volunteerSignupText={volunteerSignupText}
+            />
         </>
     )
 }

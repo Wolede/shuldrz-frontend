@@ -7,6 +7,7 @@ import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
 
 const HeroesWall = props => {
+    const {heroesWallContent} = props
     const classes = useStyles()
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
@@ -19,7 +20,7 @@ const HeroesWall = props => {
                         Heroes Wall.
                     </Typography>
                     <Typography variant="subtitle2">
-                        Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.
+                        {heroesWallContent}
                     </Typography>
                 </Box>
                 <Grid container spacing={4}>

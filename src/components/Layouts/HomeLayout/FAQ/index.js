@@ -6,9 +6,10 @@ import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown';
 
 const FAQ = props => {
-    const { faqPage } = props
+    const { faqPage, faqs } = props
     const classes = useStyles()
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
@@ -22,70 +23,33 @@ const FAQ = props => {
                     </Typography>
                     <Typography variant="subtitle2" 
                     style={{ margin: '0 auto', maxWidth: isDesktop ? '43.75rem' : '50rem' }}>
-                        Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.
+                         Answers to questions you may have. Remember we are just friends willing to help; if you are in crisis and need a professional, please reach out to your federal or state government agencies.
                     </Typography>
                 </Box>
 
                 <Box margin='0 auto' maxWidth={isDesktop ? '43.75rem' : '50rem'} marginBottom='2rem'>
-                    <ExpansionPanel
-                        className={classes.paper}
-                    >
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
+                    {faqs.map((faq, key) => (
+
+                        <ExpansionPanel
+                            className={classes.paper}
+                            key={key}
                         >
-                            <Typography variant='h5' className={classes.headerText}>
-                                What is Shuldrz?
-                            </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                sit amet blandit leo lobortis eget.
-                            </Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    <ExpansionPanel
-                        className={classes.paper}
-                    >
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography variant='h5' className={classes.headerText}>
-                                Who are these "perfectly
-                                imperfect" buddies that will
-                                help?
-                            </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                sit amet blandit leo lobortis eget.
-                            </Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    <ExpansionPanel
-                        className={classes.paper}
-                    >
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography variant='h5' className={classes.headerText}>
-                            What’s the catch? Is this free?
-                            </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                sit amet blandit leo lobortis eget.
-                            </Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography variant='h5' className={classes.headerText}>
+                                    {faq.question}
+                                </Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Box>
+                                    <ReactMarkdown source={faq.answer} />
+                                </Box>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    ))}
                 </Box>
 
                 {!faqPage && (

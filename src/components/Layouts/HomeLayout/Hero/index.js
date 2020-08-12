@@ -6,7 +6,8 @@ import { useStyles } from './style'
 import Link from 'next/link';
 
 
-const Hero = () => {
+const Hero = (props) => {
+    const { heroTitle, heroImage } = props
     const classes = useStyles()
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
@@ -26,10 +27,10 @@ const Hero = () => {
                         {/* <Grid xs={12} sm={12} md={7} item> */}
                             <Box id='hero-front' paddingTop={isDesktop ? '18rem' : '16rem'}>
                                 <Typography variant='h1' gutterBottom className={classes.heroJumbo}>
-                                    Do you need someone to talk to?
+                                    {heroTitle}
                                 </Typography>
                                 <Typography variant='subtitle1'>
-                                    <Link href='/signup'><a className={classes.link}>Join Shuldrz</a></Link> and get a shoulder to lean on
+                                    <Link href='/signup'><a className={classes.link}>Join Shuldrz</a></Link> where compassion lends a shuldr
                                 </Typography>
                             </Box>
                         {/* </Grid> */}
