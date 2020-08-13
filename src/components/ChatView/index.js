@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Typography, Box, Fab, useMediaQuery, Button as MuiButton } from '@material-ui/core'
+import { Grid, Typography, Box, Fab, useMediaQuery, Button as MuiButton, IconButton, MenuItem, Menu } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles';
 import PropTypes from 'prop-types'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
@@ -26,45 +27,61 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     });
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
-    const [openModal, setOpenModal] = useState(false);
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleRightSidebarOpen = () => {
         setOpenRightSidebar(true);
     };
-    
+
     const handleRightSidebarClose = () => {
         setOpenRightSidebar(false);
     };
 
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     // const shouldOpenRightSidebar = isDesktop ? false : openRightSidebar;
 
+    const deleteMessage = () => {
+        console.log('MESSAGE DELETED')
+    }
 
     const setSchedule = () => {
         console.log('schedule has been set')
         setOpenModal(true);
     }
 
-    
+
     const endSession = () => {
         endSessionFn()
+
     }
 
-    const handleClose = () => {
-        setOpenModal(false);
-    };
 
-    
+
+
+
     // function scrollToEnd(){
     //     var chatList = document.getElementById("chatview-container");
     //     chatList.scrollTop = chatList.scrollHeight;
     // }
 
-    useEffect(() => {        
+
+
+    useEffect(() => {
         const container = document.getElementById('chatview-container');
-        if(container)
-        container.scrollTo(0, container.scrollHeight);
+        if (container)
+            container.scrollTo(0, container.scrollHeight);
     })
-   
+
+
+
 
     if (chat === undefined) {
         return (
@@ -89,7 +106,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                     </MiniDrawer>
                 }
 
-                <Box 
+                <Box
                     position='sticky'
                     top='0.1px'
                     display="flex"
@@ -97,24 +114,31 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                     padding='0rem 0rem 1rem 0rem'
                 >
                     <Box flexGrow='1' display='flex' alignItems='center'>
-                        {  !isDesktop && (
+                        {!isDesktop && (
                             <Fab size="small" aria-label="back" color="secondary" onClick={backBtn} style={{ marginRight: '1rem' }}>
                                 <ArrowBackIcon />
                             </Fab>
-                            )
+                        )
                         }
                         <MuiButton
                             variant="contained"
                             color="secondary"
                             size='small'
                             startIcon={
-                                <Avatar className={classes.chatAvatar} alt={chat.users.filter(_user => _user !== user)[0]} src={`/images/${chat.img}`} size="tiny" variant='rounded' />
+                                <Avatar
+                                    className={classes.chatAvatar}
+                                    alt={chat.users.filter(_user => _user !== user.username)[0]}
+                                    src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
+                                        ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
+                                        chat.users.filter(_user => _user !== user.username)[0]
+                                    }
+                                    size="tiny" variant='rounded' />
                             }
                             onClick={handleRightSidebarOpen}
                         >
                             More
                         </MuiButton>
-                        
+
                     </Box>
                     <div className={classes.headerButtons}>
                         <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button>
@@ -122,13 +146,13 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                     </div>
                 </Box>
                 <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
-                    
+
                     {
-                        chat.messages.map((msg, i) => {   
+                        chat.messages.map((msg, i) => {
 
                             return (
                                 <div key={i}>
-                                    {                                       
+                                    {
                                         msg.session === 'started' && (
                                             <Divider>
                                                 <Typography variant="body1">Session Started</Typography>
@@ -140,7 +164,30 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                                         msg.message && (
                                             <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
                                                 <div>
-                                                    <Typography variant="body1">{msg.message}</Typography>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                                                        <Typography variant="body1">{msg.message}</Typography>
+                                                        <IconButton
+                                                            aria-label="more"
+                                                            aria-controls="long-menu"
+                                                            aria-haspopup="true"
+                                                            onClick={handleClick}
+                                                            color='secondary'
+                                                            style={{padding: '0 0 0 5px'}}
+                                                        >
+                                                            <MoreVertIcon style={{ color: '#ffffff' }} />
+                                                        </IconButton>
+
+                                                        <Menu
+                                                        id="simple-menu"
+                                                        anchorEl={anchorEl}
+                                                        keepMounted
+                                                        open={Boolean(anchorEl)}
+                                                        onClose={handleClose}
+                                                        >
+                                                            <MenuItem onClick={deleteMessage}>Delete message</MenuItem>                                                       
+                                                        </Menu>
+
+                                                    </div>
                                                     <Typography color="secondary" className='timestamp'>
                                                         {moment(msg.timestamp).calendar()}
                                                     </Typography>
@@ -149,30 +196,28 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                                         )
                                     }
 
-                                    {   
+                                    {
                                         msg.session === 'ended' && (
                                             <Divider>
-                                                <Typography variant="body1">Session Ended</Typography>
+
+                                                <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} ended the session</Typography>
+
                                             </Divider>
                                         )
                                     }
                                 </div>
-                            )                         
-                           
-                            
+                            )
+
+
                         })
                     }
 
                 </Box>
 
-                <ChatInput userClickedInput = {userClickedInput} submitMessageFn={submitMessage} />
 
-                {openModal &&
-                    (
-                        <Modal handleClose={handleClose} openModal={openModal} view='schedule' embedUrl={null} formProps={{ volunteer }} />
-                    )
-                }
-                
+                <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
+
+
             </>
         )
     }

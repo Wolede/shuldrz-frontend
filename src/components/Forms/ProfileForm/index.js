@@ -16,8 +16,10 @@ import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import {getProfileCompletion} from 'helpers';
+const firebase = require("firebase/app");
 import { Users } from 'react-feather'
 import useAuth from 'contexts/Auth'
+
 
 
 
@@ -109,9 +111,35 @@ const ProfileForm = ({ user }) => {
         topics: Yup.array().required('Interested topics is empty'),
     })
 
-    const onSubmit = async (values) => {
 
+
+    console.log('FETCHED USERNAME', user.username)
+    const updateFirebaseData = async (newUsername) => {
+        const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
+
+            console.log('USER', user.username)
+            console.log('USER', user.id)
+            console.log('NEW USERNAME', newUsername)
+
+            snapshot.forEach(doc => {         
+                const selectedUser = doc.data().users.filter(_user => _user !== user.id)[0]
+                
+                
+                    console.log('SELECTED USER', selectedUser.username)
+                    const users = [newUsername, selectedUser]
+
+                    doc.ref.update({
+                        users: [...users]
+                    })
+            
+                
+            })
+    }
+
+    const onSubmit = async (values) => {
+        let res;
         const newTopics = values?.topics.reduce((acc, curr) => {
+
             const topicObject = formOptions.topics.find(top => top.name === curr);
             if (topicObject) {
                 acc.push(topicObject);
@@ -124,9 +152,14 @@ const ProfileForm = ({ user }) => {
             topics: newTopics
         }
 
+
         try {
-            let res;
+            
             res = await api.put(`users/${id}`, values)
+            
+            res ? updateFirebaseData(res.data.username) : null
+            
+            
 
             const profileCompletion = getProfileCompletion(res.data)
 
@@ -141,6 +174,10 @@ const ProfileForm = ({ user }) => {
                 values.isProfileCompleted = true;
                 res = await api.put(`users/${id}`, values)
             }
+                    
+
+            
+
             
             // console.log('letsee', res, profileCompletion);
 

@@ -6,7 +6,10 @@ import { Box, CircularProgress, FormHelperText } from '@material-ui/core'
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import api from 'services/Api'
+const firebase = require("firebase/app");
+
 import { trigger } from 'swr'
+
 
 const UploadForm = ({ user }) => {
     // console.log(user, 'in profile');
@@ -15,6 +18,7 @@ const UploadForm = ({ user }) => {
     const [isSuccessful, setIsSuccessful] = useState()
     const [isDeleted, setIsDeleted] = useState()
     const [uploading, setIsUploading] = useState(false)
+
     
     // const [file, setFile] = useState();
 
@@ -47,6 +51,32 @@ const UploadForm = ({ user }) => {
 
             trigger(`/users/${user?.id}`)
             // mutate(`/users/${user?.id}`, { ...user, profileImage: null })
+
+            const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
+        
+        snapshot.forEach(doc => {         
+            const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
+            const deleteImageResponse = res.status 
+            
+            if(deleteImageResponse === 200){
+                const usersDetails =[
+                    {
+                        userId: user.id,
+                        image: null
+                    }, 
+                    {
+                        userId: selectedUser.userId,
+                        image: selectedUser.image
+                    }
+                ]
+
+                doc.ref.update({
+                    usersDetails : [...usersDetails]
+                })
+            }   
+            
+        })
+
             setIsDeleted({
                 status: true,
             })
@@ -57,6 +87,7 @@ const UploadForm = ({ user }) => {
             
         }
         handleDialogClose()
+
         setTimeout(() => {
             setIsUploading(false)
         }, 4000);
@@ -72,12 +103,37 @@ const UploadForm = ({ user }) => {
         data.append('ref', 'user')
         data.append("source", "users-permissions")
         data.append('field', 'profileImage')
+
         
         try {
             const uploadRes = await api.post(`upload`, data)
 
             trigger(`/users/${user?.id}`)
             // console.log('uploaded?', uploadRes);
+
+            const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
+
+            snapshot.forEach(doc => {         
+            const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
+            const uploadedImage = uploadRes.data[0].url
+            
+            const usersDetails =[
+                {
+                    userId: user.id,
+                    image: uploadedImage
+                }, 
+                {
+                    userId: selectedUser.userId,
+                    image: selectedUser.image
+                }
+            ]
+
+
+            
+            doc.ref.update({
+                usersDetails : [...usersDetails]
+            })
+        })
 
             setIsSuccessful({
                 status: true,
@@ -91,6 +147,7 @@ const UploadForm = ({ user }) => {
         setTimeout(() => {
             setIsUploading(false)
         }, 4000); 
+        
         
     }
 
