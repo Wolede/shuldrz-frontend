@@ -6,12 +6,16 @@ import { Box } from '@material-ui/core'
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import api from 'services/Api'
+const firebase = require("firebase/app");
+import { SelectedUserContext } from 'contexts/SelectedUserContext';
 
 
 const UploadForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()
     const [isSuccessful, setIsSuccessful] = useState()
+    const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
+    // console.log('SELECTED USER', selectedUser)
     
     // const [file, setFile] = useState();
 
@@ -38,6 +42,32 @@ const UploadForm = ({ user }) => {
         const res = await api.delete(`upload/files/${user.profileImage.id}`)
         console.log(res, 'deleted?');
         handleDialogClose()
+
+
+        const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
+        
+        snapshot.forEach(doc => {         
+            const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
+            const deleteImageResponse = res.status 
+            
+            if(deleteImageResponse === 200){
+                const usersDetails =[
+                    {
+                        userId: user.id,
+                        image: null
+                    }, 
+                    {
+                        userId: selectedUser.userId,
+                        image: selectedUser.image
+                    }
+                ]
+
+                doc.ref.update({
+                    usersDetails : [...usersDetails]
+                })
+            }   
+            
+        })
     }
 
     const uploadImage = async (file) => {
@@ -52,7 +82,33 @@ const UploadForm = ({ user }) => {
         const uploadRes = await api.post(`upload`, data)
 
         console.log('uploaded?', uploadRes);
+
+        // const selectedUserImage = selectedUser.profileImage ? selectedUser.profileImage.url : null
+
+
+        const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
         
+        snapshot.forEach(doc => {         
+            const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
+            const uploadedImage = uploadRes.data[0].url
+            
+            const usersDetails =[
+                {
+                    userId: user.id,
+                    image: uploadedImage
+                }, 
+                {
+                    userId: selectedUser.userId,
+                    image: selectedUser.image
+                }
+            ]
+
+
+            
+            doc.ref.update({
+                usersDetails : [...usersDetails]
+            })
+        })
     }
 
 

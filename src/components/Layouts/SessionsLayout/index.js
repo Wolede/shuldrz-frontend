@@ -15,7 +15,7 @@ import MiniDrawer from '../../MiniDrawer';
 import useSWR from 'swr'
 import api from 'services/Api'
 
-const firebase = require("firebase");
+const firebase = require("firebase/app");
 
 
 
@@ -51,6 +51,7 @@ const Sessions = (props) => {
     const [chatReceiverID, setChatReceiverID] = useState()
     const [prevReview, setPrevReview] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
+    
 
     const newChatFn = () => {
         console.log('new chat clicked')
@@ -65,14 +66,19 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-        if (user !== null || undefined) {           
+
+        if (user !== null || undefined) {  
+            const userImage = user.profileImage ? user.profileImage.url : null
+                   
+                   
 
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
-                setChats(firebase_chats)    
+                setChats(firebase_chats) 
                 // chats ? selectChat(0) : null
                 // selectChat(0)
+                console.log(firebase_chats)
             })    
             
         }
@@ -90,7 +96,7 @@ const Sessions = (props) => {
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
 
-        messageRead(chatIndex);    
+        // messageRead(chatIndex);    
         const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
                 firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
@@ -144,8 +150,7 @@ const Sessions = (props) => {
     }, [selectedUser])
   
 
-    const buildDocKey = (friend) => [user.username, friend].sort((a, b) =>
-        a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
+    const buildDocKey = (friend) => [user.id, friend].sort().join('');
 
     const submitMessage = (msg) => {
         const sessionState = chats[selectedChat].messages.length === 0 ? [] : 
@@ -153,7 +158,8 @@ const Sessions = (props) => {
 
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
         
-        const docKey = buildDocKey((chats[selectedChat]).users.filter(_usr => _usr !== user.username)[0])        
+        const docKey = buildDocKey((chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+        console.log('DOCUMENT KEY', docKey)   
        
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -186,7 +192,7 @@ const Sessions = (props) => {
 
     const messageRead = (chatIndex) => {
        
-        const docKey = buildDocKey(chats[chatIndex].users.filter(_usr => _usr !== user.username)[0]);   
+        const docKey = buildDocKey(chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId;   
         
         if (clickedMessageWhereNotSender(chatIndex)) {
             firebase
@@ -201,7 +207,9 @@ const Sessions = (props) => {
 
     // <!-- Submit new chat when user cliks on the chat button on a profile --> 
     const submitNewChat = async () => {
-        const newBuildDocKey = () =>  [user.username, selectedUser.username].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
+
+        const newBuildDocKey = () =>  [user.id, selectedUser.id].sort().join('');
+        const tempDocKey = () =>  [user.username, selectedUser.username].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
         
         const userExists = async () => {
             const usersSnapshot = await
@@ -235,8 +243,11 @@ const Sessions = (props) => {
             selectChat(chats.indexOf(chat))
         }
 
-        const newChatSubmit = async (chatObj) => {            
-            const docKey = newBuildDocKey();            
+        const newChatSubmit = async () => {            
+            const docKey = newBuildDocKey();  
+            const userImage = user.profileImage ? user.profileImage.url : null
+            const selectedUserImage = selectedUser.profileImage ? selectedUser.profileImage.url : null
+            
             await 
             firebase
             .firestore()
@@ -248,7 +259,17 @@ const Sessions = (props) => {
                     session: 'none'
                 }],
                 currentTime: Date.now(),
-                users: [user.username, chatObj.sendTo],
+                users: [user.username, selectedUser.username],
+                usersDetails: [
+                    {
+                        userId: user.id,
+                        image: userImage
+                    },
+                    {   
+                        userId: selectedUser.id,
+                        image: selectedUserImage
+                    }
+                ],
                 receiverHasRead: false
             })
         }
@@ -256,9 +277,7 @@ const Sessions = (props) => {
         const userExist = await userExists();
         if (userExist) {
             const chatExist = await chatExists();
-            chatExist ? goToChat(newBuildDocKey()) : newChatSubmit({
-                sendTo: selectedUser.username,                
-            });
+            chatExist ? goToChat(tempDocKey()) : newChatSubmit()
         }
 
 
@@ -270,8 +289,7 @@ const Sessions = (props) => {
 
     const endSession = async () => {           
 
-        const docKey = [user.username, chats[selectedChat].users.filter(_user => _user !== user.username)[0]].sort((a, b) => 
-        a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
+        const docKey = [user.id, chats[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
 
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -292,8 +310,7 @@ const Sessions = (props) => {
             
         } catch (error){
             console.log(error)
-        }
-          
+        }          
     }
 
     const btnDisabled = () => {

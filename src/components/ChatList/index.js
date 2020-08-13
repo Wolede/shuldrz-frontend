@@ -31,18 +31,19 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
     const selectChat = (index) => selectChatFn(index);
 
     if (chats) {
-
+        
         return (
             chats.map((chat, i) => {
-
+                
                 return (
 
                     <>
                         {
-
+                            
                             // chat.receiverHasRead === false && !userIsSender(chat) ?
                             // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
                             user.userType === 'Guest' ?  (
+
                                 <div onClick={closeChatList}>
 
                                     <Grid
@@ -67,11 +68,23 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                                         horizontal: 'left',
                                                     }}
                                                 >
-                                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]} src={`${chat.img}`} size="small" variant='rounded' />
+                                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]} 
+                                                        src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null 
+                                                        ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image : 
+                                                        chat.users.filter(_user => _user !== user.username)[0]} 
+                                                        size="small" 
+                                                        variant='rounded' 
+                                                    />
                                                 </Badge>
                                                 :
 
-                                                <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]} src={`${chat.img}`} size="small" variant='rounded' />
+                                                <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]} 
+                                                        src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null 
+                                                        ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image : 
+                                                        chat.users.filter(_user => _user !== user.username)[0]} 
+                                                        size="small" 
+                                                        variant='rounded' 
+                                                />
                                         }
 
                                         <Grid
@@ -89,7 +102,8 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                     </Grid>
                                 </div>
                             ):(
-                                chat.messages[chat.messages.length - 1].message ? (
+                                
+                                chat.messages.length - 1 > 1 ? (
                                     <div onClick={closeChatList}>
 
                                     <Grid
@@ -114,11 +128,25 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                                         horizontal: 'left',
                                                     }}
                                                 >
-                                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]} src={`${chat.img}`} size="small" variant='rounded' />
+                                                    <Avatar className={classes.avatar} 
+                                                        alt={chat.users.filter(_user => _user !== user.username)[0]} 
+                                                        src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null 
+                                                        ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image : 
+                                                        chat.users.filter(_user => _user !== user.username)[0]} 
+                                                        size="small" 
+                                                        variant='rounded'
+                                                    />
                                                 </Badge>
                                                 :
 
-                                                <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]} src={`${chat.img}`} size="small" variant='rounded' />
+                                                <Avatar className={classes.avatar} 
+                                                    alt={chat.users.filter(_user => _user !== user.username)[0]} 
+                                                    src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null 
+                                                    ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image : 
+                                                    chat.users.filter(_user => _user !== user.username)[0]} 
+                                                    size="small" 
+                                                    variant='rounded'                                                     
+                                                />
                                         }
 
                                         <Grid
