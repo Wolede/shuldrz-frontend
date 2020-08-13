@@ -15,22 +15,18 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
 
     const classes = useStyles()
-    const mockChats = [0, 1, 2, 3]
+
 
     const badgeHandler = () => {
-                
+
     }
 
-    const userIsSender = (chat) => {   
-        const a = false;     
-        console.log('userIsSender', 
-            chat.messages[chat.messages.length - 1].sender === user.email  )
-        console.log('testing',  a === false && true ? 'no badge' : 'badge')
-        chat.messages[chat.messages.length - 1].sender === user.email  
-             
+    const userIsSender = (chat) => {
+        const a = false;        
+        chat.messages[chat.messages.length - 1].sender === user.email
     }
 
-    
+
 
     const selectChat = (index) => selectChatFn(index);
 
@@ -38,7 +34,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
         
         return (
             chats.map((chat, i) => {
-
+                
                 return (
 
                     <>
@@ -46,7 +42,6 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                             
                             // chat.receiverHasRead === false && !userIsSender(chat) ?
                             // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
-
                             user.userType === 'Guest' ?  (
 
                                 <div onClick={closeChatList}>
@@ -159,38 +154,40 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                             direction="column"
                                             className={classes.typography}
                                         >
-                                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />
-                                    </Badge>
-                                :                                      
-                                    
-                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.email)[0]} src={`${chat.img}`} size="small" variant='rounded' />  
-                            }
+
+                                            <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>
+                                            <Typography variant="body2">
+                                                {chat.messages[chat.messages.length - 1].message ? chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...' : null}
+                                            </Typography>
+
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                                ): (
+                                    <>
+                                        <Typography align="center" variant="body1"> Chats empty</Typography>
+                                        <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
+                                    </>
                             
-                            <Grid
-                                container
-                                direction="column"
-                                className={classes.typography}
-                            >
-                                <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username)[0].substring(0, 8)}</Typography>
-                                <Typography variant="body2">
-                                    {chat.messages[chat.messages.length -1].message  ? chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...' : null}
-                                </Typography>
-                                
-                            </Grid>
-                        </Grid>
-                        </div>
+                            )
+                        )}
+                            
+                            
+                        
                     </>
+
+
                 )
             })
 
         )
-    } else  {
+    } else {
 
-        return(
+        return (
             <div>No chats available</div>
         )
 
-    }       
+    }
 
 
 
