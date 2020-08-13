@@ -28,7 +28,7 @@ const HomeLayout = ({home}) => {
         <>
             <Hero 
                 heroTitle={heroTitle}
-                heroImage={heroImage}
+                heroImage={heroImage.url}
             />
             <About
                 aboutTitle={aboutTitle}
