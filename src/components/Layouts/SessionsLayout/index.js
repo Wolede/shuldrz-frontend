@@ -152,8 +152,6 @@ const Sessions = (props) => {
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
 
         
-        const docKey = buildDocKey((chats[selectedChat]).users.filter(_usr => _usr !== user.username)[0])
-        
 
         const docKey = buildDocKey((chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
         console.log('DOCUMENT KEY', docKey)   
