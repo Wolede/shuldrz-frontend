@@ -285,7 +285,7 @@ const Sessions = (props) => {
         messageRead()
     }
 
-    const endSession = () => {           
+    const endSession = async () => {           
 
         const docKey = [user.id, chats[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
 
