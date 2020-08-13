@@ -12,11 +12,12 @@ import Divider from 'components/Divider'
 import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
+import Modal from 'components/Modal';
 import api from 'services/Api'
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer, prevReview }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -26,6 +27,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     });
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleRightSidebarOpen = () => {
@@ -52,6 +54,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
     const setSchedule = () => {
         console.log('schedule has been set')
+        setOpenModal(true);
     }
 
 
@@ -59,6 +62,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
         endSessionFn()
 
     }
+
 
 
 
@@ -75,6 +79,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
         if (container)
             container.scrollTo(0, container.scrollHeight);
     })
+
+
 
 
     if (chat === undefined) {
@@ -94,7 +100,6 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                         position='absolute'
                     >
                         <ChatProfile
-                            prevReview={prevReview}
                             chatProfile={volunteer}
                             closeChatProfile={handleRightSidebarClose}
                         />
@@ -157,7 +162,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
                                     {
                                         msg.message && (
-                                            <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
+                                            <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
                                                 <div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between'}}>
                                                         <Typography variant="body1">{msg.message}</Typography>
@@ -194,7 +199,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                                     {
                                         msg.session === 'ended' && (
                                             <Divider>
+
                                                 <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} ended the session</Typography>
+
                                             </Divider>
                                         )
                                     }
@@ -207,7 +214,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
                 </Box>
 
+
                 <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
+
 
             </>
         )

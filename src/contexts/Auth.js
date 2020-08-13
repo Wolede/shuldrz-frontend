@@ -29,7 +29,6 @@ export const AuthContextProvider = ({ children }) => {
                 
             }
             setLoading(false)
-            console.log('over here')
         }
         loadUserFromCookies()
     }, [])
@@ -37,7 +36,7 @@ export const AuthContextProvider = ({ children }) => {
     const logout = (identifier, password) => {
         Cookies.remove('token')
         window.location.pathname = '/login'
-        setUser(null)     
+        // setUser(null)     
     }
 
     return (
@@ -63,7 +62,6 @@ export function ProtectRoute(Component) {
 
         useEffect(() => {
             if (!isAuthenticated && !loading) router.push('/login')
-            console.log('over here');
             
         }, [loading, isAuthenticated])
 

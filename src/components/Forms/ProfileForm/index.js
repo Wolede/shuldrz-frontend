@@ -4,24 +4,31 @@ import Router from 'next/router'
 import api from 'services/Api'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormControlLabel, FormHelperText, FormLabel, Select, MenuItem, InputLabel, RadioGroup, Radio, TextField, Checkbox, Typography, Box, Grid } from '@material-ui/core'
+import { FormControl, FormControlLabel, FormHelperText, FormLabel, Select, MenuItem, InputLabel, RadioGroup, Radio, TextField, Checkbox, Typography, Box, Chip } from '@material-ui/core'
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import {Autocomplete} from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { useTheme } from '@material-ui/styles';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import {getProfileCompletion} from 'helpers';
 const firebase = require("firebase/app");
+import { Users } from 'react-feather'
+import useAuth from 'contexts/Auth'
+
+
 
 
 const ProfileForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()
     const theme = useTheme();
+    const { setUser } = useAuth();
+
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -59,9 +66,13 @@ const ProfileForm = ({ user }) => {
         user ? getFormOptions() : false
     }, [])
 
+    //useEffect for removing button message after 4 seconds
+    useEffect(() => {
+        setTimeout(() => {
+            setIsSuccessful(null);
+        }, 4000);
+    }, [isSuccessful?.status])
 
-    console.log(topics);
-    console.log(formOptions?.topics);
     
     const fetchedValues = {
         firstName: firstName ? firstName : '',
@@ -97,8 +108,9 @@ const ProfileForm = ({ user }) => {
         availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string(),
-        topics: Yup.array(),
+        topics: Yup.array().required('Interested topics is empty'),
     })
+
 
 
     console.log('FETCHED USERNAME', user.username)
@@ -126,7 +138,8 @@ const ProfileForm = ({ user }) => {
 
     const onSubmit = async (values) => {
         let res;
-        const newTopics = values.topics.reduce((acc, curr) => {
+        const newTopics = values?.topics.reduce((acc, curr) => {
+
             const topicObject = formOptions.topics.find(top => top.name === curr);
             if (topicObject) {
                 acc.push(topicObject);
@@ -167,6 +180,11 @@ const ProfileForm = ({ user }) => {
 
             
             // console.log('letsee', res, profileCompletion);
+
+
+            //set global user
+            setUser(res.data)
+            
             setIsSuccessful({
                 status: true,
             })
@@ -182,6 +200,8 @@ const ProfileForm = ({ user }) => {
     }
 
     // console.log('form', formOptions, fetchedValues)
+    // const [isAllSelected, setIsAllSelected] = useState(false);
+    // let isAllSelected;
 
     return (
         <>
@@ -197,7 +217,7 @@ const ProfileForm = ({ user }) => {
                             <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '1rem' }}>
                                 Personal Information
                             </Typography>
-                            {console.log(values)}
+                            {/* {console.log(values)} */}
                             <div className={classes.fieldWrapper}>
                                 <TextField 
                                 name="firstName" 
@@ -258,7 +278,7 @@ const ProfileForm = ({ user }) => {
                                     margin="normal"
                                     id="DateOfBirth"
                                     label="DateOfBirth"
-                                    value={values.DateOfBirth}
+                                    value={values?.DateOfBirth}
                                     onChange={value => setFieldValue("DateOfBirth", value.toDate())}
                                     KeyboardButtonProps={{
                                         'aria-label': 'change date',
@@ -397,7 +417,7 @@ const ProfileForm = ({ user }) => {
                                     options={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']}
                                     disableCloseOnSelect
                                     getOptionLabel={(option) => option}
-                                    value={values.availableDays}
+                                    value={values?.availableDays}
                                     onChange={(event, newValue) => setFieldValue("availableDays", newValue)}
                                     renderOption={(option, { selected }) => (
                                         <React.Fragment>
@@ -486,24 +506,100 @@ const ProfileForm = ({ user }) => {
                                     disableCloseOnSelect
                                     getOptionLabel={(option) => option}
                                     value={values.topics}
-                                    onChange={(event, newValue) => {setFieldValue("topics", newValue)} }
-                                    renderOption={(option, { selected }) => (
-                                        <React.Fragment>
-                                        <Checkbox
-                                            icon={icon}
-                                            checkedIcon={checkedIcon}
-                                            style={{ marginRight: 8 }}
-                                            checked={selected}
+                                    onChange={(event, newValue) => {
+                                        // console.log('eve', event.currentTarget.getAttribute('data-option-index'), event.currentTarget.getAttribute('aria-selected'), newValue, event.currentTarget)
+                                        if (event.currentTarget.getAttribute('data-option-index') == '0' && event.currentTarget.getAttribute('aria-selected') == 'false') {
+                                            const x = formOptions
+                                                .topics
+                                                .map(topic => topic.name)
+                                                .reduce((acc, curr) => {
+                                                    const topicInAcc = acc.find(top => top === curr)
+                                                    if (!topicInAcc) {
+                                                        acc.push(curr)
+                                                    }
+                                                    return acc
+                                                }, [...values.topics])
+                                                
+                                            setFieldValue('topics', x)
+                                            // console.log('evexylo', x, values.topics)
+                                        } else if (event.currentTarget.getAttribute('data-option-index') == '0' && event.currentTarget.getAttribute('aria-selected') == 'true') {
+                                            setFieldValue("topics", newValue)
+
+                                        } else if (event.currentTarget.getAttribute('data-option-index') != '0' && event.currentTarget.getAttribute('aria-selected') == 'true') {
+                                            const y = values.topics.filter(top => top !== 'All' && top !== formOptions.topics.map(topic => topic.name).find((top, idx) => idx == event.currentTarget.getAttribute('data-option-index')))
+                                            setFieldValue('topics', y)
+                                        } else if (event.currentTarget.getAttribute('data-option-index') != '0' && event.currentTarget.getAttribute('aria-selected') == 'false') { 
+                                            setFieldValue("topics", newValue)
+                                        }
+                                        // setFieldValue("topics", newValue)
+                                    } }
+                                    renderOption={(option, { selected }) => {
+                                        // console.log('opt', option, selected, values?.topics)
+                                        let isAllSelected = false;
+
+                                        if (option == 'All' && selected) {
+                                            isAllSelected = true;
+                                        } else if (option == 'All' && !selected) {
+                                            isAllSelected = false
+                                        } 
+                                        else if (option != 'All' && !selected) {
+                                            isAllSelected = false
+                                        }
+                                        // console.log('isAll', isAllSelected)
+                                        return (
+                                            <React.Fragment>
+                                                <Checkbox
+                                                    icon={icon}
+                                                    checkedIcon={checkedIcon}
+                                                    style={{ marginRight: 8 }}
+                                                    checked={isAllSelected ? true : selected}
+                                                />
+                                                {option}
+                                            </React.Fragment>
+                                        )
+                                    }}
+                                    renderTags={(tagValue, getTagProps) =>
+                                        tagValue.map((option, index) => {
+                                            if (option !== 'All') {
+                                                return (
+                                                    <Chip
+                                                        label={option}
+                                                        {...getTagProps({ index })}
+                                                        onDelete={() => { 
+                                                            // getTagProps({ index }).onDelete(); 
+                                                            const x = values.topics.filter(top => top != 'All' && top != option)
+                                                            setFieldValue('topics', x)
+                                                            // console.log('finally', option, values.topics, x) 
+                                                        }}
+                                                        // disabled={fixedOptions.indexOf(option) !== -1}
+                                                    />
+                                                )
+                                            } else {
+                                                return null
+                                            }
+                                        })
+                                    }
+                                    closeIcon={
+                                        <CloseIcon
+                                            onClick={() => setFieldValue('topics', [])}
                                         />
-                                        {option}
-                                        </React.Fragment>
-                                    )}
+                                    }
                                     // style={{ width: 500 }}
-                                    renderInput={(params) => (
-                                        <TextField {...params} name="topics" variant="outlined" label="Topics" placeholder="Interested Topics"
-                                        
-                                       />
-                                    )}
+                                    renderInput={(params) => {
+                                        // console.log('para', params)
+                                        return (
+                                            <TextField {...params} 
+                                                name="topics" 
+                                                variant="outlined" 
+                                                label="Topics" 
+                                                placeholder="Interested Topics"
+                                                error={errors.topics && touched.topics ? true : false}
+                                                helperText={ errors.topics && touched.topics ?
+                                                    errors.topics : null
+                                                }
+                                            />
+                                        )
+                                    }}
                                 />
                             </div>
                         </Box>

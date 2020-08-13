@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
-import { useStyles } from './style'
 import { Drawer, Hidden, Fab } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
 import ProfileBox from '../ProfileBox'
-import UpcomingBox from '../UpcomingBox'
+// import UpcomingBox from '../UpcomingBox'
 import AvailabilityBox from '../AvailabilityBox';
 import PersonalityBox from '../PersonalityBox';
 import useAuth from 'contexts/Auth'
+import { useStyles } from './style'
 import api from 'services/Api'
 import useSWR from 'swr'
 
@@ -52,7 +52,8 @@ const RightSidebar = props => {
                 />
 
                 {!otherUser ? (
-                    <UpcomingBox />
+                    // <UpcomingBox />
+                    <></>
                 ) : (
                     <AvailabilityBox
                         userData={userData}
@@ -64,9 +65,9 @@ const RightSidebar = props => {
                     otherUser={otherUser}
                 />
                 
-                <Hidden lgUp>
+                <Hidden mdUp>
                     <Fab 
-                        size="small" 
+                        size="medium" 
                         aria-label="back" 
                         color='secondary' 
                         onClick={onClose} 

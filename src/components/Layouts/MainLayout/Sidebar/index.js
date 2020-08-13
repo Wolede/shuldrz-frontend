@@ -23,21 +23,21 @@ const Sidebar = props => {
                     <a style={{textDecoration:'none'}}>
                         <Button activeClassName={classes.active} className={classes.button} size='large'
                         >
-                            Volunteer
+                            Become a Buddy
                         </Button>
                     </a>
                 </Link>
 
-                <Link href='#'>
+                {/* <Link href='#'>
                     <a style={{textDecoration:'none'}}>
                         <Button activeClassName={classes.active} className={classes.button} size='large'
                         >
                             Donate
                         </Button>
                     </a>
-                </Link>
+                </Link> */}
 
-                <Link href='#'>
+                <Link href='/faq'>
                     <a style={{textDecoration:'none'}}>
                         <Button activeClassName={classes.active} className={classes.button} size='large'
                         >

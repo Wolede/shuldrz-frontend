@@ -32,8 +32,8 @@ const JournalBox = ( { journal, otherUser } ) => {
         // mutate( `/journals?user.id=${user?.id}&_limit=5`, journal[0].journalSnippet.filter(c => c.id !== id), false )
         try {
             const res = await api.delete(`journals/${id}`)
-            trigger(`/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`)
-
+            trigger(`/journey?_start=0&_limit=7&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get)
+            handleClose()
         } catch (error) {
 
         }
@@ -45,12 +45,24 @@ const JournalBox = ( { journal, otherUser } ) => {
             const res = await api.put(`journals/${journal.id}`, {
                 isVisible: !isVisible,
             })
-            trigger(`/journals?user.id=${user?.id}&_sort=createdAt:desc&_limit=5`)
+            trigger(`/journey?_start=0&_limit=7&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get)
+            handleClose()
         } catch (error) {
 
         }
 
     }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+  
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="primary">
@@ -87,6 +99,9 @@ const JournalBox = ( { journal, otherUser } ) => {
                         id={id} 
                         setVisibility={setVisibility}
                         deleteSnippet={deleteSnippet}
+                        anchorEl={anchorEl}
+                        handleClick={handleClick}
+                        handleClose={handleClose}
                         />
                     </div>
                     )}
