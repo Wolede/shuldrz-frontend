@@ -36,10 +36,9 @@ const ProfileCard = (props) => {
     const handleMessageUser =  async (e) => {
 
         setSelectedUser({
-            username,
-            profileImage,
             id,
-            email
+            username,
+            profileImage,                   
         })
         router.push('/app/sessions')
     }
