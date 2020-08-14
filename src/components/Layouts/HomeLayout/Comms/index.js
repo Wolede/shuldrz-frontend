@@ -11,6 +11,8 @@ const Comms = props => {
     const classes = useStyles(props)
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
+    const isMobile= useMediaQuery(theme.breakpoints.down('xs'));
+
     return (
         <Container maxWidth={ isDesktop ? 'xl' : 'lg' }>
             <Box id='comms' paddingBottom='10rem'>
@@ -24,33 +26,33 @@ const Comms = props => {
                             <ReactMarkdown source={featuresContent}/>
                         </Typography>
 
-                        <Grid container spacing={6}>
-                            <Grid item xs={12} sm={6}>
+                        <Grid container spacing={ isMobile ? 2 : 6 }>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='secondary' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' alignItems='flex-end' justifyContent='center'>
-                                        <Typography variant='subtitle1'> Get Matched </Typography>
+                                        <Typography variant='subtitle1' align='center'> Matching </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='warning' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' alignItems='flex-end' justifyContent='center'>
-                                        <Typography variant='subtitle1'> Messaging </Typography>
+                                        <Typography variant='subtitle1' align='center'> Messaging </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='primary' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' flexDirection='column' alignItems='center' justifyContent='flex-end'>
-                                        <Typography variant='subtitle1'> Audio </Typography>
+                                        <Typography variant='subtitle1' align='center'> Audio </Typography>
                                         <Typography variant='caption' color='secondary'> coming soon </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='error' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' flexDirection='column' alignItems='center' justifyContent='flex-end'>
-                                    <Typography variant='subtitle1'> Video </Typography>
+                                    <Typography variant='subtitle1' align='center'> Video </Typography>
                                         <Typography variant='caption' color='secondary'> coming soon </Typography>
                                     </Box>
                                 </Paper>

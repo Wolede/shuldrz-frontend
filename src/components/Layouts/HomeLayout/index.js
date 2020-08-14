@@ -5,6 +5,7 @@ import Comms from './Comms'
 import HeroesWall from './HeroesWall'
 import JoinBoxes from './JoinBoxes'
 import FAQ from './FAQ'
+import Quotes from '../../Quotes'
 
 const HomeLayout = ({home}) => {
     const { 
@@ -52,6 +53,7 @@ const HomeLayout = ({home}) => {
                 guestSignupText={guestSignupText}
                 volunteerSignupText={volunteerSignupText}
             />
+            <Quotes/>
         </>
     )
 }

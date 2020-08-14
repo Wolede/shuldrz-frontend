@@ -4,7 +4,6 @@ import HomeLayout from '../components/Layouts/HomeLayout'
 import api from '../services/Api'
 
 const Home = ({home}) => {
-  console.log(home);
 
   return (
     <div>
