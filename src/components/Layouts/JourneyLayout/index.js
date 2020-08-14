@@ -286,7 +286,7 @@ const JourneyLayout = () => {
             }
 
             { isMoreData && !isLoadingMore &&
-                <div>Load more</div>
+                <div>Loading</div>
             }
 
         </div>
