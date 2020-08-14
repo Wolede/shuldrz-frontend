@@ -28,9 +28,9 @@ const useStyles = makeStyles(theme => ({
     },
     slideInBox: {
         padding: '1.1rem 1rem 1rem 1.1rem',
-        [theme.breakpoints.up('xs')]: {
-            height: '15.5rem',
-        },
+        // [theme.breakpoints.down('xs')]: {
+        //     height: '15.5rem',
+        // },
         [theme.breakpoints.up('sm')]: {
             height: '15rem',
         },

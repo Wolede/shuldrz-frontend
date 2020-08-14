@@ -165,7 +165,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                                             <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
                                                 <div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                                                        <Typography variant="body1">{msg.message}</Typography>
+                                                        <Typography variant="body1" style={{ overflow: 'auto' }}>{msg.message}</Typography>
                                                         <IconButton
                                                             aria-label="more"
                                                             aria-controls="long-menu"

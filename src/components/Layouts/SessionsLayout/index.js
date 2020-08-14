@@ -31,7 +31,7 @@ const Sessions = (props) => {
         defaultMatches: true
     });
 
-    const [openLeftSidebar, setOpenLeftSidebar] = useState(false);
+    const [openLeftSidebar, setOpenLeftSidebar] = useState(true);
 
     const handleLeftSidebarOpen = () => {
       setOpenLeftSidebar(true);
@@ -417,7 +417,8 @@ const Sessions = (props) => {
                                 (
                                     chats !== undefined ?
                                         <ChatView 
-                                            endBtn={btnDisabled}                                            
+                                            endBtn={btnDisabled}
+                                            backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
                                             user={user.username} 
                                             chat={chats[selectedChat]} 
