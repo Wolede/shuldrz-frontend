@@ -4,11 +4,15 @@ import { Container, Box, useMediaQuery, Typography, Grid } from '@material-ui/co
 import Paper from 'components/Paper'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import ReactMarkdown from 'react-markdown';
 
 const Comms = props => {
-    const classes = useStyles()
+    const { featuresContent, featuresTitle } = props
+    const classes = useStyles(props)
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
+    const isMobile= useMediaQuery(theme.breakpoints.down('xs'));
+
     return (
         <Container maxWidth={ isDesktop ? 'xl' : 'lg' }>
             <Box id='comms' paddingBottom='10rem'>
@@ -16,39 +20,39 @@ const Comms = props => {
                     <Grid item xs={12} sm={12} md={6}>
                         <Box paddingRight={ isDesktop ? '5rem' : 0 }>
                         <Typography variant='h2' className={classes.subHeader} gutterBottom>
-                            Communicate with Comfort.
+                            {featuresTitle}
                         </Typography>
-                        <Typography variant='subtitle2' style={{ marginBottom: '2.5rem' }}>
-                            Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+                        <Typography variant='subtitle2' className={classes.commsContent}>
+                            <ReactMarkdown source={featuresContent}/>
                         </Typography>
 
-                        <Grid container spacing={6}>
-                            <Grid item xs={12} sm={6}>
+                        <Grid container spacing={ isMobile ? 2 : 6 }>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='secondary' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' alignItems='flex-end' justifyContent='center'>
-                                        <Typography variant='subtitle1'> Get Matched </Typography>
+                                        <Typography variant='subtitle1' align='center'> Matching </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='warning' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' alignItems='flex-end' justifyContent='center'>
-                                        <Typography variant='subtitle1'> Messaging </Typography>
+                                        <Typography variant='subtitle1' align='center'> Messaging </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='primary' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' flexDirection='column' alignItems='center' justifyContent='flex-end'>
-                                        <Typography variant='subtitle1'> Audio </Typography>
+                                        <Typography variant='subtitle1' align='center'> Audio </Typography>
                                         <Typography variant='caption' color='secondary'> coming soon </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={6}>
                                 <Paper color='error' height="12rem" padding='3rem' borderRadius='3.75rem'>
                                     <Box display='flex' height='100%' flexDirection='column' alignItems='center' justifyContent='flex-end'>
-                                    <Typography variant='subtitle1'> Video </Typography>
+                                    <Typography variant='subtitle1' align='center'> Video </Typography>
                                         <Typography variant='caption' color='secondary'> coming soon </Typography>
                                     </Box>
                                 </Paper>

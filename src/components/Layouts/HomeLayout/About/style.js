@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
     gridTwo: {
         paddingTop: '0 !important'
-    }
+    },
 }))
 
 export { useStyles }

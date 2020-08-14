@@ -3,8 +3,10 @@ import MainLayout from 'components/Layouts/MainLayout'
 import FAQ from '../components/Layouts/HomeLayout/FAQ'
 import { Box } from '@material-ui/core'
 import JoinBoxes from '../components/Layouts/HomeLayout/JoinBoxes'
+import api from '../services/Api'
 
-const Faq = () => {
+const Faq = ({faq}) => {
+    // console.log(faq);
     return (
         <div>
             <Head>
@@ -12,12 +14,19 @@ const Faq = () => {
             </Head>
             <MainLayout withFooter>
                 <Box paddingTop='9.25rem'>
-                    <FAQ faqPage/>  
+                    <FAQ faqPage faqs={faq.qAndA}/>  
                 </Box>
                 <JoinBoxes/>
             </MainLayout>
         </div>
     )
+}
+
+export async function getServerSideProps(){
+
+    const faq = await api.get(`faq`)
+    return { props: { faq: faq.data } }
+
 }
 
 export default Faq

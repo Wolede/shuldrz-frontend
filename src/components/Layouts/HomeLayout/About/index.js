@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import { Container, Box, useMediaQuery, Typography, Grid } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import ReactMarkdown from 'react-markdown';
 
 const About = props => {
+    const { aboutTitle, aboutContent } = props
     const classes = useStyles()
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
@@ -16,14 +18,14 @@ const About = props => {
                     <Grid item xs={12} sm={12} md={6} className={classes.gridOne}>
                         <Box paddingRight={ isDesktop ? '5rem' : 0 }>
                         <Typography variant='h2' className={classes.subHeader} gutterBottom>
-                            A Listening Ear for Care Givers.
+                            {aboutTitle}
                         </Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} className={classes.gridTwo}>
                         <Box>
                         <Typography variant='subtitle2'>
-                            Shuldrz is a Non-Profit product that lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.
+                            <ReactMarkdown source={aboutContent} />
                         </Typography>
                         </Box>
                     </Grid>

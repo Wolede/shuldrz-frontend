@@ -20,12 +20,19 @@ const useStyles = makeStyles(theme => ({
         },
     },
     image: {
-        backgroundImage : 'url(/images/scenic-view.jpg)',
+        backgroundImage : props => `url(${props.featuresImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         borderRadius: '3.75rem',
         height: '100%',
+    },
+    commsContent: {
+        marginBottom: '2.5rem',
+        '& a':{
+            color: theme.palette.primary.main,
+            textDecoration: 'none'
+        }
     },
 }))
 

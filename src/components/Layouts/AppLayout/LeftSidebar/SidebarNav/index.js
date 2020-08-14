@@ -11,6 +11,19 @@ const SidebarNav = props => {
 
     return (
         <List {...rest}>
+            <ListItem
+            className={classes.item}
+            >
+                <Link href='/app'>
+                    <a style={{ textDecoration: 'none' }}>
+                        <Button
+                            className={classes.button}
+                            >
+                                <img src='/images/favicon.png' alt="Shuldrz Icon" style={{ width: '100%' }}/>
+                        </Button>
+                    </a>
+                </Link>
+            </ListItem>
             {pages.map(page => (
                 <ListItem
                 className={classes.item}

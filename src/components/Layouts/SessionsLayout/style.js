@@ -2,7 +2,10 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        height: 'calc(100vh - 7rem)'
+        height: 'calc(100vh - 4rem)',
+        [theme.breakpoints.down('md')]: {
+            height: 'calc(100vh - 10rem)'
+        },
     },
     chatContainer: {
         backgroundColor: theme.palette.secondary.main,
