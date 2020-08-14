@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -9,24 +9,42 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 import api from 'services/Api'
 
-const ReviewForm = (props) => {
+const ReviewForm = ({ chatProfile, prevReview }) => {
     const classes = useStyles()
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
+    const [allRanks, setAllRanks] = useState([]);
 
-    console.log('gg', prevReview, chatProfile)
+    // console.log('gg', props.prevReview, props.chatProfile)
 
     const initialValues = {
-        comment: '',
-        hearts: 1,
-        review_users: [props.chatProfile.id, user.id],
-        names: `${user.username} left ${props.chatProfile.username} a review`
+        comment: prevReview ? prevReview.comment : '',
+        hearts: prevReview ? prevReview.hearts : 1,
+        review_users: [chatProfile.id, user.id],
+        names: `${user.username} left ${chatProfile.username} a review`
     }
     const validationSchema = Yup.object({
         comment: Yup.string().max(150, "You've hit the 1000 character limit. Add another entry").required("Comment section cannot be empty"),
         hearts: Yup.number('give hearts').required('give hearts')
     })
 
+    // console.log('user0', chatProfile?.ranking)
+
+    const getAllRanks = async () => {
+        try {
+            const ranks = await api.get(`/rankings`)
+            setAllRanks(ranks.data)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        getAllRanks()
+    }, [])
+    
+    // console.log('rnk', allRanks)
 
     const onSubmit = async (values) => {
         const reviewRequest = prevReview ? api.put(`reviews/${prevReview.id}`, {
@@ -52,12 +70,38 @@ const ReviewForm = (props) => {
             return currentHearts + chatProfile?.heart?.count
         } 
 
+        const getRank = () => {
+            const volunteerHearts = getHeartCount()
+            // const volunteerCurrentRank = props.chatProfile?.ranking
+            let volunteerRank = null
+
+            // console.log('volunteer shii', volunteerHearts, volunteerRank)
+
+            if(volunteerHearts < 100) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Bronze')
+            } else if(volunteerHearts > 100 && volunteerHearts < 200) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Silver')
+            } else if(volunteerHearts > 200 && volunteerHearts < 300) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Gold')
+            } else if(volunteerHearts > 300) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Platinum')
+            }
+
+            return volunteerRank;
+        }
+
+        const rankingRequest = await api.put(`users/${chatProfile?.id}`, { ranking: getRank() })
+
         const heartRequest = api.put(`/hearts/${ chatProfile?.heart?.id}`, { user: chatProfile?.id, count: getHeartCount() })
 
         try {
             let res;
             res = await reviewRequest
             res = await heartRequest
+            // console.log( 'chack this', chatProfile?.ranking.id, getRank()?.id )
+            if ( chatProfile?.ranking.id !== getRank()?.id ) {
+                res = await rankingRequest
+            }
 
             setIsSuccessful({ status: true,})
 
