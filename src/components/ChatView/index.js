@@ -17,7 +17,7 @@ import api from 'services/Api'
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer, prevReview }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -100,6 +100,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                         position='absolute'
                     >
                         <ChatProfile
+                            prevReview={prevReview}
                             chatProfile={volunteer}
                             closeChatProfile={handleRightSidebarClose}
                         />
@@ -162,7 +163,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
                                     {
                                         msg.message && (
-                                            <div className={msg.sender === user ? classes.userSent : classes.friendSent}>
+                                            <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
                                                 <div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between'}}>
                                                         <Typography variant="body1" style={{ overflow: 'auto' }}>{msg.message}</Typography>
