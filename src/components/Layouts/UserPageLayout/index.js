@@ -120,8 +120,6 @@ const UserPageLayout = ({username}) => {
 
     }, [element])
 
-    console.log('user', user)
-
     // send message handler
     const [ selectedUser, setSelectedUser ] = useContext(SelectedUserContext)
     const [ userData, setUserData ] = useState()
@@ -149,7 +147,6 @@ const UserPageLayout = ({username}) => {
         getUser() // get user data
     }, [username])
 
-
     return (
         <div>
             <Box marginBottom="1.5rem">
@@ -176,11 +173,15 @@ const UserPageLayout = ({username}) => {
                 </div>
             }
 
-            {/* Fisayo, I'm removing this */}
-            {/* { isMoreData && !isLoadingMore &&
-                <div>Loading</div>
-            } */}
+            { pages.length < 2 && !isMoreData &&
+                <Box textAlign="center" paddingTop="100"> 
+                    <Typography align="center" variant="body1">No profile activity yet</Typography>
+                </Box>
+            }
 
+            { isMoreData && !isLoadingMore &&
+                <Skeleton variant="rect" height={150} animation="wave"/>
+            }
 
         </div>
     )
