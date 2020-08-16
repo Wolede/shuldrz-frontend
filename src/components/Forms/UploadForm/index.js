@@ -7,14 +7,12 @@ import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import api from 'services/Api'
 const firebase = require("firebase/app");
-import { SelectedUserContext } from 'contexts/SelectedUserContext';
 
 
 const UploadForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()
-    const [isSuccessful, setIsSuccessful] = useState()
-    const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
+    const [isSuccessful, setIsSuccessful] = useState()    
     // console.log('SELECTED USER', selectedUser)
     
     // const [file, setFile] = useState();
