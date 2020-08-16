@@ -22,12 +22,16 @@ const ProfileBox = ({userData, otherUser}) => {
                     <Skeleton variant="rect" width={150} height={150} animation="wave"/>
                 ) : (
                     <>
-                    <Avatar 
-                        alt={userData.username} 
-                        src={userData.profileImage ? userData.profileImage.url : '/empty'} 
-                        size="medium" 
-                        marginBottom="1.5rem" 
-                    />
+                    <Link href="/app/profile">
+                        <a style={{textDecoration:'none'}}>
+                        <Avatar 
+                            alt={userData.username} 
+                            src={userData.profileImage ? userData.profileImage.url : '/empty'} 
+                            size="medium" 
+                            marginBottom="1.5rem" 
+                        />
+                        </a>
+                    </Link>
 
                     <Typography variant="h4" className={classes.text} style={{ textAlign: 'center' }}>{userData.firstName} {userData.lastName}</Typography>
 

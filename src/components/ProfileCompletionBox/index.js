@@ -30,7 +30,7 @@ const ProfileCompletionBox = ({ announcement, onCancel, destination }) => {
                         color='transWarning'
                     >
                         <Box display='flex' alignItems='center' justifyContent='center' height='100%'>
-                            <Typography variant="h4">{ logo }</Typography>
+                            <Typography variant={isMobile ? 'h4' : 'h5'}>{ logo }</Typography>
                         </Box>
                     </Paper>
                 </Box>
@@ -44,19 +44,17 @@ const ProfileCompletionBox = ({ announcement, onCancel, destination }) => {
                     </div>
 
                     <Box marginBottom=".5rem">
-                        <Typography variant="h3">
+                        <Typography variant={isMobile ? 'h4' : 'h5'}>
                             { title }
                         </Typography>
                     </Box>
 
                     <Typography 
                         variant="subtitle1" 
-                        // dangerouslySetInnerHTML={{ __html : message }} 
                         style={{ fontSize: '1.2rem', fontWeight: 400 }} 
                     >
                         <ReactMarkdown source={message} />
                     </Typography>
-
                     <div className={classes.actionButtons}>
                         <Link href={destination}>
                             <a style={{textDecoration:'none'}}>
