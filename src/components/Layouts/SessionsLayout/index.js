@@ -52,7 +52,7 @@ const Sessions = (props) => {
     const [prevReview, setPrevReview] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
     const [chatExist, setChatExist] = useState(false)
-    
+    let chatNotEmpty
 
     const newChatFn = () => {
         console.log('new chat clicked')
@@ -76,9 +76,14 @@ const Sessions = (props) => {
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
+                chatNotEmpty = firebase_chats.filter(chatList => {
+                    return chatList.messages.length > 1
+                })
+
+                console.log('CHATLIST THAT ARE NOT EMPTY', chatNotEmpty)
                 setChats(firebase_chats)                 
                 console.log(firebase_chats)
-            })    
+            })              
             
         }
 
@@ -90,6 +95,17 @@ const Sessions = (props) => {
 
     }, [user]);
 
+    useEffect(()=> {
+        let messaging 
+
+        if (process.browser){
+            messaging = firebase.messaging()
+            messaging.requestPermission()
+            .then(() => {
+                console.log('Have Permission')
+            })
+        }
+    })
      
 
     const selectChat = (chatIndex) => {  
@@ -364,7 +380,6 @@ const Sessions = (props) => {
         
     }
 
-   
     
 
     // <!-- new chat -->
@@ -442,7 +457,7 @@ const Sessions = (props) => {
                                             endSessionFn={endSession} 
                                             user={user} 
                                             deleteMessage={deleteMessage}
-                                            chatList={chats}
+                                            chatList={chatNotEmpty}
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
                                             volunteer={selectedUser}
