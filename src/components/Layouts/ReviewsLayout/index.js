@@ -90,7 +90,8 @@ const ReviewsLayout = () => {
                 <Typography variant="h3">Reviews</Typography>
             </Box>
 
-            <div>{pages}</div>
+            {/* Render the page data */}        
+            {pages}
 
             { isMoreData &&
                 <div ref={setElement}>
@@ -101,9 +102,9 @@ const ReviewsLayout = () => {
                 </div>
             }
 
-            { isEmpty &&
+            { pages.length < 2 && !isMoreData &&
                 <Box textAlign="center" paddingTop="100"> 
-                    <Typography align="center" variant="body1">No Reviews for now</Typography>
+                    <Typography align="center" variant="body1">No reviews for now</Typography>
                 </Box>
             }
             

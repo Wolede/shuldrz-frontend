@@ -10,7 +10,6 @@ const firebase = require("firebase/app");
 
 import { trigger } from 'swr'
 
-
 const UploadForm = ({ user }) => {
     // console.log(user, 'in profile');
     const classes = useStyles()

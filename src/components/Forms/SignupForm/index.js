@@ -59,12 +59,11 @@ const SignupForm = ({volunteer}) => {
                 const user = res.data
                 const userObj = {
                     username: user.username,
-                    id: user.id,
-                    profileImage: null
+                    id: user.id,                   
                 };
                 // sendUserDataToFirestore(user)
                           
-                firebase.firestore().collection('users').doc(user.username).set(userObj)
+                firebase.firestore().collection('users').doc(user.id).set(userObj)
                 .then(() => {
                     console.log('logged user')
                 }, err => {

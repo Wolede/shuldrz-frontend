@@ -131,7 +131,7 @@ const JourneyLayout = () => {
 
     }, [element])
 
-    const [chats, setChats] = useState([]);
+    const [chats, setChats] = useState(null);
     useEffect(() => {
         if ( user && (!user?.topics || user?.topics?.length < 1)) {
             setOpenTopicsModal(true)
@@ -143,7 +143,7 @@ const JourneyLayout = () => {
 
             getChats();
         }
-    }, [loading])
+    }, [user])
 
     // const journeyRes = useSWR(loading ? false : `/journey?_limit=-1&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get, {revalidateOnFocus: true})
 
@@ -209,10 +209,9 @@ const JourneyLayout = () => {
     }
 
     // console.log('things', isMoreData, isLoadingMore, )
-
     return (
         <div>
-            { (getProfileCompletion(user) !== '100%' && showProfileBox) &&
+            { (user && getProfileCompletion(user) !== '100%' && showProfileBox) &&
                 <ProfileCompletionBox 
                     announcement={{
                         message: 'Complete your profile to get 20 heart points',
@@ -224,9 +223,10 @@ const JourneyLayout = () => {
                 />
             }
 
-            { (suggestedBuddies.length > 0 && chats.length < 1) &&
+            { (user && chats && suggestedBuddies.length > 0 && chats?.length < 1 && user?.userType === "Guest") &&
 
-                <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}>
+                <div>
+                {/* <div style={{ visibility: user?.userType === "Guest" ? 'visible' : 'hidden'}}> */}
                     <Box marginBottom="1.5rem" display="flex">
                         <Box className={classes.headerText}>
                             <Typography variant="h3">Suggested Buddies</Typography>
@@ -253,7 +253,8 @@ const JourneyLayout = () => {
                 </div>
             }
 
-            <Box marginBottom="2rem" display="flex" marginTop={user?.userType === "Guest" ? '0' : '-32rem'}>
+            {/* <Box marginBottom="2rem" display="flex" marginTop={user?.userType === "Guest" ? '0' : '-32rem'}> */}
+            <Box marginBottom="2rem" display="flex">
                 <Box className={classes.headerText}>
                     <Typography variant="h3">Journey</Typography>
                 </Box>
@@ -262,9 +263,10 @@ const JourneyLayout = () => {
                 </Box>
             </Box>
 
-            <div>{pages}</div>
+            {/* Render the page data */}
+            {pages}
 
-           {/* Load Custom Modal COmponent */}
+            {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
                     <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />
@@ -285,8 +287,14 @@ const JourneyLayout = () => {
                 </div>
             }
 
+            { pages.length < 2 && !isMoreData &&
+                <Box textAlign="center" paddingTop="100"> 
+                    <Typography align="center" variant="body1">Your feed is empty</Typography>
+                </Box>
+            }
+
             { isMoreData && !isLoadingMore &&
-                <div>Loading</div>
+                <Skeleton variant="rect" height={150} animation="wave"/>
             }
 
         </div>
