@@ -13,19 +13,19 @@ import { useStyles } from './styles'
 
 
 
-const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser }) => {
+const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist }) => {
 
 
     //this ensures that a user is always selected to chat with
-    useEffect(() => {
-        const modChats = chats?.flatMap(item => item.usersDetails)
-                                .filter(item => item.userId !== user.id)
+    // useEffect(() => {
+    //     const modChats = chats?.flatMap(item => item.usersDetails)
+    //                             .filter(item => item.userId !== user.id)
 
-        const desiredIndex = modChats.findIndex(chat => chat?.userId === selectedUser?.id);
+    //     const desiredIndex = modChats.findIndex(chat => chat?.userId === selectedUser?.id);
 
-        selectedUser && chats.length > 0 ? selectChat(desiredIndex) : selectChat(0);
+    //     selectedUser && chats.length > 0 ? selectChat(desiredIndex) : selectChat(0);
 
-    }, [])
+    // }, [])
 
 
     const classes = useStyles()
@@ -111,8 +111,8 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                             <Typography variant="body2">
                                                         {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
                                                             chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
-                                                         :( 
-                                                            chat.messages[chat.messages.length - 1].sender == user.username ? 'You ended the session' : `${chat.messages[chat.messages.length - 1].sender} ended the session`)
+                                                         :
+                                                         null
                                                         )}
                                             </Typography>
 

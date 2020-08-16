@@ -46,7 +46,7 @@ const Sessions = (props) => {
 
     
     // const [chats, updateChatList] = useState()
-    const [selectedChat, updateSelectedChat] = useState(0)
+    const [selectedChat, updateSelectedChat] = useState()
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
     const [chatProfileInfo, setChatProfileInfo] = useState()
     const [chatReceiverID, setChatReceiverID] = useState()
@@ -68,7 +68,7 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-
+        console.log('SELECTED USER', selectedUser)
         if (user !== null || undefined) {  
             const userImage = user.profileImage ? user.profileImage.url : null
                    
@@ -81,7 +81,7 @@ const Sessions = (props) => {
                     return chatList.messages.length > 1
                 })
                 setChats(firebase_chats)                 
-                console.log(firebase_chats)
+                console.log('CHAT IS NOT EMPTY', chatNotEmpty)
             })              
             
         }
@@ -89,27 +89,26 @@ const Sessions = (props) => {
         
         
 
-        if (selectedUser) {           
+        if (selectedUser) {    
+            console.log('HEY I GOT TO SUBMIT CHAT')       
             submitNewChat()            
-        }
-       
-               
-        console.log('sessions message', selectedUser);
+        }       
+        
 
 
     }, [user]);
 
-    useEffect(()=> {
-        let messaging 
+    // useEffect(()=> {
+    //     let messaging 
 
-        if (process.browser){
-            messaging = firebase.messaging()
-            messaging.requestPermission()
-            .then(() => {
-                console.log('Have Permission')
-            })
-        }
-    })
+    //     if (process.browser){
+    //         messaging = firebase.messaging()
+    //         messaging.requestPermission()
+    //         .then(() => {
+    //             console.log('Have Permission')
+    //         })
+    //     }
+    // })
      
 
     const selectChat = (chatIndex) => {  
@@ -117,7 +116,7 @@ const Sessions = (props) => {
 
         console.log('USERNAME', user.username)
         // messageRead(chatIndex);    
-        const chatReceiver = chats[chatIndex].users.filter(_usr => _usr !== user.username)[0]
+        const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
         
         firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
@@ -302,7 +301,9 @@ const Sessions = (props) => {
         const userExist = await userExists();
         if (userExist) {
             const chatExist = await chatExists();
-            if(chatExist){
+
+            console.log('CHAT EXIST', chatExist)
+            if(chatExist){                
                 setChatExist(true)
                 goToChat(tempDocKey())
             } else {
