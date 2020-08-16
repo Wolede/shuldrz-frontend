@@ -31,7 +31,7 @@ const Sessions = (props) => {
         defaultMatches: true
     });
 
-    const [openLeftSidebar, setOpenLeftSidebar] = useState(false);
+    const [openLeftSidebar, setOpenLeftSidebar] = useState(true);
 
     const handleLeftSidebarOpen = () => {
       setOpenLeftSidebar(true);
@@ -45,13 +45,14 @@ const Sessions = (props) => {
 
 
     
-    
-    const [selectedChat, updateSelectedChat] = useState()
+    // const [chats, updateChatList] = useState()
+    const [selectedChat, updateSelectedChat] = useState(0)
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
+    const [chatProfileInfo, setChatProfileInfo] = useState()
     const [chatReceiverID, setChatReceiverID] = useState()
-    const [prevReview, setPrevReview] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
     const [chatExist, setChatExist] = useState(false)
+    const [prevReview, setPrevReview] = useState()
     let chatNotEmpty
 
     const newChatFn = () => {
@@ -79,19 +80,22 @@ const Sessions = (props) => {
                 chatNotEmpty = firebase_chats.filter(chatList => {
                     return chatList.messages.length > 1
                 })
-
-                console.log('CHATLIST THAT ARE NOT EMPTY', chatNotEmpty)
                 setChats(firebase_chats)                 
                 console.log(firebase_chats)
             })              
             
         }
 
+        
+        
+
         if (selectedUser) {           
             submitNewChat()            
         }
-         
-        
+       
+               
+        console.log('sessions message', selectedUser);
+
 
     }, [user]);
 
@@ -145,37 +149,39 @@ const Sessions = (props) => {
         }
         
     }, [chatReceiverID])
+  
 
     const loadPrevReview = async() => {
-        
-
         try {            
-            const res= await api.get(`/reviews?names=${user.username}%20left%20${selectedUser.username}%20a%20review`)            
-            setPrevReview(res.data[0])                 
-            
+            const res= await api.get(`/reviews?names=${user?.username}%20left%20${selectedUser?.username}%20a%20review`)            
+            setPrevReview(res.data[0])                             
         }catch(error) {
             console.log(error)
         }        
     }
 
-
     useEffect(() => {       
-        
         loadPrevReview()
-        
     }, [selectedUser])
-  
 
     const buildDocKey = (friend) => [user.id, friend].sort().join('');
 
+
     const submitMessage = (msg) => {
+        // console.log('submitMessageChats', selectedChat.messages.length)
         const sessionState = chats[selectedChat].messages.length === 0 ? [] : 
         chats[selectedChat].messages[chats[selectedChat].messages.length - 1].session
 
+        console.log('sessionValue', chats[selectedChat].messages[chats[selectedChat].messages.length - 1])
+        console.log('sessionState', sessionState)
+
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
+
         
+
         const docKey = buildDocKey((chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
         console.log('DOCUMENT KEY', docKey)   
+
        
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -206,6 +212,7 @@ const Sessions = (props) => {
     const clickedMessageWhereNotSender = (chatIndex) =>  {
         return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.username        
     }
+
 
     const messageRead = (chatIndex) => {
        
@@ -257,7 +264,6 @@ const Sessions = (props) => {
             const usersInChat = docKey.split(':');
             const chat = chats.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             updateSelectedChat(chats.indexOf(chat));
-            selectChat(chats.indexOf(chat))
         }
 
         const newChatSubmit = async () => {            
@@ -289,6 +295,8 @@ const Sessions = (props) => {
                 ],
                 receiverHasRead: false
             })
+
+            
         }
 
         const userExist = await userExists();
@@ -307,7 +315,7 @@ const Sessions = (props) => {
     }
 
     const userInputFn = () => {
-        // messageRead(chatIndex)
+        messageRead()
     }
 
     const endSession = async () => {           
@@ -453,7 +461,8 @@ const Sessions = (props) => {
                                 (
                                     chats !== undefined ?
                                         <ChatView 
-                                            endBtn={btnDisabled}                                
+                                            endBtn={btnDisabled}
+                                            backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
                                             user={user} 
                                             deleteMessage={deleteMessage}

@@ -13,7 +13,19 @@ import { useStyles } from './styles'
 
 
 
-const ChatList = ({ chats, user, selectedChatIndex, selectChatFn, closeChatList, chatExist }) => {
+const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser }) => {
+
+
+    //this ensures that a user is always selected to chat with
+    useEffect(() => {
+        const modChats = chats?.flatMap(item => item.usersDetails)
+                                .filter(item => item.userId !== user.id)
+
+        const desiredIndex = modChats.findIndex(chat => chat?.userId === selectedUser?.id);
+
+        selectedUser && chats.length > 0 ? selectChat(desiredIndex) : selectChat(0);
+
+    }, [])
 
 
     const classes = useStyles()

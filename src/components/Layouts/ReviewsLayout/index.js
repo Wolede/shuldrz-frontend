@@ -22,7 +22,7 @@ const ReviewsLayout = () => {
         "reviews",
         ({ offset, withSWR }) => {
             console.log('off', offset, user)
-            const url = offset || `/reviews?_start=0&review_users.id=${user?.id}&_limit=${PAGE_SIZE}`;
+            const url = offset || `/reviews?_start=0&review_users.id=${user?.id}&_limit=${PAGE_SIZE}&_sort=createdAt:desc`;
             const {data} = withSWR(useSWR( url, api.get));
 
             if (!data) return null;
@@ -43,7 +43,7 @@ const ReviewsLayout = () => {
                 setIsMoreData(false);
             }
             const previousStart = parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7))
-            return `/reviews?_start=${previousStart + PAGE_SIZE}&review_users.id=${user?.id}&_limit=${PAGE_SIZE}` 
+            return `/reviews?_start=${previousStart + PAGE_SIZE}&review_users.id=${user?.id}&_limit=${PAGE_SIZE}&_sort=createdAt:desc` 
         },
         [loading]
     )

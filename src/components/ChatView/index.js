@@ -27,6 +27,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
     });
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleRightSidebarOpen = () => {
@@ -55,6 +56,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
     const setSchedule = () => {
         console.log('schedule has been set')
+        setOpenModal(true);
     }
 
 

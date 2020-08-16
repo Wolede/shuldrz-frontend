@@ -1,28 +1,29 @@
 import Head from 'next/head'
-import axios from "axios"
-import Link from 'next/link'
-import Login from './login'
+import MainLayout from 'components/Layouts/MainLayout'
+import HomeLayout from '../components/Layouts/HomeLayout'
+import api from '../services/Api'
 
+const Home = ({home}) => {
 
-const Home = () => {
   return (
-    <Login/>
-    // <div>
-    //   <Head>
-    //     <title>Shuldrz | Here for a lean-on</title>
-    //   </Head>
-    // </div>
+    <div>
+      <Head>
+        <title>Shuldrz | Here for a lean-on</title>
+      </Head>
+      <MainLayout withFooter>
+        <HomeLayout home={home}/>
+      </MainLayout>
+    </div>
   )
 }
 
-// export async function getServerSideProps() {
-//   const { API_URL } = process.env
 
-//   const res = await axios.get(`${API_URL}/users`)  
-//   const data = res.data
+export async function getServerSideProps(){
 
-//   return { props: {users : data} }
+  const home = await api.get(`home`)
+  return { props: { home: home.data } }
 
-// }
+}
+
 export default Home
 

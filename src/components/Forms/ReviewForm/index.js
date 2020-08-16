@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -9,10 +9,13 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 import api from 'services/Api'
 
-const ReviewForm = ({chatProfile, prevReview }) => {
+const ReviewForm = ({ chatProfile, prevReview }) => {
     const classes = useStyles()
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
+    const [allRanks, setAllRanks] = useState([]);
+
+    // console.log('gg', props.prevReview, props.chatProfile)
 
     const initialValues = {
         comment: prevReview ? prevReview.comment : '',
@@ -25,11 +28,26 @@ const ReviewForm = ({chatProfile, prevReview }) => {
         hearts: Yup.number('give hearts').required('give hearts')
     })
 
+    // console.log('user0', chatProfile?.ranking)
 
+    const getAllRanks = async () => {
+        try {
+            const ranks = await api.get(`/rankings`)
+            setAllRanks(ranks.data)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        getAllRanks()
+    }, [])
     
+    // console.log('rnk', allRanks)
 
     const onSubmit = async (values) => {
-        const request = prevReview ? api.put(`reviews/${prevReview.id}`, {
+        const reviewRequest = prevReview ? api.put(`reviews/${prevReview.id}`, {
             comment: values.comment,
             hearts: values.hearts,
             review_users: values.review_users,
@@ -40,9 +58,53 @@ const ReviewForm = ({chatProfile, prevReview }) => {
             review_users: values.review_users,
             names: values.names
         })
+
+        const getHeartCount = () => {
+            let currentHearts = 0
+            if(!prevReview) {
+                currentHearts = values.hearts
+            } else if (values.hearts > prevReview.hearts || values.hearts < prevReview.hearts) {
+                currentHearts = values.hearts - prevReview.hearts
+            }
+
+            return currentHearts + chatProfile?.heart?.count
+        } 
+
+        const getRank = () => {
+            const volunteerHearts = getHeartCount()
+            // const volunteerCurrentRank = props.chatProfile?.ranking
+            let volunteerRank = null
+
+            // console.log('volunteer shii', volunteerHearts, volunteerRank)
+
+            if(volunteerHearts < 100) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Bronze')
+            } else if(volunteerHearts > 100 && volunteerHearts < 200) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Silver')
+            } else if(volunteerHearts > 200 && volunteerHearts < 300) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Gold')
+            } else if(volunteerHearts > 300) {
+                volunteerRank = allRanks.find(rank => rank.name === 'Platinum')
+            }
+
+            return volunteerRank;
+        }
+
+        const rankingRequest = await api.put(`users/${chatProfile?.id}`, { ranking: getRank() })
+
+        const heartRequest = api.put(`/hearts/${ chatProfile?.heart?.id}`, { user: chatProfile?.id, count: getHeartCount() })
+
         try {
-            const res = await request
+            let res;
+            res = await reviewRequest
+            res = await heartRequest
+            // console.log( 'chack this', chatProfile?.ranking.id, getRank()?.id )
+            if ( chatProfile?.ranking.id !== getRank()?.id ) {
+                res = await rankingRequest
+            }
+
             setIsSuccessful({ status: true,})
+
 
         } catch (error) {
             const message = error.response.data.message[0].messages[0].message
@@ -67,7 +129,8 @@ const ReviewForm = ({chatProfile, prevReview }) => {
             >
                 {({ values, errors, touched, getFieldProps, setFieldValue, isSubmitting }) => (
                     <Form noValidate autoComplete="off">
-                        
+                        {/* {console.log(values) } */}
+
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel id="heart_label">Select heart points</InputLabel>
                             <Select
