@@ -119,8 +119,6 @@ const UserPageLayout = ({username}) => {
 
     }, [element])
 
-    console.log('user', user)
-
     // send message handler
     const [, setSelectedUser] = React.useContext(SelectedUserContext)
     const handleMessageUser =  async (e) => {
@@ -130,7 +128,6 @@ const UserPageLayout = ({username}) => {
         })
         router.push('/app/sessions')
     }
-
 
     return (
         <div>
@@ -158,8 +155,14 @@ const UserPageLayout = ({username}) => {
                 </div>
             }
 
+            { pages.length < 2 && !isMoreData &&
+                <Box textAlign="center" paddingTop="100"> 
+                    <Typography align="center" variant="body1">No profile activity yet</Typography>
+                </Box>
+            }
+
             { isMoreData && !isLoadingMore &&
-                <div>Loading</div>
+                <Skeleton variant="rect" height={150} animation="wave"/>
             }
 
 

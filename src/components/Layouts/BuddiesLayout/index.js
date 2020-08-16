@@ -95,6 +95,7 @@ const BuddiesLayout = () => {
                 <Typography variant="h3"> Buddies </Typography>
             </Box>
             
+            {/* Render the page data */}
             <Grid container spacing={4}>{pages}</Grid>
             
             { isMoreData &&
@@ -106,9 +107,9 @@ const BuddiesLayout = () => {
                 </div>
             }
 
-            { isEmpty &&
+            { pages.length < 2 && !isMoreData &&
                 <Box textAlign="center" paddingTop="100"> 
-                    <Typography align="center" variant="body1">No Buddies for now</Typography>
+                    <Typography align="center" variant="body1">No buddies for now</Typography>
                 </Box>
             }
         </div>

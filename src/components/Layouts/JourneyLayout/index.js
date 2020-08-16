@@ -209,9 +209,6 @@ const JourneyLayout = () => {
     }
 
     // console.log('things', isMoreData, isLoadingMore, )
-
-    console.log('user', user)
-
     return (
         <div>
             { (user && getProfileCompletion(user) !== '100%' && showProfileBox) &&
@@ -266,9 +263,10 @@ const JourneyLayout = () => {
                 </Box>
             </Box>
 
-            <div>{pages}</div>
+            {/* Render the page data */}
+            {pages}
 
-           {/* Load Custom Modal COmponent */}
+            {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
                     <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />
@@ -287,6 +285,12 @@ const JourneyLayout = () => {
                         <Skeleton variant="rect" height={150} animation="wave"/>
                     }
                 </div>
+            }
+
+            { pages.length < 2 && !isMoreData &&
+                <Box textAlign="center" paddingTop="100"> 
+                    <Typography align="center" variant="body1">Your feed is empty</Typography>
+                </Box>
             }
 
             { isMoreData && !isLoadingMore &&
