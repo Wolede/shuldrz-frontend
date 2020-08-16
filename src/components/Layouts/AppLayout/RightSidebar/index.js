@@ -37,15 +37,15 @@ const RightSidebar = props => {
 
 
     // on a user profile page, set selected user
-    const [ , setSelectedUser] = useContext(SelectedUserContext)
-    useEffect(() => {
-        setSelectedUser({
-            id: userData?.id,
-            username: userData?.username,
-            profileImage: userData?.profileImage,   
-        })
+    // const [ , setSelectedUser] = useContext(SelectedUserContext)
+    // useEffect(() => {
+    //     setSelectedUser({
+    //         id: userData?.id,
+    //         username: userData?.username,
+    //         profileImage: userData?.profileImage,   
+    //     })
 
-    }, [userData])
+    // }, [userData])
     
 
     return (
