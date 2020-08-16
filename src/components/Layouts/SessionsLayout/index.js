@@ -51,6 +51,7 @@ const Sessions = (props) => {
     const [chatProfileInfo, setChatProfileInfo] = useState()
     const [chatReceiverID, setChatReceiverID] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
+    const [prevReview, setPrevReview] = useState()
     
 
     const newChatFn = () => {
@@ -110,9 +111,7 @@ const Sessions = (props) => {
         })
 
         const userInfo = (doc) =>{
-            console.log('username', doc.data().username)
             doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null
-            console.log('chatReceiverId', chatReceiverID)               
         }                
 
        
@@ -123,7 +122,6 @@ const Sessions = (props) => {
         const getUserInfo = async() => {            
             try{
                 const { data } = await api.get(`/users/${chatReceiverID}`)            
-                console.log('user info', data);
                 setSelectedUser(data)
             } catch(error){
                 console.log(error)
@@ -137,6 +135,18 @@ const Sessions = (props) => {
     }, [chatReceiverID])
   
 
+    const loadPrevReview = async() => {
+        try {            
+            const res= await api.get(`/reviews?names=${user?.username}%20left%20${selectedUser?.username}%20a%20review`)            
+            setPrevReview(res.data[0])                             
+        }catch(error) {
+            console.log(error)
+        }        
+    }
+
+    useEffect(() => {       
+        loadPrevReview()
+    }, [selectedUser])
 
     const buildDocKey = (friend) => [user.id, friend].sort().join('');
 
@@ -420,10 +430,11 @@ const Sessions = (props) => {
                                             endBtn={btnDisabled}
                                             backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
-                                            user={user.username} 
+                                            user={user} 
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
                                             volunteer={selectedUser}
+                                            prevReview={prevReview}
                                         /> 
                                         : <div> No chat available select a profile to chat with </div>
                                 )

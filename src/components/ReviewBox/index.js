@@ -6,6 +6,7 @@ import Chip from 'components/Chip'
 import { Typography, Box, useMediaQuery } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
+import Link from 'next/link'
 
 const ReviewBox = props => {
     const classes = useStyles()
@@ -20,11 +21,15 @@ const ReviewBox = props => {
         <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="secondary">
                 <Box display="flex">
                     <Box>
+                    <Link href={`/app/users/${username}`}>
+                    <a style={{textDecoration:'none'}}>
                         <Avatar 
                             alt={username} 
                             src={userImage ? userImage : '/'} 
                             size={isMobile ? 'small' : 'tiny'} 
                         />
+                    </a>
+                    </Link>
                     </Box>
                     <Box flexGrow="1" paddingLeft={isMobile ? '2rem' : '1rem'}>
                         <Box>
