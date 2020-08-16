@@ -21,14 +21,14 @@ const UserPageLayout = ({username}) => {
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
 
-    const PAGE_SIZE = 6;
+    const PAGE_SIZE = 5;
     const START_POSITION_IN_CONFIG_URL = 21; // index location of the first digit of the start position in the config url
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "user-profile",
         ({ offset, withSWR }) => {
             // console.log('off', offset)  
-            const url = offset || `/user-profile?_start=0&user.username=${user?.username}&_limit=${PAGE_SIZE}&_sort=createdAt:desc`;
+            const url = offset || `/user-profile?_start=0&user.username=${username}&_limit=${PAGE_SIZE}&_sort=createdAt:desc`;
             const {data} = withSWR(useSWR( url, api.get));
 
             if (!data) return null;
@@ -76,7 +76,7 @@ const UserPageLayout = ({username}) => {
                 setIsMoreData(false);
             }
             const previousStart = parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7))
-            return `/user-profile?_start=${previousStart + PAGE_SIZE}&user.username=${user?.username}&_limit=${PAGE_SIZE}&_sort=createdAt:desc`
+            return `/user-profile?_start=${previousStart + PAGE_SIZE}&user.username=${username}&_limit=${PAGE_SIZE}&_sort=createdAt:desc`
         },
         [loading]
     )
@@ -158,9 +158,10 @@ const UserPageLayout = ({username}) => {
                 </div>
             }
 
-            { isMoreData && !isLoadingMore &&
+            {/* Fisayo, I'm removing this */}
+            {/* { isMoreData && !isLoadingMore &&
                 <div>Loading</div>
-            }
+            } */}
 
 
         </div>

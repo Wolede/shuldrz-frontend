@@ -7,10 +7,10 @@ import Button from 'components/Button'
 import { Box, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import Link from 'next/link'
-import useAuth from 'contexts/Auth'
+// import useAuth from 'contexts/Auth'
 
 const ProfileBox = ({userData, otherUser}) => {
-    const { user } = useAuth()
+    // const { user } = useAuth()
     const classes = useStyles()
 
     
@@ -37,7 +37,7 @@ const ProfileBox = ({userData, otherUser}) => {
                         <Typography variant="body1" className={classes.text}>{userData.experience ? userData.experience : '- - -'}</Typography>
                     )}
                     <Box display="flex" justifyContent="center" flexWrap="wrap">
-                        { user.userType === 'Volunteer'  && (
+                        { userData.userType === 'Volunteer'  && (
                             <Chip label={userData.ranking ? userData.ranking.name : 'Bronze'} rank={userData.ranking ? userData.ranking.colourCode : '#cd7f32'} color="paper"/>
                         )}
                         <Chip label={userData.heart ? userData.heart.count.toString() : 'No hearts yet'} heart color="paper"/>
