@@ -8,8 +8,6 @@ import Button from 'components/Button'
 import api from 'services/Api'
 const firebase = require("firebase/app");
 
-import { trigger } from 'swr'
-
 
 const UploadForm = ({ user }) => {
     // console.log(user, 'in profile');

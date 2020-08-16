@@ -46,13 +46,14 @@ const Sessions = (props) => {
 
     
     // const [chats, updateChatList] = useState()
-    const [selectedChat, updateSelectedChat] = useState(0)
+    const [selectedChat, updateSelectedChat] = useState()
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
     const [chatProfileInfo, setChatProfileInfo] = useState()
     const [chatReceiverID, setChatReceiverID] = useState()
     const [chats, setChats] = React.useContext(ChatContext)
+    const [chatExist, setChatExist] = useState(false)
     const [prevReview, setPrevReview] = useState()
-    
+    let chatNotEmpty
 
     const newChatFn = () => {
         console.log('new chat clicked')
@@ -67,7 +68,7 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-
+        console.log('SELECTED USER', selectedUser)
         if (user !== null || undefined) {  
             const userImage = user.profileImage ? user.profileImage.url : null
                    
@@ -76,52 +77,66 @@ const Sessions = (props) => {
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
-
-                setChats(firebase_chats) 
-                // chats ? selectChat(0) : null
-                // selectChat(0)
-                console.log(firebase_chats)
-            })    
+                chatNotEmpty = firebase_chats.filter(chatList => {
+                    return chatList.messages.length > 1
+                })
+                setChats(firebase_chats)                 
+                console.log('CHAT IS NOT EMPTY', chatNotEmpty)
+            })              
             
         }
 
         
         
 
-        if (selectedUser) {           
-            submitNewChat()                 
-        }
-       
-               
-        console.log('sessions message', selectedUser);
+        if (selectedUser) {    
+            console.log('HEY I GOT TO SUBMIT CHAT')       
+            submitNewChat()            
+        }       
+        
 
 
     }, [user]);
 
-   
+    // useEffect(()=> {
+    //     let messaging 
+
+    //     if (process.browser){
+    //         messaging = firebase.messaging()
+    //         messaging.requestPermission()
+    //         .then(() => {
+    //             console.log('Have Permission')
+    //         })
+    //     }
+    // })
+     
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
 
-
+        console.log('USERNAME', user.username)
         // messageRead(chatIndex);    
         const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
-                firebase.firestore().collection('users').get().then((snapshot) => {
+        
+        firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
 
-        const userInfo = (doc) =>{
-            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null
-        }                
-
+        const userInfo = (doc) =>{             
+           doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                
+        } 
        
     }
 
+
+
     useEffect(() => {
-        
+        // console.log('CHAT RECEIVER ID', chatReceiverID)
         const getUserInfo = async() => {            
             try{
-                const { data } = await api.get(`/users/${chatReceiverID}`)            
+                const { data } = await api.get(`/users/${chatReceiverID}`)           
+                
+                // console.log('USER INFO', data)               
                 setSelectedUser(data)
             } catch(error){
                 console.log(error)
@@ -173,7 +188,8 @@ const Sessions = (props) => {
                 sender: user.username,
                 message: msg,
                 session: session,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                isDeleted: false
             }),
             currentTime: Date.now(),
             receiverHasRead: false
@@ -262,8 +278,8 @@ const Sessions = (props) => {
             .set({
                 messages: [{
                     sender: user.username,
-                    session: 'none'
-                }],
+                    session: 'none',                    
+                }],                
                 currentTime: Date.now(),
                 users: [user.username, selectedUser.username],
                 usersDetails: [
@@ -285,7 +301,15 @@ const Sessions = (props) => {
         const userExist = await userExists();
         if (userExist) {
             const chatExist = await chatExists();
-            chatExist ? goToChat(tempDocKey()) : newChatSubmit()
+
+            console.log('CHAT EXIST', chatExist)
+            if(chatExist){                
+                setChatExist(true)
+                goToChat(tempDocKey())
+            } else {
+                newChatSubmit()
+            }  
+            
         }
 
 
@@ -332,6 +356,39 @@ const Sessions = (props) => {
        }
     }
 
+    const deleteMessage = async (i) => {
+        const docKey = [user.id, selectedUser.id].sort().join('')
+        const doc = await firebase.firestore().collection('chats').doc(docKey).get()
+        let messages = doc.data().messages
+        let editMessage
+        
+        editMessage =  {
+            sender: messages[i].sender,
+            message: messages[i].message,
+            session: messages[i].session,
+            timestamp: messages[i].timestamp,
+            isDeleted: true
+        }   
+              
+        messages[i] = editMessage
+        console.log('MESSAGES INDEX', messages)
+    
+        return doc.ref.update({
+            "messages": firebase.firestore.FieldValue.arrayRemove({})
+        })
+        .then(() => {
+            doc.ref.update({
+                messages
+            })
+         })
+         .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error(error);
+         });
+        
+        
+    }
+
     
 
     // <!-- new chat -->
@@ -341,7 +398,6 @@ const Sessions = (props) => {
         <div>
             
                 <Grid
-                    // className={useStyles.root}
                     container
                     direction="row"
                     justify="center"
@@ -363,28 +419,7 @@ const Sessions = (props) => {
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
                                 </>
-                            ) : chats.length === 0 ? (
-                                <Box textAlign="center" paddingTop="100"> 
-                                <Typography align="center" variant="body1"> Chats empty</Typography>
-                                    {
-                                        user.userType === 'Guest' ? (
-                                            <Link href="/app/buddies">
-                                                <a style={{textDecoration:'none'}}>
-                                                    <Button
-                                                    variant="contained"    
-                                                    color="secondary"
-                                                    size="small"
-                                                    >
-                                                        Go to Buddies page
-                                                    </Button>
-                                                </a>
-                                            </Link>
-                                        ) : (
-                                            <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
-                                        )
-                                    }
-                                </Box>
-                            ) :
+                            ) : 
                                 (
                                     
                                     <ChatList
@@ -395,8 +430,8 @@ const Sessions = (props) => {
                                         newChatFn={newChatFn}
                                         chats={chats ? chats : null}
                                         selectedChatIndex={selectedChat}
-                                    />
-                                       
+                                        chatExist={chatExist}
+                                    />                                      
 
                                 )
                         }
@@ -431,12 +466,47 @@ const Sessions = (props) => {
                                             backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
                                             user={user} 
+                                            deleteMessage={deleteMessage}
+                                            chatList={chatNotEmpty}
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
                                             volunteer={selectedUser}
                                             prevReview={prevReview}
                                         /> 
-                                        : <div> No chat available select a profile to chat with </div>
+                                        : (
+                                            <div style={{
+                                                display:"flex",
+                                                justifyContent:"center",
+                                                flexDirection: "column",
+                                                alignItems:"center",
+                                                height:"inherit"
+                                                }}
+                                            >
+                                                {
+                                                    user.userType === 'Guest' ? (
+                                                        <Typography align="center" variant="body1"> You currently do not have any message</Typography>
+                                                    ) : (
+                                                        <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
+                                                    )
+                                                }   
+                                                    
+                                                    
+                                                <Link href="/app/buddies">
+                                                    <a style={{textDecoration:'none'}}>
+                                                        <Button
+                                                        variant="contained"    
+                                                        color="error"
+                                                        size="small"
+                                                        >
+                                                            Go to Buddies page
+                                                        </Button>
+                                                    </a>
+                                                </Link> 
+                    
+            
+                                            </div>
+                                        )
+                                        
                                 )
                         }
                     </Box>
