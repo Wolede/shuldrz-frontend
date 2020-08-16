@@ -1,3 +1,4 @@
+import React, { useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Drawer, Hidden, Fab } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
@@ -7,6 +8,7 @@ import AvailabilityBox from '../AvailabilityBox';
 import PersonalityBox from '../PersonalityBox';
 import useAuth from 'contexts/Auth'
 import { useStyles } from './style'
+import { SelectedUserContext } from 'contexts/SelectedUserContext';
 import api from 'services/Api'
 import useSWR from 'swr'
 
@@ -33,6 +35,18 @@ const RightSidebar = props => {
 
     console.log(userData, 'user data in profile')
 
+
+    // on a user profile page, set selected user
+    // const [ , setSelectedUser] = useContext(SelectedUserContext)
+    // useEffect(() => {
+    //     setSelectedUser({
+    //         id: userData?.id,
+    //         username: userData?.username,
+    //         profileImage: userData?.profileImage,   
+    //     })
+
+    // }, [userData])
+    
 
     return (
         <Drawer

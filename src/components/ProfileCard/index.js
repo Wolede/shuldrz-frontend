@@ -13,7 +13,7 @@ const firebase = require("firebase");
 const ProfileCard = (props) => {
     const router = useRouter()
     const classes = useStyles()
-    const { username, email, profileImage, occupation, experience, heart, ranking, id } = props
+    const { username, email, profileImage, occupation, experience, heart, ranking, id, userType } = props
 
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
     // if (journalRes) setJournal(journalRes.data?.data);
@@ -34,11 +34,12 @@ const ProfileCard = (props) => {
     // }
 
     const handleMessageUser =  async (e) => {
+        console.log('PROFILE IMAGE', profileImage)
 
         setSelectedUser({
             id,
             username,
-            profileImage,                   
+            profileImage,                    
         })
         router.push('/app/sessions')
     }
@@ -58,7 +59,9 @@ const ProfileCard = (props) => {
                 <Typography variant="body1" className={classes.text}>{experience ? experience : '- - -'}</Typography>
 
                 <Box display="flex" justifyContent="center" flexWrap="wrap">
-                    <Chip label={ranking ? ranking.name : 'Bronze'} rank={ranking ? ranking.colourCode : '#cd7f32'} color="paper" margin=".25rem .25rem .25rem 0" />
+                    {userType === 'Volunteer' &&
+                        <Chip label={ranking ? ranking.name : 'Bronze'} rank={ranking ? ranking.colourCode : '#cd7f32'} color="paper" margin=".25rem .25rem .25rem 0" />
+                    }
                     <Chip label={heart ? heart.count.toString() : '0'} heart color="paper"/>
                 </Box>
 

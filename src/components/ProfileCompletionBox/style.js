@@ -15,11 +15,11 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
     },
     actionButtons: {
-        position: 'absolute',
-        bottom: '-0.1rem',
-        right:  '0rem',
         display: 'flex',
-        alignItems: 'center',
+        justifyContent: 'flex-end',
+        '& button' : {
+            marginTop: '0'
+        }
     },
 }))
 

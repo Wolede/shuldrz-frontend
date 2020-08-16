@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { Box, Typography } from '@material-ui/core'
@@ -86,6 +86,7 @@ const UserPageLayout = ({username}) => {
     const [element, setElement] = useState(null);
 
     useEffect(() => {
+
         observer.current = new IntersectionObserver(
             entries => {
                 const first = entries[0];
@@ -120,14 +121,31 @@ const UserPageLayout = ({username}) => {
     }, [element])
 
     // send message handler
-    const [, setSelectedUser] = React.useContext(SelectedUserContext)
+    const [ selectedUser, setSelectedUser ] = useContext(SelectedUserContext)
+    const [ userData, setUserData ] = useState()
+
+    const getUser = async () => {
+        try { 
+            const { data } = await api.get(`users/?username=${username}`)
+            setUserData(data[0])
+            console.log(data, 'user data p');
+        } catch(error) {
+
+        }
+    }
     const handleMessageUser =  async (e) => {
-        
+        //set selected user is now set in the RightSidebar where user's data is available
         setSelectedUser({
-            username,
+            id: userData?.id,
+            username: userData?.username,
+            profileImage: userData?.profileImage,   
         })
         router.push('/app/sessions')
     }
+
+    useEffect(() => {
+        getUser() // get user data
+    }, [username])
 
     return (
         <div>
@@ -137,11 +155,11 @@ const UserPageLayout = ({username}) => {
             <Box marginBottom="2rem" display="flex">
                 <Box className={classes.headerText}>
                     <Typography variant="h4">
-                        { `${username}'s profile` }
+                        {username ? `${username}'s profile` : <Skeleton variant="rect" width={220} height={30} animation="wave"/> }
                     </Typography>
                 </Box>
                 <Box>
-                    <Button variant="contained" color="primary" size="small" onClick={handleMessageUser}>Message</Button>
+                    <Button variant="contained" color="primary" size="small" onClick={handleMessageUser} disabled={!selectedUser && !userData}>Message</Button>
                 </Box>
             </Box>
 
@@ -164,7 +182,6 @@ const UserPageLayout = ({username}) => {
             { isMoreData && !isLoadingMore &&
                 <Skeleton variant="rect" height={150} animation="wave"/>
             }
-
 
         </div>
     )

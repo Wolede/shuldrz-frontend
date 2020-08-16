@@ -16,6 +16,9 @@ const useStyles = makeStyles(theme => ({
             fontSize: 16
           }
         },
+        [theme.breakpoints.down("xs")]: {
+          'select, textarea, input' : { fontSize: '16px !important' }
+        },
         '*::-webkit-scrollbar': {
           width: '0.4rem',
         },

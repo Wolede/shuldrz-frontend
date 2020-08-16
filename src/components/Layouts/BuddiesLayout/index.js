@@ -36,6 +36,7 @@ const BuddiesLayout = () => {
                         id={result.id}
                         ranking={result.ranking}
                         email={result.email}
+                        userType={result.userType}
                     />
                 </Grid>
             ))
