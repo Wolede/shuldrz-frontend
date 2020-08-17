@@ -89,7 +89,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
 
                     </div>
                 )
-                : chatList?.length == 0 ? (
+                : chatList?.length === 0 ? (
                     <div style={{
                         display: "flex",
                         justifyContent: "center",
