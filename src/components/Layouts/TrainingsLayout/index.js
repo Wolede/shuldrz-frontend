@@ -81,7 +81,8 @@ const TrainingsLayout = () => {
                 <Typography variant="h3">Trainings</Typography>
             </Box>
             
-            <div>{pages}</div>
+            {/* Render the page data */}
+            {pages}
             
             { isMoreData &&
                 <div ref={setElement}>
@@ -91,9 +92,9 @@ const TrainingsLayout = () => {
                     
                 </div>
             }
-            { isEmpty &&
+            { pages.length < 2 && !isMoreData &&
                 <Box textAlign="center" paddingTop="100"> 
-                    <Typography align="center" variant="body1">No Trainings for now</Typography>
+                    <Typography align="center" variant="body1">No trainings for now</Typography>
                 </Box>
             }
             
