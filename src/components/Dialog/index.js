@@ -10,7 +10,7 @@ const Dialog = (props) => {
     const classes = useStyles();
 
     const { uploadImage } = props
-    const [file, setFile] = React.useState()
+    const [file, setFile] = React.useState([])
 
     const handleUploadSubmit = () => {
         uploadImage(file)
@@ -44,7 +44,7 @@ const Dialog = (props) => {
                                     <MuiButton onClick={props.handleClose}  style={{color: "#FD2D55"}}>
                                         Cancel
                                     </MuiButton>
-                                    <MuiButton onClick={handleUploadSubmit} color="primary">
+                                    <MuiButton onClick={handleUploadSubmit} color="primary" disabled={ file.length < 1 }>
                                         Upload
                                     </MuiButton>
                                 </DialogActions>
