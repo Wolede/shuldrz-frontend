@@ -41,8 +41,7 @@ const JournalBox = ( { journal, otherUser, triggerUrl } ) => {
 
     // update 
     const setVisibility = async () => {
-        console.log('tingz', triggerUrl)
-        try {
+\        try {
             const res = await api.put(`journals/${journal.id}`, {
                 isVisible: !isVisible,
             })
