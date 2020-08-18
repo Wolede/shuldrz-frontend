@@ -68,7 +68,6 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-        console.log('SELECTED USER', selectedUser)
         if (user !== null || undefined) {  
             const userImage = user.profileImage ? user.profileImage.url : null
                    
@@ -77,25 +76,20 @@ const Sessions = (props) => {
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
-                chatNotEmpty = firebase_chats.filter(chatList => {
-                    return chatList.messages.length > 1
+                chatNotEmpty = firebase_chats.filter((chatList, i) => {
+                    return chatList.messages.length > 1 || chatList.messages[0].sender  === user.username 
                 })
-                setChats(firebase_chats)                 
-                console.log('CHAT IS NOT EMPTY', chatNotEmpty)
-            })              
+                setChats(firebase_chats)     
+            })       
             
         }
 
-        
-        
-
-        if (selectedUser) {    
-            console.log('HEY I GOT TO SUBMIT CHAT')       
-            submitNewChat()            
+        if (selectedUser) {                  
+            submitNewChat()                        
         }       
+
         
-
-
+        
     }, [user]);
 
     // useEffect(()=> {
@@ -109,13 +103,12 @@ const Sessions = (props) => {
     //         })
     //     }
     // })
-     
+    
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
 
-        console.log('USERNAME', user.username)
-        // messageRead(chatIndex);    
+          // messageRead(chatIndex);    
         const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
         
         firebase.firestore().collection('users').get().then((snapshot) => {
@@ -171,17 +164,10 @@ const Sessions = (props) => {
         const sessionState = chats[selectedChat].messages.length === 0 ? [] : 
         chats[selectedChat].messages[chats[selectedChat].messages.length - 1].session
 
-        console.log('sessionValue', chats[selectedChat].messages[chats[selectedChat].messages.length - 1])
-        console.log('sessionState', sessionState)
-
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
 
-        
-
         const docKey = buildDocKey((chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
-        console.log('DOCUMENT KEY', docKey)   
-
-       
+ 
         firebase.firestore().collection('chats').doc(docKey)
         .update({
             messages: firebase.firestore.FieldValue.arrayUnion({
@@ -255,7 +241,7 @@ const Sessions = (props) => {
                 .firestore()
                 .collection('chats')
                 .doc(docKey)
-                .get();           
+                .get();                         
             return chat.exists;
         }
 
@@ -302,14 +288,13 @@ const Sessions = (props) => {
         if (userExist) {
             const chatExist = await chatExists();
 
-            console.log('CHAT EXIST', chatExist)
-            if(chatExist){                
+            if(chatExist && chats.find(item => item)?.messages?.find(item => item)?.session !== 'none'){                
                 setChatExist(true)
                 goToChat(tempDocKey())
             } else {
                 newChatSubmit()
-            }  
-            
+            }    
+          
         }
 
 
@@ -370,8 +355,7 @@ const Sessions = (props) => {
             isDeleted: true
         }   
               
-        messages[i] = editMessage
-        console.log('MESSAGES INDEX', messages)
+        messages[i] = editMessage        
     
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
@@ -460,53 +444,21 @@ const Sessions = (props) => {
                                 </Box>
                             ) :
                                 (
-                                    chats !== undefined ?
+                                    chats !== undefined  ?
                                         <ChatView 
                                             endBtn={btnDisabled}
                                             backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
                                             user={user} 
                                             deleteMessage={deleteMessage}
-                                            chatList={chatNotEmpty}
+                                            chatList={chats}
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
                                             volunteer={selectedUser}
                                             prevReview={prevReview}
                                         /> 
-                                        : (
-                                            <div style={{
-                                                display:"flex",
-                                                justifyContent:"center",
-                                                flexDirection: "column",
-                                                alignItems:"center",
-                                                height:"inherit"
-                                                }}
-                                            >
-                                                {
-                                                    user.userType === 'Guest' ? (
-                                                        <Typography align="center" variant="body1"> You currently do not have any message</Typography>
-                                                    ) : (
-                                                        <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
-                                                    )
-                                                }   
-                                                    
-                                                    
-                                                <Link href="/app/buddies">
-                                                    <a style={{textDecoration:'none'}}>
-                                                        <Button
-                                                        variant="contained"    
-                                                        color="error"
-                                                        size="small"
-                                                        >
-                                                            Go to Buddies page
-                                                        </Button>
-                                                    </a>
-                                                </Link> 
-                    
-            
-                                            </div>
-                                        )
-                                        
+                                        : 
+                                    null                                        
                                 )
                         }
                     </Box>

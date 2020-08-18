@@ -17,7 +17,7 @@ import ChatProfile from '../ChatProfile';
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer, prevReview, chatList, deleteMessage }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer, prevReview, deleteMessage, chatList }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -73,9 +73,11 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
             container.scrollTo(0, container.scrollHeight);
     })
 
+    
     return (
         <>
-            {chat === undefined || chatList?.length > 0 ?
+            {chat === undefined ?
+                
                 (
                     <div style={{
                         display: "flex",
@@ -85,185 +87,171 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                         height: "inherit"
                     }}
                     >
-                        <h1> Select a chat to view details</h1>
-
+                        <Typography align="center" variant="body2"> Select a chat to view it's content, if there are no chats on the side kindly visit the buddies page</Typography>
+                        
                     </div>
+                    
                 )
-                : chatList?.length === 0 ? (
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        height: "inherit"
-                    }}
-                    >
+                :  chatList[0].messages.length >= 1 && chatList[0].messages[0]?.sender !== user.username ?  
+                        
+                    (
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            height: "inherit"
+                        }}
+                        >
+                            <Typography align="center" variant="body2"> Select a chat to view it's content, if there are no chats on the side kindly visit the buddies page</Typography>
+                            
+                        </div>
+                    )            
+                : (
+
+                    <>
                         {
-                            user.userType === 'Guest' ? (
-                                <Typography align="center" variant="body1"> You currently do not have any message</Typography>
-                            ) : (
-                                    <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
-                                )
+                            <MiniDrawer
+                                direction='left'
+                                open={openRightSidebar}
+                                width='100%'
+                                position='absolute'
+                            >
+                                <ChatProfile
+                                    prevReview={prevReview}
+                                    chatProfile={volunteer}
+                                    closeChatProfile={handleRightSidebarClose}
+                                />
+                            </MiniDrawer>
                         }
 
-                        <Link href="/app/buddies">
-                            <a style={{ textDecoration: 'none' }}>
-                                <Button
+                        <Box
+                            position='sticky'
+                            top='0.1px'
+                            display="flex"
+                            style={{ backgroundColor: '#3f316b' }}
+                            padding='0rem 0rem 1rem 0rem'
+                        >
+                            <Box flexGrow='1' display='flex' alignItems='center'>
+                                {!isDesktop && (
+                                    <Fab size="small" aria-label="back" color="secondary" onClick={backBtn} style={{ marginRight: '1rem' }}>
+                                        <ArrowBackIcon />
+                                    </Fab>
+                                )
+                                }
+                                <MuiButton
                                     variant="contained"
-                                    color="error"
-                                    size="small"
+                                    color="secondary"
+                                    size='small'
+                                    startIcon={
+                                        <Avatar
+                                            className={classes.chatAvatar}
+                                            alt={chat.users.filter(_user => _user !== user.username)[0]}
+                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
+                                                ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
+                                                chat.users.filter(_user => _user !== user.username)[0]
+                                            }
+                                            size="tiny" variant='rounded' />
+                                    }
+                                    onClick={handleRightSidebarOpen}
                                 >
-                                    Go to Buddies page
-                                </Button>
-                            </a>
-                        </Link>
-                    </div>
-                ) :
-                    (
+                                    More
+                    </MuiButton>
 
-                        <>
+                            </Box>
+                            <div className={classes.headerButtons}>
+                                {/* <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button> */}
+                                <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
+                            </div>
+                        </Box>
+                        <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
+
                             {
-                                <MiniDrawer
-                                    direction='left'
-                                    open={openRightSidebar}
-                                    width='100%'
-                                    position='absolute'
-                                >
-                                    <ChatProfile
-                                        prevReview={prevReview}
-                                        chatProfile={volunteer}
-                                        closeChatProfile={handleRightSidebarClose}
-                                    />
-                                </MiniDrawer>
+                                chat.messages.map((msg, i) => {
+
+                                    return (
+                                        <div key={i}>
+                                            {
+                                                msg.session === 'started' && (
+                                                    <Divider>
+                                                        <Typography variant="body1">Session Started</Typography>
+                                                    </Divider>
+                                                )
+                                            }
+
+                                            {
+                                                msg.message && msg.isDeleted ? (
+                                                    <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
+                                                        <div>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                                <Typography fontStyle="italic" variant="body1">message deleted</Typography>
+                                                            </div>
+                                                            <Typography color="secondary" className='timestamp'>
+                                                                {moment(msg.timestamp).calendar()}
+                                                            </Typography>
+                                                        </div>
+                                                    </div>
+                                                )
+                                                    :
+                                                    (
+                                                        msg.message ?
+                                                            <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
+                                                                <div>
+                                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                                        <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
+                                                                        <IconButton
+                                                                            aria-label="more"
+                                                                            aria-controls="long-menu"
+                                                                            aria-haspopup="true"
+                                                                            onClick={handleClick}
+                                                                            color='secondary'
+                                                                            style={{ padding: '0 0 0 5px' }}
+                                                                        >
+                                                                            <MoreVertIcon style={{ color: '#ffffff' }} />
+                                                                        </IconButton>
+
+                                                                        <Menu
+                                                                            id="simple-menu"
+                                                                            anchorEl={anchorEl}
+                                                                            keepMounted
+                                                                            open={Boolean(anchorEl)}
+                                                                            onClose={handleClose}
+                                                                        >
+                                                                            <MenuItem onClick={() => deleteMessage(i)}>Delete message</MenuItem>
+                                                                        </Menu>
+
+                                                                    </div>
+                                                                    <Typography color="secondary" className='timestamp'>
+                                                                        {moment(msg.timestamp).calendar()}
+                                                                    </Typography>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            null
+                                                    )
+                                            }
+
+                                            {
+                                                msg.session === 'ended' && (
+                                                    <Divider>
+                                                        <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} ended the session</Typography>
+                                                    </Divider>
+                                                )
+                                            }
+                                        </div>
+                                    )
+
+                                })
                             }
 
-                            <Box
-                                position='sticky'
-                                top='0.1px'
-                                display="flex"
-                                style={{ backgroundColor: '#3f316b' }}
-                                padding='0rem 0rem 1rem 0rem'
-                            >
-                                <Box flexGrow='1' display='flex' alignItems='center'>
-                                    {!isDesktop && (
-                                        <Fab size="small" aria-label="back" color="secondary" onClick={backBtn} style={{ marginRight: '1rem' }}>
-                                            <ArrowBackIcon />
-                                        </Fab>
-                                    )
-                                    }
-                                    <MuiButton
-                                        variant="contained"
-                                        color="secondary"
-                                        size='small'
-                                        startIcon={
-                                            <Avatar
-                                                className={classes.chatAvatar}
-                                                alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                    ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                    chat.users.filter(_user => _user !== user.username)[0]
-                                                }
-                                                size="tiny" variant='rounded' />
-                                        }
-                                        onClick={handleRightSidebarOpen}
-                                    >
-                                        More
-                        </MuiButton>
+                        </Box>
 
-                                </Box>
-                                <div className={classes.headerButtons}>
-                                    {/* <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button> */}
-                                    <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
-                                </div>
-                            </Box>
-                            <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
+                        <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
 
-                                {
-                                    chat.messages.map((msg, i) => {
+                    </>
 
-                                        return (
-                                            <div key={i}>
-                                                {
-                                                    msg.session === 'started' && (
-                                                        <Divider>
-                                                            <Typography variant="body1">Session Started</Typography>
-                                                        </Divider>
-                                                    )
-                                                }
-
-                                                {
-                                                    msg.message && msg.isDeleted ? (
-                                                        <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
-                                                            <div>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                    <Typography fontStyle="italic" variant="body1">message deleted</Typography>
-                                                                </div>
-                                                                <Typography color="secondary" className='timestamp'>
-                                                                    {moment(msg.timestamp).calendar()}
-                                                                </Typography>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                        :
-                                                        (
-                                                            msg.message ?
-                                                                <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
-                                                                    <div>
-                                                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                            <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
-                                                                            <IconButton
-                                                                                aria-label="more"
-                                                                                aria-controls="long-menu"
-                                                                                aria-haspopup="true"
-                                                                                onClick={handleClick}
-                                                                                color='secondary'
-                                                                                style={{ padding: '0 0 0 5px' }}
-                                                                            >
-                                                                                <MoreVertIcon style={{ color: '#ffffff' }} />
-                                                                            </IconButton>
-
-                                                                            <Menu
-                                                                                id="simple-menu"
-                                                                                anchorEl={anchorEl}
-                                                                                keepMounted
-                                                                                open={Boolean(anchorEl)}
-                                                                                onClose={handleClose}
-                                                                            >
-                                                                                <MenuItem onClick={() => deleteMessage(i)}>Delete message</MenuItem>
-                                                                            </Menu>
-
-                                                                        </div>
-                                                                        <Typography color="secondary" className='timestamp'>
-                                                                            {moment(msg.timestamp).calendar()}
-                                                                        </Typography>
-                                                                    </div>
-                                                                </div>
-                                                                :
-                                                                null
-                                                        )
-                                                }
-
-                                                {
-                                                    msg.session === 'ended' && (
-                                                        <Divider>
-                                                            <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} ended the session</Typography>
-                                                        </Divider>
-                                                    )
-                                                }
-                                            </div>
-                                        )
-
-
-                                    })
-                                }
-
-                            </Box>
-
-                            <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
-
-                        </>
-
-                    )
+                )
+                    
         
             }
         </>
