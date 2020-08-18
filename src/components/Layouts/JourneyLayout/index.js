@@ -74,7 +74,7 @@ const JourneyLayout = () => {
                             <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
                         </Box>
                         
-                        <JournalBox journal={val} />
+                        <JournalBox journal={val} triggerUrl={url} />
                         
                         </>
                     )}
