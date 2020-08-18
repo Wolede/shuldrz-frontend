@@ -18,7 +18,10 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     //this ensures that a user is always selected to chat with
     useEffect(() => {
-        const modChats = chats?.flatMap(item => item.usersDetails)
+        const modChats = chats?.reduce((acc, curr) => {
+                                    acc.push(...curr.usersDetails)
+                                    return acc
+                                } , [])
                                 .filter(item => item.userId !== user.id)
 
         const desiredIndex = modChats.findIndex(chat => chat?.userId === selectedUser?.id);
