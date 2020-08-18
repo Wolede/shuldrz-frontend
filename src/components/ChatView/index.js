@@ -17,7 +17,7 @@ import ChatProfile from '../ChatProfile';
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, userClickedInput, volunteer, prevReview, deleteMessage, chatList }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex, submitMessage, userClickedInput, selectedUser, prevReview, deleteMessage, chatList }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -73,8 +73,11 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
             container.scrollTo(0, container.scrollHeight);
     })
 
+    console.log('CHATLIST', chatList)
+
     
     return (
+        
         <>
             {chat === undefined ?
                 
@@ -92,7 +95,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                     </div>
                     
                 )
-                :  chatList[0].messages.length >= 1 && chatList[0].messages[0]?.sender !== user.username ?  
+                :  chatList[selectedChatIndex].messages.length <= 1 && chatList[selectedChatIndex]?.messages[0]?.sender !== user.username ?  
                         
                     (
                         <div style={{
@@ -119,7 +122,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                             >
                                 <ChatProfile
                                     prevReview={prevReview}
-                                    chatProfile={volunteer}
+                                    chatProfile={selectedUser}
                                     closeChatProfile={handleRightSidebarClose}
                                 />
                             </MiniDrawer>
@@ -167,8 +170,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                         <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
 
                             {
-                                chat.messages.map((msg, i) => {
 
+                                chat.messages.map((msg, i) => {
+                                {/* chatList.find(item => item.users.includes(selectedUser.username))?.messages.map((msg, i) => { */}
                                     return (
                                         <div key={i}>
                                             {
