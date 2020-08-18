@@ -92,7 +92,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, submitMessage, us
                     </div>
                     
                 )
-                :  chatList[0].messages.length >= 1 && chatList[0].messages[0]?.sender !== user.username ?  
+                :  chatList[0].messages.length <= 1 && chatList[0].messages[0]?.sender !== user.username ?  
                         
                     (
                         <div style={{
