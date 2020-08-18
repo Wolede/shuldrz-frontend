@@ -23,7 +23,15 @@ const Sessions = (props) => {
     const classes = useStyles()
     
     const { user, loading } = useAuth()
-    
+
+    // request user permissions to display desktop notifications
+    useEffect(() => {
+        if (!("Notification" in window)) {
+            console.log("This browser does not support desktop notification");
+          } else {
+            Notification.requestPermission();
+          }
+    }, [])
 
     // Sidebar stuff
     const theme = useTheme();
