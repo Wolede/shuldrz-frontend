@@ -46,7 +46,7 @@ const Sessions = (props) => {
 
     
     // const [chats, updateChatList] = useState()
-    const [selectedChat, updateSelectedChat] = useState()
+    const [selectedChat, updateSelectedChat] = useState(0)
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
     const [chatProfileInfo, setChatProfileInfo] = useState()
     const [chatReceiverID, setChatReceiverID] = useState()
@@ -103,6 +103,10 @@ const Sessions = (props) => {
     //         })
     //     }
     // })
+
+
+    console.log('CHATS', chats)
+    console.log('SELECTED USER', selectedUser)
     
 
     const selectChat = (chatIndex) => {  
@@ -288,7 +292,7 @@ const Sessions = (props) => {
         if (userExist) {
             const chatExist = await chatExists();
 
-            if(chatExist && chats.find(item => item)?.messages?.find(item => item)?.session !== 'none'){                
+            if(chatExist && chats[selectedChat]?.messages?.length > 1){              
                 setChatExist(true)
                 goToChat(tempDocKey())
             } else {
@@ -449,12 +453,13 @@ const Sessions = (props) => {
                                             endBtn={btnDisabled}
                                             backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
+                                            selectedChatIndex={selectedChat}
                                             user={user} 
                                             deleteMessage={deleteMessage}
                                             chatList={chats}
                                             chat={chats[selectedChat]} 
                                             submitMessage={submitMessage}
-                                            volunteer={selectedUser}
+                                            selectedUser={selectedUser}
                                             prevReview={prevReview}
                                         /> 
                                         : 
