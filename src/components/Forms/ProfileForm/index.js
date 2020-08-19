@@ -328,7 +328,6 @@ const ProfileForm = ({ user }) => {
                                 { ...getFieldProps('personality_type')}
                                 label="Personality Type"
                                 >
-                                <MenuItem value={null}>A Brick</MenuItem>
                                 {formOptions?.personalities?.map((value, key) => (
                                     <MenuItem key={key} value={value.id}>{value.personalityType}</MenuItem>
                                 ))}
