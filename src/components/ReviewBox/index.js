@@ -18,7 +18,7 @@ const ReviewBox = props => {
     const isMobile= useMediaQuery(theme.breakpoints.up('sm'));
     
     return (
-        <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="secondary">
+        <Paper borderRadius="1.875rem 1.875rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="secondary">
                 <Box display="flex">
                     <Box>
                     <Link href={`/app/users/${username}`}>
