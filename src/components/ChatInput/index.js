@@ -44,8 +44,8 @@ const ChatInput = (props) => {
                 variant="outlined"
                 id='chattextbox'
                 placeholder='Say something nice...'
-                multiline
-                rows={1}
+                // multiline
+                // rows={1}
                 autoComplete="off"
                 onFocus={props.userClickedInput}
                 value={value}

@@ -8,30 +8,16 @@ import Chip from 'components/Chip'
 import Button from 'components/Button'
 import { useStyles } from './style';
 import { SelectedUserContext } from 'contexts/SelectedUserContext';
-const firebase = require("firebase");
+import useAuth from 'contexts/Auth';
 
 const ProfileCard = (props) => {
     const router = useRouter()
     const classes = useStyles()
+    const { user } = useAuth();
+
     const { username, email, profileImage, occupation, experience, heart, ranking, id, userType } = props
 
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
-    // if (journalRes) setJournal(journalRes.data?.data);
-
-     // <!-- check if user exists on firebase -->    
-    // const userExists = async () => {
-    //     const usersSnapshot = await 
-    //     firebase
-    //       .firestore()
-    //       .collection('users')
-    //       .get();
-    //     const exists = usersSnapshot
-    //       .docs
-    //         .map(_doc => _doc.data().email)
-    //         .includes(useremail);
-        
-    //     return exists;
-    // }
 
     const handleMessageUser =  async (e) => {
         
@@ -65,9 +51,12 @@ const ProfileCard = (props) => {
                 </Box>
 
                 <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
+                    {user.username !== username && (
                     <div>
                         <Button variant="contained" size="small" color="primary" onClick={handleMessageUser}>message</Button>
                     </div>
+
+                    )}
                     <Link href="/app/users/[username]" as={`/app/users/${username}`}>
                         <a style={{textDecoration:'none'}}>
                             <Button variant="contained" size="small" color="secondary" >View Profile</Button>

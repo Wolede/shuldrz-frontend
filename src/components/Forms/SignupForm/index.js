@@ -231,10 +231,21 @@ const SignupForm = ({volunteer}) => {
                             }
                         </FormHelperText>
                     </FormControl>
-
-
+                    { volunteer ? (
+                        <Box marginTop='2rem'>
+                            <Typography variant='body2'>
+                                Need help instead? <Link href="signup"><a className={classes.link}>Signup here</a></Link>
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <Box marginTop='2rem'>
+                            <Typography variant='body2'>
+                                Want to give help instead? <Link href="volunteer-signup"><a className={classes.link}>Signup here</a></Link> 
+                            </Typography>
+                        </Box>
+                    )}
                     <Hidden mdUp>
-                        <Box marginTop='4rem'>
+                        <Box marginTop='1rem'>
                             <Typography variant='body2'>
                                 Already have an account? <Link href="login"><a className={classes.link}>Login</a></Link>
                             </Typography>

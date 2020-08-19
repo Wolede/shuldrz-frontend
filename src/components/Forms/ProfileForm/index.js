@@ -261,7 +261,7 @@ const ProfileForm = ({ user }) => {
                                 label="Phone Number (optional)"
                                 { ...getFieldProps('phoneNumber')}
                                 variant="outlined"
-                                type="number"
+                                type="tel"
                                 className={classes.numberInput}
                                 error={errors.phoneNumber && touched.phoneNumber ? true : false}
                                 helperText={ errors.phoneNumber && touched.phoneNumber ?
@@ -328,7 +328,6 @@ const ProfileForm = ({ user }) => {
                                 { ...getFieldProps('personality_type')}
                                 label="Personality Type"
                                 >
-                                <MenuItem value={null}>A Brick</MenuItem>
                                 {formOptions?.personalities?.map((value, key) => (
                                     <MenuItem key={key} value={value.id}>{value.personalityType}</MenuItem>
                                 ))}
@@ -476,7 +475,7 @@ const ProfileForm = ({ user }) => {
                                     { ...getFieldProps('charity')}
                                     label="Charity"
                                     >
-                                        <MenuItem value={null}>No Charity</MenuItem>
+                                        {/* <MenuItem value={'none'}>No Charity</MenuItem> */}
                                     {formOptions?.charities?.map((value, key) => (
                                         <MenuItem key={key} value={value.id}>{value.name}</MenuItem>
                                     ))}
