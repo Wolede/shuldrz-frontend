@@ -159,7 +159,7 @@ const UserPageLayout = ({username}) => {
                         </Typography>
                 </Box>
                 <Box>
-                    {user.username !== username && (
+                    {username !== user?.username && (
                         <Button variant="contained" color="primary" size="small" onClick={handleMessageUser} disabled={!selectedUser && !userData}>Message</Button>
                     )}
                 </Box>
