@@ -13,7 +13,7 @@ const BuddiesLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
-    const PAGE_SIZE = 6;
+    const PAGE_SIZE = 12; // changed to 12 #lede
     const START_POSITION_IN_CONFIG_URL = 35; // index location of the first digit of the start position in the config url
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(

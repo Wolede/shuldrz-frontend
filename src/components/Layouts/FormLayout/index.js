@@ -47,7 +47,7 @@ const FormLayout = props => {
                             {page === 'volunteer' && (
                                 <>
                                 <Typography variant="h2" className={classes.headerText}>
-                                    Get Started as a Volunteer
+                                    Get Started as a Buddy
                                 </Typography>
                                 <Typography variant="h5" className={classes.contentText}>
                                     Ready to help out people in need?
@@ -78,9 +78,9 @@ const FormLayout = props => {
                             </Typography>
                             
                             <div className={classes.quoteAction}>
-                                <Typography className={classes.quoteText} variant="h5">
+                                {/* <Typography className={classes.quoteText} variant="h5">
                                 It's free forever
-                                </Typography>
+                                </Typography> */}
                                 <Link href="/signup">
                                     <a style={{textDecoration:'none'}}>
                                         <Button variant="contained" color="warning">

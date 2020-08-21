@@ -61,7 +61,7 @@ const AppLayout = (props) => {
 
 
             <div className={classes.root}>
-                <Grid container spacing={'4 0 4 0'}>
+                <Grid container>
                     <Grid 
                       item 
                       xs={12}

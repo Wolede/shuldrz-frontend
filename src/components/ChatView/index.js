@@ -65,16 +65,28 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
     }
 
-
-
     useEffect(() => {
         const container = document.getElementById('chatview-container');
         if (container)
             container.scrollTo(0, container.scrollHeight);
     })
 
-    console.log('CHATLIST', chatList)
-
+    const [ mostRecentTimestamp, setMostRecentTimeStamp ] = useState(0);
+    useEffect(() => {
+        const chat = chatList[selectedChatIndex];
+        const options = {
+            body: chat?.messages[chat?.messages?.length - 1]?.message,
+            icon: '/images/favicon.png',
+        }
+        //conditions 1. Is the notification api supported 2. Has the user granted permission to display notifications? 3. Is the sender of the message different from the user receiving the notifications?
+        // 4. is the user currently on shuldrz or somewhere else? 5. is the timestamp of the message about to be displayed different from the timestamp of the most recently displayed message. 
+        if (("Notification" in window) && Notification.permission === "granted" && chat?.messages[chat?.messages?.length - 1]?.sender !== user.username && !document.hasFocus() && chat?.messages[chat?.messages?.length - 1]?.timestamp !== mostRecentTimestamp ) {
+            setMostRecentTimeStamp(chat?.messages[chat?.messages?.length - 1]?.timestamp)
+            let notification = new Notification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options);
+            notification.onclick = () => window.focus();
+        }
+        
+    }, [chat.messages?.length])
     
     return (
         

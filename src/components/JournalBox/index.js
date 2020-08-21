@@ -15,7 +15,7 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 
 
-const JournalBox = ( { journal, otherUser } ) => {
+const JournalBox = ( { journal, otherUser, triggerUrl } ) => {
     const classes = useStyles()
     const { user } = useAuth();
 
@@ -32,7 +32,7 @@ const JournalBox = ( { journal, otherUser } ) => {
         // mutate( `/journals?user.id=${user?.id}&_limit=5`, journal[0].journalSnippet.filter(c => c.id !== id), false )
         try {
             const res = await api.delete(`journals/${id}`)
-            trigger(`/journey?_start=0&_limit=7&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get)
+            trigger(triggerUrl, api.get)
             handleClose()
         } catch (error) {
 
@@ -45,7 +45,7 @@ const JournalBox = ( { journal, otherUser } ) => {
             const res = await api.put(`journals/${journal.id}`, {
                 isVisible: !isVisible,
             })
-            trigger(`/journey?_start=0&_limit=7&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get)
+            trigger(triggerUrl, api.get)
             handleClose()
         } catch (error) {
 

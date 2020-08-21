@@ -22,7 +22,7 @@ const VideoBox = props => {
     };
 
     return (
-        <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="3rem">
+        <Paper borderRadius="1.875rem 1.875rem 1.875rem 1.875rem" padding="1rem" marginBottom="3rem">
             <Box paddingLeft="1rem">
                 <Typography variant="subtitle1" gutterBottom>{ title }</Typography>
             </Box>

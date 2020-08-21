@@ -154,12 +154,14 @@ const UserPageLayout = ({username}) => {
             </Box>
             <Box marginBottom="2rem" display="flex">
                 <Box className={classes.headerText}>
-                    <Typography variant="h4">
-                        {username ? `${username}'s profile` : <Skeleton variant="rect" width={220} height={30} animation="wave"/> }
-                    </Typography>
+                        <Typography variant="h4">
+                            {username ? `${username}'s profile` : <Skeleton variant="rect" width={220} height={30} animation="wave"/> }
+                        </Typography>
                 </Box>
                 <Box>
-                    <Button variant="contained" color="primary" size="small" onClick={handleMessageUser} disabled={!selectedUser && !userData}>Message</Button>
+                    {username !== user?.username && (
+                        <Button variant="contained" color="primary" size="small" onClick={handleMessageUser} disabled={!selectedUser && !userData}>Message</Button>
+                    )}
                 </Box>
             </Box>
 
