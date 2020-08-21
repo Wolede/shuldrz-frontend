@@ -91,7 +91,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
             })
         }
         
-    }, [chat.messages?.length])
+    }, [chat?.messages?.length])
     
     return (
         

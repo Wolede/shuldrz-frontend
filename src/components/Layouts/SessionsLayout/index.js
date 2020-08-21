@@ -209,7 +209,7 @@ const Sessions = (props) => {
     
 
     const clickedMessageWhereNotSender = (selectedChat) =>  {        
-        return chats[selectedChat].messages[chats[selectedChat].messages.length - 1].sender !== user.username        
+        return chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1]?.sender !== user?.username        
     }
 
     const userClickedInputFn = () => {
@@ -218,8 +218,8 @@ const Sessions = (props) => {
     }
 
     const messageRead = () => {               
-        const selectedUserID = chats[selectedChat].usersDetails.find(_usr => _usr.userId !== user.id).userId
-        const docKey = [user.id, selectedUserID].sort().join('');   
+        const selectedUserID = chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+        const docKey = [user?.id, selectedUserID].sort().join('');   
         
         if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
