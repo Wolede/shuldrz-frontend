@@ -197,42 +197,58 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     </div>
                                                 )
                                                     :
-                                                    (
-                                                        msg.message ?
-                                                            <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
+                                                    
+                                                    msg.message && msg.sender === user.username ? (
+                                                        <div className={classes.userSent}>
+                                                            <div>
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                                    <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
+                                                                    <IconButton
+                                                                        aria-label="more"
+                                                                        aria-controls="long-menu"
+                                                                        aria-haspopup="true"
+                                                                        onClick={handleClick}
+                                                                        color='secondary'
+                                                                        style={{ padding: '0 0 0 5px' }}
+                                                                    >
+                                                                        <MoreVertIcon style={{ color: '#ffffff' }} />
+                                                                    </IconButton>
+
+                                                                    <Menu
+                                                                        id="simple-menu"
+                                                                        anchorEl={anchorEl}
+                                                                        keepMounted
+                                                                        open={Boolean(anchorEl)}
+                                                                        onClose={handleClose}
+                                                                    >
+                                                                        <MenuItem onClick={() => deleteMessage(i)}>Delete message</MenuItem>
+                                                                    </Menu>
+
+                                                                </div>
+                                                                <Typography color="secondary" className='timestamp'>
+                                                                    {moment(msg.timestamp).calendar()}
+                                                                </Typography>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                        :
+                                                            
+                                                        msg.message ? (
+                                                            <div className={classes.friendSent}>
                                                                 <div>
                                                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                        <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
-                                                                        <IconButton
-                                                                            aria-label="more"
-                                                                            aria-controls="long-menu"
-                                                                            aria-haspopup="true"
-                                                                            onClick={handleClick}
-                                                                            color='secondary'
-                                                                            style={{ padding: '0 0 0 5px' }}
-                                                                        >
-                                                                            <MoreVertIcon style={{ color: '#ffffff' }} />
-                                                                        </IconButton>
-
-                                                                        <Menu
-                                                                            id="simple-menu"
-                                                                            anchorEl={anchorEl}
-                                                                            keepMounted
-                                                                            open={Boolean(anchorEl)}
-                                                                            onClose={handleClose}
-                                                                        >
-                                                                            <MenuItem onClick={() => deleteMessage(i)}>Delete message</MenuItem>
-                                                                        </Menu>
+                                                                        <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>                                                                 
 
                                                                     </div>
                                                                     <Typography color="secondary" className='timestamp'>
                                                                         {moment(msg.timestamp).calendar()}
                                                                     </Typography>
                                                                 </div>
-                                                            </div>
-                                                            :
-                                                            null
-                                                    )
+                                                           </div>
+                                                        )
+                                                        : 
+                                                        null
+                                                    
                                             }
 
                                             {

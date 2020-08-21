@@ -55,10 +55,7 @@ const Sessions = (props) => {
     const [prevReview, setPrevReview] = useState()
     let chatNotEmpty
 
-    const newChatFn = () => {
-        console.log('new chat clicked')
-    }
-
+   
 
     const chatContainer = useRef()
     const scrollToMyRef = () => {
@@ -106,13 +103,12 @@ const Sessions = (props) => {
 
 
     console.log('CHATS', chats)
-    console.log('SELECTED USER', selectedUser)
+   
     
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)
-
-          // messageRead(chatIndex);    
+         
         const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
         
         firebase.firestore().collection('users').get().then((snapshot) => {
@@ -121,10 +117,12 @@ const Sessions = (props) => {
 
         const userInfo = (doc) =>{             
            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                
-        } 
-       
+        }        
     }
 
+    useEffect(() => {
+        messageRead()
+    }, [selectedChat])
 
 
     useEffect(() => {
@@ -198,16 +196,20 @@ const Sessions = (props) => {
 
     
 
-    const clickedMessageWhereNotSender = (chatIndex) =>  {
-        return chats[chatIndex].messages[chats[chatIndex].messages.length - 1].sender !== user.username        
+    const clickedMessageWhereNotSender = (selectedChat) =>  {        
+        return chats[selectedChat].messages[chats[selectedChat].messages.length - 1].sender !== user.username        
     }
 
+    const userClickedInputFn = () => {
+        messageRead()
+        console.log('you clicked input')
+    }
 
-    const messageRead = (chatIndex) => {
-       
-        const docKey = buildDocKey(chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId;   
+    const messageRead = () => {               
+        const selectedUserID = chats[selectedChat].usersDetails.find(_usr => _usr.userId !== user.id).userId
+        const docKey = [user.id, selectedUserID].sort().join('');   
         
-        if (clickedMessageWhereNotSender(chatIndex)) {
+        if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
             .firestore()
             .collection('chats')
@@ -304,10 +306,7 @@ const Sessions = (props) => {
 
     }
 
-    const userInputFn = () => {
-        messageRead()
-    }
-
+   
     const endSession = async () => {           
 
         const docKey = [user.id, chats[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
@@ -414,8 +413,7 @@ const Sessions = (props) => {
                                         user={user}
                                         history={props.history}
                                         selectChatFn={selectChat}
-                                        closeChatList={handleLeftSidebarClose}
-                                        newChatFn={newChatFn}
+                                        closeChatList={handleLeftSidebarClose}                                        
                                         chats={chats ? chats : null}
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
@@ -454,6 +452,7 @@ const Sessions = (props) => {
                                             backBtn={handleLeftSidebarOpen}
                                             endSessionFn={endSession} 
                                             selectedChatIndex={selectedChat}
+                                            userClickedInput={userClickedInputFn}
                                             user={user} 
                                             deleteMessage={deleteMessage}
                                             chatList={chats}

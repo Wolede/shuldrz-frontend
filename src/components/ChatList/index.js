@@ -35,8 +35,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     }
 
-    const userIsSender = (chat) => {
-        const a = false;
+    const userIsSender = (chat) => {        
         chat.messages[chat.messages.length - 1].sender === user.email
     }
 
@@ -45,7 +44,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
     const selectChat = (index) => selectChatFn(index);
 
     
-    if ( chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender === user.username)) {        
+    if ( chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender !== user.username)) {        
         
         return (
             chats.map((chat, i) => {
