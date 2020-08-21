@@ -31,6 +31,10 @@ const Sessions = (props) => {
           } else {
             Notification.requestPermission();
           }
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/push-sw.js')
+        }
     }, [])
 
     // Sidebar stuff

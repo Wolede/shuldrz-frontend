@@ -80,10 +80,15 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
         }
         //conditions 1. Is the notification api supported 2. Has the user granted permission to display notifications? 3. Is the sender of the message different from the user receiving the notifications?
         // 4. is the user currently on shuldrz or somewhere else? 5. is the timestamp of the message about to be displayed different from the timestamp of the most recently displayed message. 
-        if (("Notification" in window) && Notification.permission === "granted" && chat?.messages[chat?.messages?.length - 1]?.sender !== user.username && !document.hasFocus() && chat?.messages[chat?.messages?.length - 1]?.timestamp !== mostRecentTimestamp ) {
-            setMostRecentTimeStamp(chat?.messages[chat?.messages?.length - 1]?.timestamp)
-            let notification = new Notification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options);
-            notification.onclick = () => window.focus();
+
+        if (("Notification" in window) && Notification.permission === "granted" && chat?.messages[chat?.messages?.length - 1]?.sender !== user.username && !document.hasFocus() && chat?.messages[chat?.messages?.length - 1]?.timestamp !== mostRecentTimestamp && ('serviceWorker' in navigator) ) {
+            // let notification = new Notification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options);
+            // notification.onclick = () => window.focus();
+
+            navigator.serviceWorker.getRegistration().then((reg) => {
+                setMostRecentTimeStamp(chat?.messages[chat?.messages?.length - 1]?.timestamp)
+                reg.showNotification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options)
+            })
         }
         
     }, [chat.messages?.length])
