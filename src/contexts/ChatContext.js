@@ -3,7 +3,7 @@ import React, { useState, createContext } from 'react'
 export const ChatContext = createContext();
 
 const ChatContextProvider = ({ children }) => {
-    const [ chats, setChats ] = useState()
+    const [ chats, setChats ] = useState([])
     // console.log(chats, 'incontext');
     
     return (
