@@ -84,6 +84,18 @@ const Header = (props) => {
                             </Typography>
                         </a>
                     </Link>
+                    <Link 
+                        href="/wall"      
+                    >
+                        <a className={classes.menuLink}>
+                            <Typography
+                                variant="body2"
+                                className={isLight ? classes.lightText : null}
+                            >
+                                Wall
+                            </Typography>
+                        </a>
+                    </Link>
 
                     {/* <Link 
                         href="#"      
