@@ -21,9 +21,18 @@ const Sidebar = props => {
             >
                 <Link href='/volunteer-signup'>
                     <a style={{textDecoration:'none'}}>
-                        <Button activeClassName={classes.active} className={classes.button} size='large'
+                        <Button className={classes.button} size='large'
                         >
                             Become a Buddy
+                        </Button>
+                    </a>
+                </Link>
+
+                <Link href='/wall'>
+                    <a style={{textDecoration:'none'}}>
+                        <Button className={classes.button} size='large'
+                        >
+                            Wall
                         </Button>
                     </a>
                 </Link>
@@ -39,7 +48,7 @@ const Sidebar = props => {
 
                 <Link href='/faq'>
                     <a style={{textDecoration:'none'}}>
-                        <Button activeClassName={classes.active} className={classes.button} size='large'
+                        <Button className={classes.button} size='large'
                         >
                             FAQ
                         </Button>
@@ -48,7 +57,7 @@ const Sidebar = props => {
 
                 <Link href='/login'>
                     <a style={{textDecoration:'none'}}>
-                        <Button activeClassName={classes.active} className={classes.button} size='large'
+                        <Button className={classes.button} size='large'
                         >
                             Login
                         </Button>
@@ -57,7 +66,7 @@ const Sidebar = props => {
 
                 <Link href='/signup'>
                     <a style={{textDecoration:'none'}}>
-                        <Button activeClassName={classes.active} className={classes.button} size='large'
+                        <Button className={classes.button} size='large'
                         color="primary" >
                             Sign Up
                         </Button>
