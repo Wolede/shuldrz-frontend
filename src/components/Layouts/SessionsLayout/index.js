@@ -115,22 +115,20 @@ const Sessions = (props) => {
     
 
     const selectChat = (chatIndex) => {  
-        updateSelectedChat(chatIndex)
-         
+        updateSelectedChat(chatIndex)         
         const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
-        
+
         firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
-
         const userInfo = (doc) =>{             
            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                
         }        
     }
 
-    useEffect(() => {
-        messageRead()
-    }, [selectedChat])
+    // useEffect(() => {
+    //     messageRead()
+    // }, [selectedChat])
 
 
     useEffect(() => {
@@ -214,7 +212,7 @@ const Sessions = (props) => {
     }
 
     const messageRead = () => {               
-        const selectedUserID = chats[selectedChat].usersDetails.find(_usr => _usr.userId !== user.id).userId
+        const selectedUserID = chats[selectedChat]?.usersDetails.find(_usr => _usr.userId !== user.id).userId
         const docKey = [user.id, selectedUserID].sort().join('');   
         
         if (clickedMessageWhereNotSender(selectedChat)) {
