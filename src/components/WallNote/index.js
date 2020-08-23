@@ -55,6 +55,10 @@ const WallNote = props => {
         }
     }
 
+    const webShare = () => {
+        
+    }
+
     return (
         // <ButtonBase
         //     focusRipple={modalIsOpen}
@@ -108,7 +112,7 @@ const WallNote = props => {
             <Box marginTop=".5rem">
                 <Chip label={hearts ? hearts.toString() : '0'} heart color="paper"/>
                     {/* <Chip label={'Share'} color="paper"/> */}
-                    <Button variant='outlined' size="tiny">Share</Button>
+                    <Button variant='outlined' size="tiny" onClick={webShare}>Share</Button>
             </Box>
             <Box marginTop=".5rem">
                 <Typography variant='body2' color="textSecondary">
