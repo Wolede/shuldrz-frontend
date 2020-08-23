@@ -27,10 +27,10 @@ const JourneyLayout = () => {
     const [showProfileBox, setShowProfileBox] = useState(true);
     const [suggestedBuddies, setSuggestedBuddies] = useState([]);
 
+    
     const PAGE_SIZE = 12; //changed to 12 #lede
     const START_POSITION_IN_CONFIG_URL = 16; // index location of the first digit of the start position in the config url
-
-
+    
     // console.log('user',user)
 
 
@@ -39,6 +39,7 @@ const JourneyLayout = () => {
         ({ offset, withSWR }) => {
             // console.log('off', offset)
             const url = offset || `/journey?_start=0&_limit=${PAGE_SIZE}&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`;
+
             const {data} = withSWR(useSWR( url, api.get));
 
             if (!data) return null;
@@ -269,7 +270,7 @@ const JourneyLayout = () => {
             {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
-                    <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} />
+                    <Modal handleClose={handleClose} openModal={openModal} view='writeJournal' embedUrl={null} pageLimit={PAGE_SIZE} />
                 )
             }
 

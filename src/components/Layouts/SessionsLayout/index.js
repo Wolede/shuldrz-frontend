@@ -354,34 +354,36 @@ const Sessions = (props) => {
        }
     }
 
-    const deleteMessage = async (msg, i) => {        
-        
+    const deleteMessage = async (timestamp) => {
         const selectedUserID = chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
         const docKey = [user.id, selectedUserID].sort().join('')
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
-        let editedMessage = msg
-       
         
-        editedMessage.isDeleted = true
+        const newMessages = messages.reduce((acc, curr) => {
+            if ( curr.timestamp === timestamp ) {
+                curr = {
+                    ...curr,
+                    isDeleted: true
+                }
+            }
+            acc.push(curr)
+            return acc;
+        }, [])
               
-        messages[index] = editedMessage      
-        
-    
+
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
         })
         .then(() => {
             doc.ref.update({
-                messages
+                messages: newMessages
             })
          })
          .catch(function(error) {
-        // The document probably doesn't exist.
-        console.error(error);
+            // The document probably doesn't exist.
+            console.error(error);
          });
-        
-        
     }
 
     
