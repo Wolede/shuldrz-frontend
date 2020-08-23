@@ -212,7 +212,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
         }}
         >
             {
-                user.userType === 'Guest' ? (
+                user?.userType === 'Guest' ? (
                     <Typography align="center" variant="body1"> You currently do not have any message</Typography>
                 ) : (
                         <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
