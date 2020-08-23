@@ -114,27 +114,25 @@ const Sessions = (props) => {
     // })
 
 
-    console.log('CHATS', chats)
+
    
     
 
     const selectChat = (chatIndex) => {  
-        updateSelectedChat(chatIndex)
-         
+        updateSelectedChat(chatIndex)         
         const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
-        
+
         firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
-
         const userInfo = (doc) =>{             
            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                
         }        
     }
 
-    useEffect(() => {
-        messageRead()
-    }, [selectedChat])
+    // useEffect(() => {
+    //     messageRead()
+    // }, [selectedChat])
 
 
     useEffect(() => {
@@ -357,7 +355,8 @@ const Sessions = (props) => {
     }
 
     const deleteMessage = async (timestamp) => {
-        const docKey = selectedUser ? [user.id, selectedUser.id].sort().join('') : [user.id, chats[selectedChat].usersDetails.find(detail => detail.userId !== user?.id)?.userId].sort().join('');
+        const selectedUserID = chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+        const docKey = [user.id, selectedUserID].sort().join('')
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
         
@@ -372,6 +371,7 @@ const Sessions = (props) => {
             return acc;
         }, [])
               
+
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
         })

@@ -191,7 +191,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                             {
 
                                 chat.messages.map((msg, i) => {
-                                {/* chatList.find(item => item.users.includes(selectedUser.username))?.messages.map((msg, i) => { */}
+                                    
                                     return (
                                         <div key={msg.timestamp || i}>
                                             {
@@ -218,7 +218,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     :
                                                     
                                                     msg.message && msg.sender === user.username ? (
-                                                        <div className={classes.userSent}>
+                                                        <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                                     <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
@@ -234,13 +234,12 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     </IconButton>
 
                                                                     <Menu
-                                                                        id="simple-menu"
+                                                                        id="simple-menu"                                                                        
                                                                         anchorEl={anchorEl}
-                                                                        keepMounted
                                                                         open={Boolean(anchorEl)}
                                                                         onClose={handleClose}
                                                                     >
-                                                                        <MenuItem onClick={() => {deleteMessage(ts); handleClose()}}>Delete message</MenuItem>
+                                                                        <MenuItem onClick={() => {deleteMessage(ts); handleClose();}}>Delete message</MenuItem>
                                                                     </Menu>
 
                                                                 </div>
