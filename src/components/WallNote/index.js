@@ -26,6 +26,7 @@ const WallNote = props => {
     } = props
 
     const [openModal, setOpenModal] = useState(urlQuery === id);
+    const [openShareModal, setOpenShareModal] = useState(false);
 
     
     const handleOpen = () => {
@@ -56,7 +57,19 @@ const WallNote = props => {
     }
 
     const webShare = () => {
-        
+        if(navigator.share) {
+            navigator.share({
+                title: `${title}`,
+                text: `${truncate(note, 100)}`,
+                url: `https://shuldrz-frontend.now.sh/wall?note=${id}`,
+            })
+        } else {
+            setOpenShareModal(true)
+        }
+    }
+
+    const handleCloseShareModal = () => {
+        setOpenShareModal(false)
     }
 
     return (
@@ -135,6 +148,16 @@ const WallNote = props => {
                         date,
                         dedication,
                         isPublic,
+                    }}
+                    />
+                )
+            }
+
+            {/* Load Share Modal COmponent */}
+            {openShareModal === true &&
+                (
+                    <Modal handleClose={handleCloseShareModal} openModal={openShareModal} view='share' embedUrl={null} viewNote={{
+                        id, title, note, userData
                     }}
                     />
                 )

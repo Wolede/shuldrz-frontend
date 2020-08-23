@@ -10,6 +10,7 @@ import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
 import WallNote from '../WallNote'
+import Share from '../Share'
 
 const Modal = props => {
     const classes = useStyles()
@@ -72,7 +73,7 @@ const Modal = props => {
                 { view === "share" &&
                     (
                         <Paper padding="1.5rem">
-                            
+                            <Share note={viewNote}/>
                         </Paper>
                     )
                 }
