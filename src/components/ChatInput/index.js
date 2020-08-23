@@ -10,10 +10,8 @@ const ChatInput = (props) => {
     const userTyping = (e) => {
         // when shift and enter is pressed 
         // e.keyCode == 13 && e.shiftKey ? setMultiline(true) : null;
-
-        // to send message. i.e only enter is pressed
-        e.keyCode == 13 && !e.shiftKey ? submitMessage() : updateChatText( e.target.value );
-
+        // to send message. i.e only enter is pressed        
+        e.keyCode == 13 && !e.shiftKey ? submitMessage() : updateChatText(e.target.value);
     };
 
     const messageValid = (txt) => txt && txt.replace(/\s/g, '').length;
@@ -24,12 +22,12 @@ const ChatInput = (props) => {
       setValue(e.target.value)
     };
     
-    const submitMessage = () => {
-        if(messageValid(chatText)) {
-            props.submitMessageFn(chatText);
-            // document.getElementById('chattextbox').value = ''; // i used state instead
-            setValue('')
+    const submitMessage = () => {        
+        if(messageValid(chatText) && chatText !== '') {
+            props.submitMessageFn(chatText);            
+            updateChatText('')
         }
+        setValue('')
     }
 
     return (

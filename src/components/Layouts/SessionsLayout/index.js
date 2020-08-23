@@ -114,7 +114,7 @@ const Sessions = (props) => {
     // })
 
 
-    console.log('CHATS', chats)
+
    
     
 
@@ -354,21 +354,19 @@ const Sessions = (props) => {
        }
     }
 
-    const deleteMessage = async (i) => {
-        const docKey = [user.id, selectedUser.id].sort().join('')
+    const deleteMessage = async (msg, i) => {        
+        
+        const selectedUserID = chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+        const docKey = [user.id, selectedUserID].sort().join('')
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
-        let editMessage
+        let editedMessage = msg
+       
         
-        editMessage =  {
-            sender: messages[i].sender,
-            message: messages[i].message,
-            session: messages[i].session,
-            timestamp: messages[i].timestamp,
-            isDeleted: true
-        }   
+        editedMessage.isDeleted = true
               
-        messages[i] = editMessage        
+        messages[index] = editedMessage      
+        
     
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
