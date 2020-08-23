@@ -4,14 +4,17 @@ import { Modal as MuiModal, Container, Box } from '@material-ui/core'
 import { useStyles } from './style'
 import Paper from 'components/Paper'
 import AddJournalForm from '../Forms/AddJournalForm'
+import AddNoteForm from '../Forms/AddNoteForm'
 import ReviewForm from '../Forms/ReviewForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
+import WallNote from '../WallNote'
+import Share from '../Share'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, pageLimit } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit } = props
 
     return (
         <MuiModal
@@ -67,6 +70,39 @@ const Modal = props => {
                         </Paper>
                     )
                 }
+                { view === "share" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <Share note={viewNote}/>
+                        </Paper>
+                    )
+                }
+                { view === "writeNote" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddNoteForm onClose={handleClose} />
+                        </Paper>
+                    )
+                }
+                { view === "viewNote" &&
+                    (
+                        <div>
+                            <WallNote 
+                                modalIsOpen={true}
+                                id={viewNote.id}
+                                title={viewNote.title}
+                                note={viewNote.note}
+                                hearts={viewNote.hearts}
+                                color={viewNote.color}
+                                link={viewNote.link}
+                                date={viewNote.date}
+                                dedication={viewNote.dedication}
+                                userData={viewNote.userData}
+                                urlQuery={false}
+                            />
+                        </div>
+                    )
+                }
                 </Box>
             </Container>
         </MuiModal>
@@ -80,6 +116,7 @@ Modal.propTypes = {
     view: PropTypes.string,
     embedUrl: PropTypes.string,
     user: PropTypes.object,
+    viewNote: PropTypes.object,
 }
 
 export default Modal
