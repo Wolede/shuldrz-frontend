@@ -11,7 +11,7 @@ import ScheduleForm from '../Forms/ScheduleForm'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, pageLimit } = props
 
     return (
         <MuiModal
@@ -34,7 +34,7 @@ const Modal = props => {
                 { view === "writeJournal" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddJournalForm onClose={handleClose} />
+                            <AddJournalForm onClose={handleClose} pageLimit={pageLimit} />
                         </Paper>
                     )
                 }
