@@ -13,29 +13,37 @@ import { useStyles } from './style'
 import WallNote from '../../WallNote'
 
 
-const WallLayout = props => {
+const WallLayout = ({isPublic}) => {
     const classes = useStyles()
     const { user, loading } = useAuth()
+
     const router = useRouter()
     const noteUrl = router.query.note
     console.log('url', noteUrl);
 
-    const [notes, setNotes] = useState(false);
+    const { data, error, isValidating } = useSWR(loading ? false : `/wall-notes?_sort=createdAt:desc`, api.get, {revalidateOnFocus: true})
 
-    const getNotes = async () => {
-        try {
-            const { data } = await api.get('wall-notes')
-            setNotes(data)
-            console.log(data, 'here');
-        } catch (error) {
-
-        }
-    }
+    const notes = data ? data.data : null
+    console.log(notes, 'wall-notes')
 
 
-    useEffect(() => {
-        getNotes()
-    }, [])
+    // const [notes, setNotes] = useState(false);
+
+
+    // const getNotes = async () => {
+    //     try {
+    //         const { data } = await api.get('wall-notes')
+    //         setNotes(data)
+    //         console.log(data, 'here');
+    //     } catch (error) {
+
+    //     }
+    // }
+
+
+    // useEffect(() => {
+    //     getNotes()
+    // }, [])
 
     // open write note
     const [openModal, setOpenModal] = useState(false);
@@ -49,14 +57,16 @@ const WallLayout = props => {
 
     return (
         <div>
-            <Box marginBottom="2rem" display="flex">
-                <Box className={classes.headerText}>
-                    <Typography variant="h3">Wall</Typography>
+            {!isPublic && (
+                <Box marginBottom="2rem" display="flex">
+                    <Box className={classes.headerText}>
+                        <Typography variant="h3">Wall</Typography>
+                    </Box>
+                    <Box>
+                        <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add Note</Button>
+                    </Box>
                 </Box>
-                <Box>
-                    <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add Note</Button>
-                </Box>
-            </Box>
+            )}
 
             {!notes ? (
                 <Skeleton variant="rect" height={150} animation="wave"/>
@@ -84,6 +94,7 @@ const WallLayout = props => {
                                 dedication={note.dedication}
                                 userData={note.user}
                                 urlQuery={noteUrl}
+                                isPublic={isPublic}
                             />
                         </Grid>
 

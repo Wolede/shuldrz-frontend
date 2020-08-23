@@ -7,6 +7,7 @@ const useStyles = makeStyles(theme => ({
         padding: '1.5rem',
         borderRadius: '1.875rem',
         width: '100%',
+        height: '100%',
         '& a':{
             color: theme.palette.primary.contrastText,
         }

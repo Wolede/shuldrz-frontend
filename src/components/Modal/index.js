@@ -4,6 +4,7 @@ import { Modal as MuiModal, Container, Box } from '@material-ui/core'
 import { useStyles } from './style'
 import Paper from 'components/Paper'
 import AddJournalForm from '../Forms/AddJournalForm'
+import AddNoteForm from '../Forms/AddNoteForm'
 import ReviewForm from '../Forms/ReviewForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
@@ -65,6 +66,20 @@ const Modal = props => {
                     (
                         <Paper padding="1.5rem">
                             <ScheduleForm onClose={handleClose} formProps={formProps}/>
+                        </Paper>
+                    )
+                }
+                { view === "share" &&
+                    (
+                        <Paper padding="1.5rem">
+                            
+                        </Paper>
+                    )
+                }
+                { view === "writeNote" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddNoteForm onClose={handleClose} />
                         </Paper>
                     )
                 }

@@ -10,7 +10,7 @@ const Wall = () => {
                 <title>Shuldrz | Wall</title>
             </Head>
             <AppLayout>
-                <WallLayout public={false} />
+                <WallLayout isPublic={false} />
             </AppLayout>
         </div>
     )

@@ -17,7 +17,7 @@ const Login = () => {
     }, [])
 
     return (
-        <div>
+        <div id='hero-front'>
             <Head>
                 <title>Shuldrz | Login</title>
             </Head>

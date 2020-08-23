@@ -65,7 +65,7 @@ const AddJournalForm = props => {
                                 <TextField 
                                     name="snippetNote" 
                                     id="snippetNote" 
-                                    label="..How has this individual helped you?"
+                                    label="..What's on your mind today?"
                                     { ...getFieldProps('snippetNote')}
                                     variant="outlined"
                                     multiline

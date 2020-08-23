@@ -6,6 +6,7 @@ import Chip from 'components/Chip'
 import Link from 'next/link'
 import { useStyles } from './style';
 import Modal from 'components/Modal'
+import Button from 'components/Button'
 
 const WallNote = props => {
     const classes = useStyles(props)
@@ -20,7 +21,8 @@ const WallNote = props => {
         color,
         dedication,
         urlQuery,
-        modalIsOpen
+        modalIsOpen,
+        isPublic
     } = props
 
     const [openModal, setOpenModal] = useState(urlQuery === id);
@@ -67,7 +69,7 @@ const WallNote = props => {
 
             
             <Box marginBottom='1rem' display='flex'>
-                <Link href={`/app/users/${userData.username}`}>
+                <Link href={isPublic ? '/login' : `/app/users/${userData.username}`}>
                 <a style={{textDecoration:'none'}}>
                     <Box display='flex' alignItems='center'>
                         <Box marginRight='1rem'>
@@ -85,9 +87,9 @@ const WallNote = props => {
                 </Link>
                 <Box flexGrow='1'></Box>
             </Box>
-            <Typography variant='h4' gutterBottom>
+            <Typography variant='h5' gutterBottom>
                 {title}
-                {dedication}
+                {/* {dedication} */}
             </Typography>
             {modalIsOpen ? (
                 <Typography variant='body1' gutterBottom>{note}</Typography>
@@ -105,6 +107,8 @@ const WallNote = props => {
             )}
             <Box marginTop=".5rem">
                 <Chip label={hearts ? hearts.toString() : '0'} heart color="paper"/>
+                    {/* <Chip label={'Share'} color="paper"/> */}
+                    <Button variant='outlined' size="tiny">Share</Button>
             </Box>
             <Box marginTop=".5rem">
                 <Typography variant='body2' color="textSecondary">
@@ -126,6 +130,7 @@ const WallNote = props => {
                         color,
                         date,
                         dedication,
+                        isPublic,
                     }}
                     />
                 )
