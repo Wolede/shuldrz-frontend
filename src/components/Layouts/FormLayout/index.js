@@ -10,7 +10,7 @@ const FormLayout = props => {
     const classes = useStyles(props)
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} id='hero-front'>
             <Grid
                 className={classes.grid}
                 container

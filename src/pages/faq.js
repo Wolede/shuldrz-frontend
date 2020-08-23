@@ -13,7 +13,7 @@ const Faq = ({faq}) => {
                 <title>Shuldrz | Frequently Asked Questions</title>
             </Head>
             <MainLayout withFooter>
-                <Box paddingTop='9.25rem'>
+                <Box id='hero-front' paddingTop='9.25rem'>
                     <FAQ faqPage faqs={faq.qAndA}/>  
                 </Box>
                 <JoinBoxes/>

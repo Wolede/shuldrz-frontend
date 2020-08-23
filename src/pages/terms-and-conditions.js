@@ -13,7 +13,7 @@ const TermsAndConditions = ({tAndC}) => {
         <title>Shuldrz | Terms and Conditions</title>
       </Head>
       <MainLayout withFooter>
-        <Box paddingTop='9.25rem'>
+        <Box id='hero-front' paddingTop='9.25rem'>
             <TandC terms={tAndC}/>
         </Box>
         <JoinBoxes/>
