@@ -457,33 +457,35 @@ const ProfileForm = ({ user }) => {
                         </Box>
 
 
-                        <Box>
-                            <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
-                                Charity
-                            </Typography>
-                            
-                            <Typography variant="body1" style={{ marginBottom: '1rem' }}>
-                                Select one of the charities we support. All your volunteer efforts will go to them.
-                            </Typography>
+                        {userType === 'Volunteer' && (
+                            <Box>
+                                <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
+                                    Charity
+                                </Typography>
+                                
+                                <Typography variant="body1" style={{ marginBottom: '1rem' }}>
+                                    Select one of the charities we support. All your volunteer efforts will go to them.
+                                </Typography>
 
-                            <div className={classes.fieldWrapper}>
-                                <FormControl variant="outlined" className={classes.formControl}>
-                                    <InputLabel id="charityLabel">Charity</InputLabel>
-                                    <Select
-                                    labelId="charityLabel"
-                                    id="charity"
-                                    { ...getFieldProps('charity')}
-                                    label="Charity"
-                                    >
-                                        {/* <MenuItem value={'none'}>No Charity</MenuItem> */}
-                                    {formOptions?.charities?.map((value, key) => (
-                                        <MenuItem key={key} value={value.id}>{value.name}</MenuItem>
-                                    ))}
-                                    </Select>
-                                </FormControl>
+                                <div className={classes.fieldWrapper}>
+                                    <FormControl variant="outlined" className={classes.formControl}>
+                                        <InputLabel id="charityLabel">Charity</InputLabel>
+                                        <Select
+                                        labelId="charityLabel"
+                                        id="charity"
+                                        { ...getFieldProps('charity')}
+                                        label="Charity"
+                                        >
+                                            {/* <MenuItem value={'none'}>No Charity</MenuItem> */}
+                                        {formOptions?.charities?.map((value, key) => (
+                                            <MenuItem key={key} value={value.id}>{value.name}</MenuItem>
+                                        ))}
+                                        </Select>
+                                    </FormControl>
 
-                            </div>
-                        </Box>
+                                </div>
+                            </Box>
+                        )}
 
 
                         <Box>

@@ -8,10 +8,11 @@ import ReviewForm from '../Forms/ReviewForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
+import WallNote from '../WallNote'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote } = props
 
     return (
         <MuiModal
@@ -67,6 +68,25 @@ const Modal = props => {
                         </Paper>
                     )
                 }
+                { view === "viewNote" &&
+                    (
+                        <div>
+                            <WallNote 
+                                modalIsOpen={true}
+                                id={viewNote.id}
+                                title={viewNote.title}
+                                note={viewNote.note}
+                                hearts={viewNote.hearts}
+                                color={viewNote.color}
+                                link={viewNote.link}
+                                date={viewNote.date}
+                                dedication={viewNote.dedication}
+                                userData={viewNote.userData}
+                                urlQuery={false}
+                            />
+                        </div>
+                    )
+                }
                 </Box>
             </Container>
         </MuiModal>
@@ -80,6 +100,7 @@ Modal.propTypes = {
     view: PropTypes.string,
     embedUrl: PropTypes.string,
     user: PropTypes.object,
+    viewNote: PropTypes.object,
 }
 
 export default Modal

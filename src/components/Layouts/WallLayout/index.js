@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 import { Box, Typography, Grid } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import Button from 'components/Button'
@@ -15,6 +16,9 @@ import WallNote from '../../WallNote'
 const WallLayout = props => {
     const classes = useStyles()
     const { user, loading } = useAuth()
+    const router = useRouter()
+    const noteUrl = router.query.note
+    console.log('url', noteUrl);
 
     const [notes, setNotes] = useState(false);
 
@@ -70,13 +74,16 @@ const WallLayout = props => {
                             key={key}
                         >
                             <WallNote 
+                                id={note.id}
                                 title={note.title}
                                 note={note.note}
                                 hearts={note.hearts}
                                 color={note.color}
                                 link={note.link}
-                                date={note.createdAt}
+                                date={moment(note.createdAt).calendar()}
                                 dedication={note.dedication}
+                                userData={note.user}
+                                urlQuery={noteUrl}
                             />
                         </Grid>
 
