@@ -56,11 +56,19 @@ const WallNote = props => {
         }
     }
 
+    const truncateWithoutMarkup = (string, maxLength) => {
+        if (string.length > maxLength) {
+            return `${string.substring(0, maxLength)}...`
+        } else {
+            return string;
+        }
+    }
+
     const webShare = () => {
         if(navigator.share) {
             navigator.share({
                 title: `${title}`,
-                text: `${truncate(note, 100)}`,
+                text: `${title} -> ${truncateWithoutMarkup(note, 150)}`,
                 url: `https://shuldrz-frontend.now.sh/wall?note=${id}`,
             })
         } else {
@@ -128,7 +136,7 @@ const WallNote = props => {
                     <Button variant='outlined' size="tiny" onClick={webShare}>Share</Button>
             </Box>
             <Box marginTop=".5rem">
-                <Typography variant='body2' color="textSecondary">
+                <Typography variant='caption'>
                     {date}
                 </Typography>
             </Box>
