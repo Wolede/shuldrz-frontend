@@ -15,7 +15,7 @@ const ProfileCard = (props) => {
     const classes = useStyles()
     const { user } = useAuth();
 
-    const { username, email, profileImage, occupation, experience, heart, ranking, id, userType } = props
+    const { username, email, profileImage, occupation, experience, heart, ranking, id, userType, firstName, lastName } = props
 
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
 
@@ -27,7 +27,13 @@ const ProfileCard = (props) => {
         setSelectedUser({
             id,
             username,
-            profileImage,                    
+            profileImage,
+            firstName,
+            lastName,
+            occupation,
+            ranking,
+            heart,
+            experience                   
         })
         router.push('/app/sessions')
     }

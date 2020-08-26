@@ -17,18 +17,18 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
 
     //this ensures that a user is always selected to chat with
-    useEffect(() => {
-        const modChats = chats?.reduce((acc, curr) => {
-                                    acc.push(...curr.usersDetails)
-                                    return acc
-                                } , [])
-                                .filter(item => item.userId !== user.id)
+    // useEffect(() => {
+    //     const modChats = chats?.reduce((acc, curr) => {
+    //                                 acc.push(...curr.usersDetails)
+    //                                 return acc
+    //                             } , [])
+    //                             .filter(item => item.userId !== user.id)
 
-        const desiredIndex = modChats.findIndex(chat => chat?.userId === selectedUser?.id);
+    //     const desiredIndex = modChats.findIndex(chat => chat?.userId === selectedUser?.id);
 
-        selectedUser && chats.length > 0 ? selectChat(desiredIndex) : selectChat(0);
+    //     selectedUser && chats.length > 0 ? selectChat(desiredIndex) : selectChat(0);
 
-    }, [])
+    // }, [])
 
 
     const classes = useStyles()
@@ -45,6 +45,8 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
 
     const selectChat = (index) => selectChatFn(index);
+
+    console.log('chatListChats', chats)
 
     //we need to dicuss the changes made here
     if ( chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username)) {        
