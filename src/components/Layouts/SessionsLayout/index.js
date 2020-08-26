@@ -77,11 +77,9 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-        if (user !== null || undefined) {  
+        if (user) {  
             const userImage = user.profileImage ? user.profileImage.url : null
                    
-                   
-
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
@@ -90,16 +88,24 @@ const Sessions = (props) => {
                 })
                 setChats(firebase_chats)     
             })       
-            
+
         }
 
-        if (selectedUser) {                  
-            submitNewChat()                        
-        }       
-
-        
-        
     }, [user]);
+
+    //call submitNewChat only when the chats array is not empty anymore
+    useEffect(() => {
+
+        if( !selectedUser ){
+            setChatReceiverID(chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId)
+        }
+
+        console.log('present chat', chats)
+        if (selectedUser && chats.length) {                  
+            submitNewChat()                        
+        }
+
+    }, [chats.length])
 
     // useEffect(()=> {
     //     let messaging 
@@ -113,9 +119,7 @@ const Sessions = (props) => {
     //     }
     // })
 
-
-
-   
+   console.log('chats', chats, selectedUser)
     
 
     const selectChat = (chatIndex) => {  
@@ -133,6 +137,17 @@ const Sessions = (props) => {
     // useEffect(() => {
     //     messageRead()
     // }, [selectedChat])
+    
+    // useEffect(() => {
+    //     if( !selectedUser ){
+    //         setChatReceiverID(chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId)
+    //     }
+
+    //     // if(selectedUser) {
+    //     //     setChatReceiverID(selectedUser.id)
+    //     // }
+        
+    // }, [chats.length])
 
 
     useEffect(() => {
@@ -304,7 +319,16 @@ const Sessions = (props) => {
         if (userExist) {
             const chatExist = await chatExists();
 
-            if(chatExist && chats[selectedChat]?.messages?.length > 1){              
+            console.log('we here', chatExist, 
+                                    userExist, 
+                                    selectedChat,
+                                    chats[selectedChat]?.messages?.length > 1, 
+                                    chats.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id)),
+                                    selectedUser,
+                                    chats[0].usersDetails.some(_user => _user.userId === selectedUser.id)
+            )
+
+            if(chatExist && chats.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){              
                 setChatExist(true)
                 goToChat(tempDocKey())
             } else {
@@ -386,7 +410,7 @@ const Sessions = (props) => {
          });
     }
 
-    
+    console.log('selectedUser', selectedUser, chats)
 
     // <!-- new chat -->
   

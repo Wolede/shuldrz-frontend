@@ -19,7 +19,10 @@ const ProfileCard = (props) => {
 
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
 
+    const [messageDisabled, setMessageDisabled] = React.useState(false)
+
     const handleMessageUser =  async (e) => {
+        await setMessageDisabled(true);
         
         setSelectedUser({
             id,
@@ -53,7 +56,7 @@ const ProfileCard = (props) => {
                 <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
                     {user.username !== username && (
                     <div>
-                        <Button variant="contained" size="small" color="primary" onClick={handleMessageUser}>message</Button>
+                        <Button variant="contained" size="small" color="primary" onClick={handleMessageUser} disabled={messageDisabled} loading={messageDisabled}>message</Button>
                     </div>
 
                     )}

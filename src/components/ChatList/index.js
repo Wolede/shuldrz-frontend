@@ -46,8 +46,8 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     const selectChat = (index) => selectChatFn(index);
 
-    
-    if ( chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender !== user.username)) {        
+    //we need to dicuss the changes made here
+    if ( chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username)) {        
         
         return (
             chats.map((chat, i) => {
