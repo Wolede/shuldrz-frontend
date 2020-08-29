@@ -14,7 +14,7 @@ import Share from '../Share'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl } = props
 
     return (
         <MuiModal
@@ -80,7 +80,7 @@ const Modal = props => {
                 { view === "writeNote" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddNoteForm onClose={handleClose} />
+                            <AddNoteForm onClose={handleClose} triggerUrl={triggerUrl}/>
                         </Paper>
                     )
                 }
@@ -95,10 +95,13 @@ const Modal = props => {
                                 hearts={viewNote.hearts}
                                 color={viewNote.color}
                                 link={viewNote.link}
+                                usersLiked={viewNote.usersLiked}
                                 date={viewNote.date}
                                 dedication={viewNote.dedication}
                                 userData={viewNote.userData}
                                 urlQuery={false}
+                                isPublic={viewNote.isPublic}
+                                triggerUrl={viewNote.triggerUrl}
                             />
                         </div>
                     )

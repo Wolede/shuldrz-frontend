@@ -48,7 +48,7 @@ const AddNoteForm = props => {
             })
             
             console.log('let see', res);
-            trigger(`/wall-notes?_sort=createdAt:desc`, api.get)
+            trigger(props.triggerUrl, api.get)
             props.onClose()
             
         } catch (error) {
