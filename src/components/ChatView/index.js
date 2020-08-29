@@ -176,9 +176,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                             size="tiny" variant='rounded' />
                                     }
                                     onClick={handleRightSidebarOpen}
+                                    disabled={ !selectedUser }
                                 >
                                     More
-                    </MuiButton>
+                                </MuiButton>
 
                             </Box>
                             <div className={classes.headerButtons}>
