@@ -143,6 +143,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     prevReview={prevReview}
                                     chatProfile={selectedUser}
                                     closeChatProfile={handleRightSidebarClose}
+                                    view="singleChat"
                                 />
                             </MiniDrawer>
                         }

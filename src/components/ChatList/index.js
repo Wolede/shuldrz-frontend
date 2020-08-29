@@ -59,17 +59,16 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
     return (
         <>
         <Box margin="1rem 1rem 1rem 1rem" display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h5">
-                            Sessions
-                        </Typography>
-                        <Fab color="primary" aria-label="new-session" size="small" onClick={handleOpen}>
-                            <ChatIcon fontSize="small" />
-                        </Fab>
+            <Typography variant="h5">
+                Sessions
+            </Typography>
+            <Fab color="primary" aria-label="new-session" size="small" onClick={handleOpen}>
+                <ChatIcon fontSize="small" />
+            </Fab>
         </Box>
         { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username) ? (
             chats.map((chat, i) => (
                 <>
-                    
                     {
                         // chat.receiverHasRead === false && !userIsSender(chat) ?
                         // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
