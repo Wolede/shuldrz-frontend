@@ -67,8 +67,6 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
     }
 
-    console.log('chatList', chat.messages.length)
-
     useEffect(() => {
         const container = document.getElementById('chatview-container');
         if (container && !anchorEl)
