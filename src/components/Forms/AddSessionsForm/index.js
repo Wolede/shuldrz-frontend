@@ -132,6 +132,7 @@ const AddSessionsForm = ({onClose}) => {
                                 variant="contained" 
                                 color="primary" 
                                 type="submit"
+                                size="small"
                                 disabled={isSubmitting}
                                 loading={isSubmitting}
                                 >
