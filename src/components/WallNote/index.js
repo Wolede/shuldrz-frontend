@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { Box, Typography, ButtonBase } from '@material-ui/core'
 import Avatar from 'components/Avatar'
@@ -9,6 +9,7 @@ import api from 'services/Api'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import BoxMenu from 'components/BoxMenu'
 import { trigger } from 'swr'
 import useAuth from 'contexts/Auth'
@@ -24,6 +25,7 @@ const WallNote = props => {
         hearts,
         userData,
         link,
+        usersLiked,
         date,
         color,
         dedication,
@@ -50,6 +52,64 @@ const WallNote = props => {
     const handleClose = () => {
         setOpenModal(false);
     };
+
+    // Like/Heart functions
+    const [likes, setLikes] = useState({
+        userHasLiked: false,
+        count: usersLiked.length,
+        loading: true
+    });
+
+    const like = async () => {
+        console.log('like');
+        setLikes({...likes, loading: true})
+        try {
+            const res = await api.put(`wall-notes/${id}`, {
+                usersLiked: [
+                    ...usersLiked,
+                    user.id
+                ]
+            })
+            setLikes({
+                userHasLiked: true,
+                count: usersLiked.length + 1,
+                loading: false
+            })
+
+        } catch (error){}
+    }
+
+    const unlike = async () => {
+        console.log('unlike');
+        setLikes({...likes, loading: true})
+        const newUsersLiked = usersLiked.filter(item => item.id !== user.id)
+        
+        try {
+            const res = await api.put(`wall-notes/${id}`, {
+                usersLiked : newUsersLiked
+            })
+            setLikes({
+                userHasLiked: false,
+                count: newUsersLiked.length,
+                loading: false
+            })
+
+        } catch (error){}
+    }
+
+    const getLikeStatus = () => {
+        if(!isPublic) {
+            setLikes({
+                userHasLiked: usersLiked.some((curr) => curr.username === user.username),
+                count: usersLiked.length
+            })
+        }
+    }
+
+    useEffect(() => {
+        getLikeStatus()
+    }, [])
+
 
     // Menu Functions
     const [anchorEl, setAnchorEl] = useState(null);
@@ -141,7 +201,7 @@ const WallNote = props => {
                 </a>
                 </Link>
                 <Box flexGrow='1' display="flex" justifyContent="flex-end">
-                    {userData.username === user.username && (
+                    {!isPublic && userData.username === user.username && (
                         <div className={classes.iconButtons}>
                             <BoxMenu
                                 className={classes.iconButton} 
@@ -174,7 +234,37 @@ const WallNote = props => {
                 </a>
             )}
             <Box marginTop="auto" className={classes.buttons}>
-                <Button variant='contained' size="small" color="paper" startIcon={<FavoriteIcon style={{ color: 'FD4659' }}/>}>{hearts ? hearts : '0'}</Button>
+                {isPublic ? (
+                    <Link href={'/login'}>
+                    <a style={{textDecoration:'none'}}>
+                        <Button 
+                            variant='contained' 
+                            size="small" 
+                            color="paper" 
+                            startIcon={
+                                <FavoriteBorderOutlinedIcon/>
+                            }
+                        >
+                            {likes.count}
+                        </Button>
+                    </a>
+                    </Link>
+                ) : (
+                    <Button 
+                        variant='contained' 
+                        size="small" 
+                        color="paper" 
+                        startIcon={likes.userHasLiked ? 
+                            <FavoriteIcon style={{ color: 'FD4659' }}/> :
+                            <FavoriteBorderOutlinedIcon/>
+                        }
+                        loading={likes.loading}
+                        onClick={likes.userHasLiked ? unlike : like}
+                    >
+                        {likes.count}
+                    </Button>
+                )}
+
                 <Button variant='outlined' size="small" onClick={webShare}>Share</Button>
             </Box>
             <Box marginTop=".5rem">
@@ -203,10 +293,12 @@ const WallNote = props => {
                         hearts,
                         userData,
                         link,
+                        usersLiked,
                         color,
                         date,
                         dedication,
                         isPublic,
+                        triggerUrl
                     }}
                     />
                 )

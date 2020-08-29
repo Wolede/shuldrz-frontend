@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     },
     buttons: {
         '& button': {
-            margin: '1rem .5rem 0 0',
+            margin: '1.5rem .5rem 0 0',
         }
     },
     iconButtons: {

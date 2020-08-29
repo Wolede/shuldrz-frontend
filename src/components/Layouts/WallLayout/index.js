@@ -49,7 +49,7 @@ const WallLayout = ({isPublic}) => {
 
     const handleSwitchChange = (event) => {
         if (event.target.checked) {
-            setRequestUrl(`wall-notes?user.id=${event.target.name}&_sort=createdAt:desc`)
+            setRequestUrl(`wall-notes?user=${event.target.name}&_sort=createdAt:desc`)
         } else {
             setRequestUrl(`wall-notes?_sort=createdAt:desc`)
         }
@@ -117,6 +117,7 @@ const WallLayout = ({isPublic}) => {
                                 hearts={note.hearts}
                                 color={note.color}
                                 link={note.link}
+                                usersLiked={note.usersLiked}
                                 date={moment(note.createdAt).calendar()}
                                 dedication={note.dedication}
                                 userData={note.user}

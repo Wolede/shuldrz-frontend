@@ -47,6 +47,8 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     type: PropTypes.string,
+    startIcon: PropTypes.any,
+    endIcon: PropTypes.any,
     loading: PropTypes.bool,
     marginTop: PropTypes.string,
     marginBottom: PropTypes.string,
