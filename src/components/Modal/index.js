@@ -11,6 +11,7 @@ import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
 import WallNote from '../WallNote'
 import Share from '../Share'
+import AddSessionsForm from '../Forms/AddSessionsForm'
 
 const Modal = props => {
     const classes = useStyles()
@@ -60,6 +61,14 @@ const Modal = props => {
                     (
                         <Paper padding="1.5rem">
                             <AddTopicsForm onClose={handleClose} getSuggestedBuddies={callback}/>
+                        </Paper>
+                    )
+                }
+
+                { view === "addSessions" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddSessionsForm onClose={handleClose} />
                         </Paper>
                     )
                 }

@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
-import { Grid, Typography, Badge, Box } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { Grid, Typography, Badge, Box, Fab } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import Avatar from 'components/Avatar'
 import Paper from 'components/Paper'
+import Modal from 'components/Modal'
 import Link from 'next/link'
 import Notification from 'components/Notification'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import NotificationImportant from '@material-ui/icons/NotificationImportant';
 import Button from 'components/Button'
+import ChatIcon from '@material-ui/icons/Chat';
 import { useStyles } from './styles'
 
 
@@ -34,9 +36,15 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
     const classes = useStyles()
 
 
-    const badgeHandler = () => {
+    // open add sessions modal
+    const [openModal, setOpenModal] = useState(false);
+    const handleOpen = () => {
+        setOpenModal(true);
+    };
 
-    }
+    const handleClose = () => {
+        setOpenModal(false);
+    };
 
     const userIsSender = (chat) => {        
         chat.messages[chat.messages.length - 1].sender === user.email
@@ -57,6 +65,14 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                 return (
 
                     <>
+                        <Box margin="1rem 1rem 1rem 1rem" display="flex" justifyContent="space-between" alignItems="center">
+                            <Typography variant="h5">
+                                Sessions
+                            </Typography>
+                            <Fab color="primary" aria-label="new-session" size="small" onClick={handleOpen}>
+                                <ChatIcon fontSize="small" />
+                            </Fab>
+                        </Box>
                         {
                             // chat.receiverHasRead === false && !userIsSender(chat) ?
                             // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
@@ -195,6 +211,13 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                             )             
                         }        
                         
+                        {/* Load Custom Modal COmponent */}
+                        {openModal === true &&
+                            (
+                                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
+                            )
+                        }
+
                     </>
 
 
