@@ -56,62 +56,49 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     console.log('chatListChats', chats)
 
-    //we need to dicuss the changes made here
-    if ( chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username)) {        
-        
-        return (
-            chats.map((chat, i) => {
+    return (
+        <>
+        <Box margin="1rem 1rem 1rem 1rem" display="flex" justifyContent="space-between" alignItems="center">
+                        <Typography variant="h5">
+                            Sessions
+                        </Typography>
+                        <Fab color="primary" aria-label="new-session" size="small" onClick={handleOpen}>
+                            <ChatIcon fontSize="small" />
+                        </Fab>
+        </Box>
+        { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username) ? (
+            chats.map((chat, i) => (
+                <>
+                    
+                    {
+                        // chat.receiverHasRead === false && !userIsSender(chat) ?
+                        // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
+                        chat.messages[0].sender === user.username ? (
 
-                return (
+                            <div onClick={closeChatList}>
 
-                    <>
-                        <Box margin="1rem 1rem 1rem 1rem" display="flex" justifyContent="space-between" alignItems="center">
-                            <Typography variant="h5">
-                                Sessions
-                            </Typography>
-                            <Fab color="primary" aria-label="new-session" size="small" onClick={handleOpen}>
-                                <ChatIcon fontSize="small" />
-                            </Fab>
-                        </Box>
-                        {
-                            // chat.receiverHasRead === false && !userIsSender(chat) ?
-                            // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
-                            chat.messages[0].sender === user.username ? (
-
-                                <div onClick={closeChatList}>
-
-                                    <Grid
-                                        key={i}
-                                        onClick={() => selectChat(i)}
-                                        container
-                                        direction="row"
-                                        justify="center"
-                                        alignItems="center"
-                                        className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
-                                    >
-                                        {
-                                            chat.receiverHasRead === false && !userIsSender(chat)
-                                                ?
-                                                <Badge
-                                                    color="error"
-                                                    variant="dot"
-                                                    invisible={false}
-                                                    overlap='Avatar'
-                                                    anchorOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'left',
-                                                    }}
-                                                >
-                                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                        src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                            ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                            chat.users.filter(_user => _user !== user.username)[0]}
-                                                        size="small"
-                                                        variant='rounded'
-                                                    />
-                                                </Badge>
-                                                :
-
+                                <Grid
+                                    key={i}
+                                    onClick={() => selectChat(i)}
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center"
+                                    className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
+                                >
+                                    {
+                                        chat.receiverHasRead === false && !userIsSender(chat)
+                                            ?
+                                            <Badge
+                                                color="error"
+                                                variant="dot"
+                                                invisible={false}
+                                                overlap='Avatar'
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'left',
+                                                }}
+                                            >
                                                 <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
                                                     src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
                                                         ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
@@ -119,61 +106,61 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                                     size="small"
                                                     variant='rounded'
                                                 />
-                                        }
+                                            </Badge>
+                                            :
 
-                                        <Grid
-                                            container
-                                            direction="column"
-                                            className={classes.typography}
-                                        >
+                                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
+                                                src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
+                                                    ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
+                                                    chat.users.filter(_user => _user !== user.username)[0]}
+                                                size="small"
+                                                variant='rounded'
+                                            />
+                                    }
 
-                                            <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>
-                                            <Typography variant="body2">
-                                                        {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
-                                                            chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
-                                                         :
-                                                         null
-                                                        )}
-                                            </Typography>
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        className={classes.typography}
+                                    >
 
-                                        </Grid>
+                                        <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>
+                                        <Typography variant="body2">
+                                                    {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
+                                                        chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
+                                                        :
+                                                        null
+                                                    )}
+                                        </Typography>
+
                                     </Grid>
-                                </div>
+                                </Grid>
+                            </div>
 
-                            ) : (  chat.messages.length > 1 ? 
-                                <div onClick={closeChatList}>
-                                    <Grid
-                                        key={i}
-                                        onClick={() => selectChat(i)}
-                                        container
-                                        direction="row"
-                                        justify="center"
-                                        alignItems="center"
-                                        className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
-                                    >
-                                        {
-                                            chat.receiverHasRead === false && !userIsSender(chat)
-                                                ?
-                                                <Badge
-                                                    color="error"
-                                                    variant="dot"
-                                                    invisible={false}
-                                                    overlap='Avatar'
-                                                    anchorOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'left',
-                                                    }}
-                                                >
-                                                    <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                        src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                            ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                            chat.users.filter(_user => _user !== user.username)[0]}
-                                                        size="small"
-                                                        variant='rounded'
-                                                    />
-                                                </Badge>
-                                                :
-
+                        ) : (  chat.messages.length > 1 ? 
+                            <div onClick={closeChatList}>
+                                <Grid
+                                    key={i}
+                                    onClick={() => selectChat(i)}
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center"
+                                    className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
+                                >
+                                    {
+                                        chat.receiverHasRead === false && !userIsSender(chat)
+                                            ?
+                                            <Badge
+                                                color="error"
+                                                variant="dot"
+                                                invisible={false}
+                                                overlap='Avatar'
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'left',
+                                                }}
+                                            >
                                                 <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
                                                     src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
                                                         ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
@@ -181,83 +168,90 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                                     size="small"
                                                     variant='rounded'
                                                 />
-                                        }
+                                            </Badge>
+                                            :
 
-                                        <Grid
-                                            container
-                                            direction="column"
-                                            className={classes.typography}
-                                        >
+                                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
+                                                src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
+                                                    ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
+                                                    chat.users.filter(_user => _user !== user.username)[0]}
+                                                size="small"
+                                                variant='rounded'
+                                            />
+                                    }
 
-                                            <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>                    
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        className={classes.typography}
+                                    >
+
+                                        <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>                    
+                                        
+                                        <Typography variant="body2">
+                                        {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
+                                            chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
+                                            :( 
+                                            chat.messages[chat.messages.length - 1].sender == user.username ? 'You ended the session' : `${chat.messages[chat.messages.length - 1].sender} ended the session`)
+                                        )}
+                                        </Typography>
+                                                
+                                        
+                                        
+
+                                    </Grid>
+                                </Grid>                         
+                                </div>       
+                            : 
+                            null
                                             
-                                            <Typography variant="body2">
-                                            {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
-                                                chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
-                                                :( 
-                                                chat.messages[chat.messages.length - 1].sender == user.username ? 'You ended the session' : `${chat.messages[chat.messages.length - 1].sender} ended the session`)
-                                            )}
-                                            </Typography>
-                                                    
-                                            
-                                            
+                        )             
+                    }        
+                    
+                    {/* Load Custom Modal COmponent */}
+                    {openModal === true &&
+                        (
+                            <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
+                        )
+                    }
 
-                                        </Grid>
-                                    </Grid>                         
-                                    </div>       
-                                : 
-                                null
-                                              
-                            )             
-                        }        
-                        
-                        {/* Load Custom Modal COmponent */}
-                        {openModal === true &&
-                            (
-                                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
-                            )
-                        }
+                </>
+            ))
 
-                    </>
-
-
-                )
-            })
-
-        )
-    } else {
-        
-        return (
-        <div style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "inherit"
-        }}
-        >
-            {
-                user?.userType === 'Guest' ? (
-                    <Typography align="center" variant="body1"> You currently do not have any message</Typography>
-                ) : (
-                        <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
-                    )
-            }
-
-            <Link href="/app/buddies">
-                <a style={{ textDecoration: 'none' }}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                    >
-                        Go to Buddies page
-                    </Button>
-                </a>
-            </Link>
-        </div>
-    )}
+        ) : (
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                alignItems: "center",
+                height: "inherit"
+            }}
+            >
+                {
+                    user?.userType === 'Guest' ? (
+                        <Typography align="center" variant="body1"> You currently do not have any message</Typography>
+                    ) : (
+                            <Typography align="center" variant="body1"> You currently do not have messages from guests</Typography>
+                        )
+                }
     
+                <Link href="/app/buddies">
+                    <a style={{ textDecoration: 'none' }}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                        >
+                            Go to Buddies page
+                        </Button>
+                    </a>
+                </Link>
+            </div>
+        )
+
+        }
+        </>
+    )
     
 }
 
