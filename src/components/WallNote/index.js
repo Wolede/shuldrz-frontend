@@ -5,11 +5,18 @@ import Avatar from 'components/Avatar'
 import Chip from 'components/Chip'
 import Link from 'next/link'
 import { useStyles } from './style';
+import api from 'services/Api'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import BoxMenu from 'components/BoxMenu'
+import { trigger } from 'swr'
+import useAuth from 'contexts/Auth'
 
 const WallNote = props => {
     const classes = useStyles(props)
+    const { user } = useAuth();
+
     const {
         id,
         title,
@@ -22,8 +29,11 @@ const WallNote = props => {
         dedication,
         urlQuery,
         modalIsOpen,
-        isPublic
+        isPublic,
+        triggerUrl
     } = props
+
+    // Modal Functions
 
     const [openModal, setOpenModal] = useState(urlQuery === id);
     const [openShareModal, setOpenShareModal] = useState(false);
@@ -41,6 +51,26 @@ const WallNote = props => {
         setOpenModal(false);
     };
 
+    // Menu Functions
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const deleteNote = async () => {
+        try {
+            const res = await api.delete(`wall-notes/${id}`)
+            trigger(triggerUrl, api.get)
+            handleMenuClose()
+        } catch (error){}
+    }
+
+    //Truncate functions
     const truncate = (string, maxLength) => {
         if (string.length > maxLength) {
             return (
@@ -93,7 +123,7 @@ const WallNote = props => {
         <Box className={classes.root}>
 
             
-            <Box marginBottom='1rem' display='flex'>
+            <Box marginBottom='1.5rem' display='flex'>
                 <Link href={isPublic ? '/login' : `/app/users/${userData.username}`}>
                 <a style={{textDecoration:'none'}}>
                     <Box display='flex' alignItems='center'>
@@ -110,11 +140,24 @@ const WallNote = props => {
                     </Box>
                 </a>
                 </Link>
-                <Box flexGrow='1'></Box>
+                <Box flexGrow='1' display="flex" justifyContent="flex-end">
+                    {userData.username === user.username && (
+                        <div className={classes.iconButtons}>
+                            <BoxMenu
+                                className={classes.iconButton} 
+                                id={id} 
+                                deleteNote={deleteNote}
+                                anchorEl={anchorEl}
+                                handleClick={handleMenuClick}
+                                handleClose={handleMenuClose}
+                                view="wallNote"
+                            />
+                        </div>
+                    )}
+                </Box>
             </Box>
             <Typography variant='h5' gutterBottom>
                 {title}
-                {/* {dedication} */}
             </Typography>
             {modalIsOpen ? (
                 <Typography variant='body1' gutterBottom>{note}</Typography>
@@ -130,16 +173,24 @@ const WallNote = props => {
                     </Typography>
                 </a>
             )}
-            <Box marginTop=".5rem">
-                <Chip label={hearts ? hearts.toString() : '0'} heart color="paper"/>
-                    {/* <Chip label={'Share'} color="paper"/> */}
-                    <Button variant='outlined' size="tiny" onClick={webShare}>Share</Button>
+            <Box marginTop="auto" className={classes.buttons}>
+                <Button variant='contained' size="small" color="paper" startIcon={<FavoriteIcon style={{ color: 'FD4659' }}/>}>{hearts ? hearts : '0'}</Button>
+                <Button variant='outlined' size="small" onClick={webShare}>Share</Button>
             </Box>
             <Box marginTop=".5rem">
                 <Typography variant='caption'>
                     {date}
                 </Typography>
             </Box>
+
+            {/* Dedication Badge  */}
+            {dedication && (
+                <div className={classes.dedicationBadge}>
+                    <Typography variant="caption">
+                        Dedication
+                    </Typography>
+                </div>
+            )}
 
             {/* Load Custom Modal COmponent */}
             {openModal === true &&

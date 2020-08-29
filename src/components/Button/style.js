@@ -89,6 +89,15 @@ const colorPicker = (color, theme) => {
                 boxShadowHover: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
                 boxShadowActive: `0px 30px 60px rgba(237, 123, 132, 0.20)`,
             }
+        case 'paper':
+            return {
+                mainColor: theme.palette.background.paper,
+                darkColor: theme.palette.background.default,
+                textColor: theme.palette.secondary.main,
+                boxShadow: `0px 30px 60px rgba(63, 49, 107, 0.20)`,
+                boxShadowHover: `0px 30px 60px rgba(63, 49, 107, 0.50)`,
+                boxShadowActive: `0px 30px 60px rgba(63, 49, 107, 0.60)`,
+            }
         default:
             return {
                 mainColor: null,

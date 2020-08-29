@@ -122,6 +122,7 @@ const WallLayout = ({isPublic}) => {
                                 userData={note.user}
                                 urlQuery={noteUrl}
                                 isPublic={isPublic}
+                                triggerUrl={requestUrl}
                             />
                         </Grid>
 
