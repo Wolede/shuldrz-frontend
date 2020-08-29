@@ -54,7 +54,7 @@ const LeftSidebar = props => {
        {
         title: 'Wall',
         href: '/app/wall',
-        icon: <Home />
+        icon: <Grid />
        },
        {
         title: 'Buddies',

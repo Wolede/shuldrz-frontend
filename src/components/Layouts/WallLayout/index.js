@@ -134,7 +134,7 @@ const WallLayout = ({isPublic}) => {
             {/* Load Custom Modal COmponent */}
             {openModal === true &&
                 (
-                    <Modal handleClose={handleClose} openModal={openModal} view='writeNote' embedUrl={null} />
+                    <Modal handleClose={handleClose} openModal={openModal} view='writeNote' embedUrl={null} triggerUrl={requestUrl} />
                 )
             }
 
