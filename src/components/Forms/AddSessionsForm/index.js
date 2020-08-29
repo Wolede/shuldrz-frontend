@@ -15,7 +15,7 @@ import useAuth from 'contexts/Auth'
 
 
 const AddSessionsForm = ({onClose}) => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const classes = useStyles()
 
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -23,18 +23,48 @@ const AddSessionsForm = ({onClose}) => {
 
 
     const [isSuccessful, setIsSuccessful] = useState()
-    const [topics, setTopics] = useState([]);
+    const [buddies, setBuddies] = useState([]);
+
+    const getFormOptions = async () => {
+        try {
+            const resBuddies = await api.get(`/users?userType=Volunteer`)
+            
+            setBuddies(resBuddies.data);            
+
+            console.log('budsss', resBuddies.data)
+
+        } catch (error) {
+            setBuddies(null)
+        }
+    } 
+
+    useEffect(() => {
+        user ? getFormOptions() : null;
+    }, [loading])
 
     const fetchedValues = {
-        topics: [],
+        buddies: [],
     }
 
     const validationSchema = Yup.object({
-        topics: Yup.array().required('Interested topics is empty'),
+        buddies: Yup.array().required('Buddies to chat with is empty'),
     })
 
     const onSubmit = async (values) => {
+        
+        const users = values.buddies;
+        
+        const usersDetails = values.buddies.reduce((acc, curr) => {
+            const buddiesObject = buddies.find(bud => bud.username === curr);
+            if (buddiesObject) {
+                acc.push({ userId: buddiesObject.id, image: buddiesObject?.profileImage?.url });
+            }
+            return acc; 
+        }, [])
+        
+        const data = { users, usersDetails }
 
+        console.log('vali', data);
     }
 
     return (
@@ -54,7 +84,45 @@ const AddSessionsForm = ({onClose}) => {
                             </Typography>
                             
                             <div className={classes.fieldWrapper}>
-                                
+                            <Autocomplete
+                                    multiple
+                                    id="buddies"
+                                    options={
+                                        buddies ? buddies.map(bud => bud.username) : [] 
+                                    }
+                                    disableCloseOnSelect
+                                    getOptionLabel={(option) => option}
+                                    value={values.buddies}
+                                    onChange={(event, newValue) => {
+                                        setFieldValue("buddies", newValue)
+                                    } }
+                                    renderOption={(option, { selected }) => {
+                                        return (
+                                            <React.Fragment>
+                                                <Checkbox
+                                                    icon={icon}
+                                                    checkedIcon={checkedIcon}
+                                                    style={{ marginRight: 8 }}
+                                                    checked={selected}
+                                                />
+                                                {option}
+                                            </React.Fragment>
+                                        )
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField 
+                                            {...params} 
+                                            name="buddies" 
+                                            variant="outlined" 
+                                            label="Buddies" 
+                                            placeholder="Buddies to chat with"
+                                            error={errors.buddies && touched.buddies ? true : false}
+                                            helperText={ errors.buddies && touched.buddies ?
+                                                errors.buddies : null
+                                            }
+                                       />
+                                    )}
+                                />
                             </div>
                         </Box>
 
