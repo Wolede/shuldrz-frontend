@@ -35,7 +35,7 @@ const JoinBoxes = props => {
                         <Paper color="primary" padding='4rem 2rem' borderRadius='3.75rem' height="100%">
                             <Box height='100%' textAlign='center' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                                 <Typography variant='h4' gutterBottom>
-                                    Volunteer and join our Heroes Wall  
+                                    Want to give help? Become a Buddy 
                                 </Typography>
                                 <Link href='/volunteer-signup'>
                                     <a style={{textDecoration: 'none'}}>

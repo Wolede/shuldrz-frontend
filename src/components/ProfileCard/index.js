@@ -15,33 +15,44 @@ const ProfileCard = (props) => {
     const classes = useStyles()
     const { user } = useAuth();
 
-    const { username, email, profileImage, occupation, experience, heart, ranking, id, userType } = props
+    const { username, email, profileImage, occupation, experience, heart, ranking, id, userType, firstName, lastName } = props
 
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
 
+    const [messageDisabled, setMessageDisabled] = React.useState(false)
+
     const handleMessageUser =  async (e) => {
+        await setMessageDisabled(true);
         
         setSelectedUser({
             id,
             username,
-            profileImage,                    
+            profileImage,
+            firstName,
+            lastName,
+            occupation,
+            ranking,
+            heart,
+            experience                   
         })
         router.push('/app/sessions')
     }
 
     return (
         <Paper padding="1.5rem 1.5rem 1.5rem 1.5rem" marginBottom="2rem">
-            <Box display="flex" flexDirection="column" alignItems='flex-start' justifyContent="center">
-                <Avatar
-                    alt={username}
-                    src={profileImage ? profileImage.url : '/empty'}
-                    size="medium"
-                    autoWidth
-                    marginBottom="1.5rem"
-                />
+            <Box display="flex" flexDirection="column" alignItems='center' justifyContent="center">
+                <Box display="flex" justifyContent="center" width="100%">
+                    <Avatar
+                        alt={username}
+                        src={profileImage ? profileImage.url : '/empty'}
+                        size="small"
+                        // autoWidth
+                        marginBottom="1.5rem"
+                    />
+                </Box>
                 <Typography variant="h4" className={classes.headerText}>{username}</Typography>
 
-                <Typography variant="body1" className={classes.text}>{experience ? experience : '- - -'}</Typography>
+                <Typography variant="body1" align="center" className={classes.text}>{experience ? experience : '- - -'}</Typography>
 
                 <Box display="flex" justifyContent="center" flexWrap="wrap">
                     {userType === 'Volunteer' &&
@@ -50,10 +61,10 @@ const ProfileCard = (props) => {
                     <Chip label={heart ? heart.count.toString() : '0'} heart color="paper"/>
                 </Box>
 
-                <Box width="100%" display="flex" justifyContent="flex-start" flexWrap="wrap" className={classes.buttonGroup}>
+                <Box width="100%" display="flex" justifyContent="center" flexWrap="wrap" className={classes.buttonGroup}>
                     {user.username !== username && (
                     <div>
-                        <Button variant="contained" size="small" color="primary" onClick={handleMessageUser}>message</Button>
+                        <Button variant="contained" size="small" color="primary" onClick={handleMessageUser} disabled={messageDisabled} loading={messageDisabled}>message</Button>
                     </div>
 
                     )}

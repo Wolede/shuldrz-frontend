@@ -139,6 +139,12 @@ const UserPageLayout = ({username}) => {
             id: userData?.id,
             username: userData?.username,
             profileImage: userData?.profileImage,   
+            firstName: userData?.firstName, 
+            lastName: userData?.lastName, 
+            occupation: userData?.occupation, 
+            ranking: userData?.ranking, 
+            heart: userData?.heart, 
+            experience: userData?.experience, 
         })
         router.push('/app/sessions')
     }

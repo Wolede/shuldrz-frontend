@@ -25,6 +25,7 @@
     "next": "9.4.4",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
+    "react-color": "^2.18.1",
     "react-dom": "16.13.1",
     "react-feather": "^2.0.8",
     "react-markdown": "^4.3.1",

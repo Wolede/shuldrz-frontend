@@ -18,7 +18,7 @@ const Signup = () => {
     }, [])
 
     return (
-        <div>
+        <div id='hero-front'>
             <Head>
                 <title>Shuldrz | Signup</title>
             </Head>

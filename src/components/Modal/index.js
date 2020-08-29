@@ -4,14 +4,18 @@ import { Modal as MuiModal, Container, Box } from '@material-ui/core'
 import { useStyles } from './style'
 import Paper from 'components/Paper'
 import AddJournalForm from '../Forms/AddJournalForm'
+import AddNoteForm from '../Forms/AddNoteForm'
 import ReviewForm from '../Forms/ReviewForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
+import WallNote from '../WallNote'
+import Share from '../Share'
+import AddSessionsForm from '../Forms/AddSessionsForm'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl } = props
 
     return (
         <MuiModal
@@ -34,7 +38,7 @@ const Modal = props => {
                 { view === "writeJournal" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddJournalForm onClose={handleClose} />
+                            <AddJournalForm onClose={handleClose} pageLimit={pageLimit} />
                         </Paper>
                     )
                 }
@@ -60,11 +64,55 @@ const Modal = props => {
                         </Paper>
                     )
                 }
+
+                { view === "addSessions" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddSessionsForm onClose={handleClose} />
+                        </Paper>
+                    )
+                }
                 { view === "schedule" &&
                     (
                         <Paper padding="1.5rem">
                             <ScheduleForm onClose={handleClose} formProps={formProps}/>
                         </Paper>
+                    )
+                }
+                { view === "share" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <Share note={viewNote}/>
+                        </Paper>
+                    )
+                }
+                { view === "writeNote" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <AddNoteForm onClose={handleClose} triggerUrl={triggerUrl}/>
+                        </Paper>
+                    )
+                }
+                { view === "viewNote" &&
+                    (
+                        <div>
+                            <WallNote 
+                                modalIsOpen={true}
+                                id={viewNote.id}
+                                title={viewNote.title}
+                                note={viewNote.note}
+                                hearts={viewNote.hearts}
+                                color={viewNote.color}
+                                link={viewNote.link}
+                                usersLiked={viewNote.usersLiked}
+                                date={viewNote.date}
+                                dedication={viewNote.dedication}
+                                userData={viewNote.userData}
+                                urlQuery={false}
+                                isPublic={viewNote.isPublic}
+                                triggerUrl={viewNote.triggerUrl}
+                            />
+                        </div>
                     )
                 }
                 </Box>
@@ -80,6 +128,7 @@ Modal.propTypes = {
     view: PropTypes.string,
     embedUrl: PropTypes.string,
     user: PropTypes.object,
+    viewNote: PropTypes.object,
 }
 
 export default Modal
