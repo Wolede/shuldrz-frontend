@@ -67,11 +67,13 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
     }
 
+    console.log('chatList', chat.messages.length)
+
     useEffect(() => {
         const container = document.getElementById('chatview-container');
-        if (container)
+        if (container && !anchorEl)
             container.scrollTo(0, container.scrollHeight);
-    })
+    }, [chat.messages.length])
 
     const [ mostRecentTimestamp, setMostRecentTimeStamp ] = useState(0);
     useEffect(() => {
