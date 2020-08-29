@@ -82,7 +82,7 @@ const Sessions = (props) => {
                    
                    
 
-            firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
+           const unsubscribe = firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
                 chatNotEmpty = firebase_chats.filter((chatList, i) => {
@@ -97,7 +97,9 @@ const Sessions = (props) => {
             submitNewChat()                        
         }       
 
-        
+        return () => {
+            unsubscribe()
+        }
         
     }, [user]);
 
@@ -133,8 +135,9 @@ const Sessions = (props) => {
     // useEffect(() => {
     //     messageRead()
     // }, [selectedChat])
+    
 
-
+   
     useEffect(() => {
         // console.log('CHAT RECEIVER ID', chatReceiverID)
         const getUserInfo = async() => {            
