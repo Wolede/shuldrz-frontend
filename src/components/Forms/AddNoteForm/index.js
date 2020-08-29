@@ -8,6 +8,8 @@ import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 import api from 'services/Api'
+import { GithubPicker, CirclePicker } from 'react-color';
+
 
 const AddNoteForm = props => {
     const classes = useStyles()
@@ -60,7 +62,7 @@ const AddNoteForm = props => {
         <Box>
             <Box marginBottom='1.5rem'>
                 <Typography variant="h4" gutterBottom>Add Note</Typography>
-                <Typography variant="caption" gutterBottom>You can choose to make this public on your profile</Typography>
+                <Typography variant="caption" gutterBottom>This will be visible publicly</Typography>
             </Box>
 
             <Box>
@@ -71,7 +73,7 @@ const AddNoteForm = props => {
                 >
                 {({values, errors, touched, getFieldProps, setFieldValue, isSubmitting}) => (
                     <Form noValidate autoComplete="off">
-                        {/* {console.log(values) } */}
+                        {console.log(values) }
                         <FormControl className={classes.formControl}>
                             <FormControlLabel
                                 control={<Switch { ...getFieldProps('dedication')} name="dedication" color="secondary" />}
@@ -129,6 +131,19 @@ const AddNoteForm = props => {
                                 />
                             </FormControl>
                         )}
+
+                        <FormControl className={classes.formControl}>
+                            <div className={classes.colorWrapper}>
+                            <Typography variant="body2" gutterBottom>Pick a color</Typography>
+                            <CirclePicker 
+                                colors={['#3F316B', '#00C766', '#F3B700', '#FD4659', '#292F36']}
+                                circleSize={32}
+                                color={values.color}
+                                onChangeComplete={(color) => setFieldValue('color', color.hex)}
+                                />
+                                
+                            </div>
+                        </FormControl>
 
                         <Box marginTop='1.5rem' display='flex' justifyContent='flex-end'>
                             <Button 

@@ -21,7 +21,7 @@ const PublicWall = () => {
                         </Box>
                         <WallLayout isPublic={true} />
                     </Container>
-                    <Box paddingBottom="2.5rem" textAlign="center">
+                    <Box paddingTop="2.5rem" paddingBottom="2.5rem" textAlign="center">
                         <Link href='/login'>
                             <a style={{ textDecoration: 'none' }}>
                                 <Button variant="contained" color="primary" size="medium">Login to see more</Button>    

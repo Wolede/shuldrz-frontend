@@ -6,7 +6,7 @@ import SidebarNav from './SidebarNav';
 import Logout from 'components/Logout'
 import useAuth from 'contexts/Auth'
 import SponsoredAdBox from '../../../SponsoredAdBox';
-import { Home, MessageSquare, Clipboard, MessageCircle, Users } from 'react-feather';
+import { Home, MessageSquare, Clipboard, MessageCircle, Users, Grid } from 'react-feather';
 
 const LeftSidebar = props => {
     const { open, variant, onClose, className, ...rest } = props
@@ -23,7 +23,7 @@ const LeftSidebar = props => {
         {
           title: 'Wall',
           href: '/app/wall',
-          icon: <Home />
+          icon: <Grid />
         },
         {
           title: 'Buddies',

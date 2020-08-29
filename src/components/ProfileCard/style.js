@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
     buttonGroup: {
         '& > div, > a' : {
-            margin: '1.5rem .5rem 0 0'
+            margin: '1.5rem .25rem 0 .25rem'
         }
     },
     headerText: {

@@ -24,7 +24,6 @@ const BuddiesLayout = () => {
             const {data} = withSWR(useSWR( url, api.get));
 
             if (!data) return null;
-            // console.log('dat',data)
             return data.data.map(result => (
                 <Grid item xl={4} md={4} sm={6} xs={12} key={result.id}>
                     <ProfileCard 
@@ -37,6 +36,8 @@ const BuddiesLayout = () => {
                         ranking={result.ranking}
                         email={result.email}
                         userType={result.userType}
+                        firstName={result.firstName}
+                        lastName={result.lastName}
                     />
                 </Grid>
             ))

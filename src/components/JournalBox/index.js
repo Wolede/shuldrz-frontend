@@ -94,14 +94,15 @@ const JournalBox = ( { journal, otherUser, triggerUrl } ) => {
                         )}
 
                         <BoxMenu 
-                        className={classes.iconButton} 
-                        isVisible={isVisible} 
-                        id={id} 
-                        setVisibility={setVisibility}
-                        deleteSnippet={deleteSnippet}
-                        anchorEl={anchorEl}
-                        handleClick={handleClick}
-                        handleClose={handleClose}
+                            className={classes.iconButton} 
+                            isVisible={isVisible} 
+                            id={id} 
+                            setVisibility={setVisibility}
+                            deleteSnippet={deleteSnippet}
+                            anchorEl={anchorEl}
+                            handleClick={handleClick}
+                            handleClose={handleClose}
+                            view="journalBox"
                         />
                     </div>
                     )}

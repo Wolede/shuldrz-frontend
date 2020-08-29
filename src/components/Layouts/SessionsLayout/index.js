@@ -77,29 +77,44 @@ const Sessions = (props) => {
 
     useEffect(() => {
 
-        if (user !== null || undefined) {  
+        if (user) {  
             const userImage = user.profileImage ? user.profileImage.url : null
                    
-                   
-
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())    
                 chatNotEmpty = firebase_chats.filter((chatList, i) => {
                     return chatList.messages.length > 1 || chatList.messages[0].sender  === user.username 
                 })
-                setChats(firebase_chats)     
+                setChats({ loading: false, data: firebase_chats ? firebase_chats : [] })     
             })       
-            
+
         }
 
-        if (selectedUser) {                  
-            submitNewChat()                        
-        }       
+    }, [user]);
+
+    // useEffect(() => {
+    //     console.log('set this one', selectedUser)
+    //     if(selectedUser) {
+    //         setChatReceiverID(selectedUser.id)
+    //     }
+    // }, [])
+
+    //call submitNewChat only when the chats array is not empty anymore
+    useEffect(() => {
 
         
-        
-    }, [user]);
+        if( !selectedUser ){
+            console.log('war', selectedUser)
+            setChatReceiverID(chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId)
+        }
+                
+        console.log('present chat', chats)
+        if (selectedUser && !chats.loading) {                  
+            submitNewChat()                        
+        }
+
+    }, [chats.loading])
 
     // useEffect(()=> {
     //     let messaging 
@@ -113,28 +128,35 @@ const Sessions = (props) => {
     //     }
     // })
 
-
-    console.log('CHATS', chats)
-   
+   console.log('chats', chats, selectedUser)
     
 
     const selectChat = (chatIndex) => {  
-        updateSelectedChat(chatIndex)
-         
-        const chatReceiver = chats[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
-        
+        updateSelectedChat(chatIndex)         
+        const chatReceiver = chats.data[chatIndex]?.users.filter(_usr => _usr !== user.username)[0]
+
         firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
-
         const userInfo = (doc) =>{             
            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                
         }        
     }
 
-    useEffect(() => {
-        messageRead()
-    }, [selectedChat])
+    // useEffect(() => {
+    //     messageRead()
+    // }, [selectedChat])
+    
+    // useEffect(() => {
+    //     if( !selectedUser ){
+    //         setChatReceiverID(chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId)
+    //     }
+
+    //     // if(selectedUser) {
+    //     //     setChatReceiverID(selectedUser.id)
+    //     // }
+        
+    // }, [chats.length])
 
 
     useEffect(() => {
@@ -143,7 +165,8 @@ const Sessions = (props) => {
             try{
                 const { data } = await api.get(`/users/${chatReceiverID}`)           
                 
-                // console.log('USER INFO', data)               
+                // console.log('USER INFO', data)   
+                console.log('kini', chatReceiverID, data)            
                 setSelectedUser(data)
             } catch(error){
                 console.log(error)
@@ -175,12 +198,12 @@ const Sessions = (props) => {
 
     const submitMessage = (msg) => {
         // console.log('submitMessageChats', selectedChat.messages.length)
-        const sessionState = chats[selectedChat].messages.length === 0 ? [] : 
-        chats[selectedChat].messages[chats[selectedChat].messages.length - 1].session
+        const sessionState = chats.data[selectedChat].messages.length === 0 ? [] : 
+        chats.data[selectedChat].messages[chats.data[selectedChat].messages.length - 1].session
 
         const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
 
-        const docKey = buildDocKey((chats[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+        const docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
  
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -204,12 +227,12 @@ const Sessions = (props) => {
         if (chats) {
             btnDisabled()
         }
-    }, [chats, selectedChat])
+    }, [chats.data, selectedChat])
 
     
 
     const clickedMessageWhereNotSender = (selectedChat) =>  {        
-        return chats[selectedChat]?.messages[chats[selectedChat]?.messages?.length - 1]?.sender !== user?.username        
+        return chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages?.length - 1]?.sender !== user?.username        
     }
 
     const userClickedInputFn = () => {
@@ -218,7 +241,7 @@ const Sessions = (props) => {
     }
 
     const messageRead = () => {               
-        const selectedUserID = chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+        const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
         const docKey = [user?.id, selectedUserID].sort().join('');   
         
         if (clickedMessageWhereNotSender(selectedChat)) {
@@ -265,8 +288,8 @@ const Sessions = (props) => {
 
         const goToChat = (docKey) => {
             const usersInChat = docKey.split(':');
-            const chat = chats.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
-            updateSelectedChat(chats.indexOf(chat));
+            const chat = chats.data.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+            updateSelectedChat(chats.data.indexOf(chat));
         }
 
         const newChatSubmit = async () => {            
@@ -306,7 +329,16 @@ const Sessions = (props) => {
         if (userExist) {
             const chatExist = await chatExists();
 
-            if(chatExist && chats[selectedChat]?.messages?.length > 1){              
+            // console.log('we here', chatExist, 
+            //                         userExist, 
+            //                         selectedChat,
+            //                         chats.data[selectedChat]?.messages?.length > 1, 
+            //                         chats.data.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id)),
+            //                         selectedUser,
+            //                         chats.data[0].usersDetails.some(_user => _user.userId === selectedUser.id)
+            // )
+
+            if(chatExist && chats.data.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){              
                 setChatExist(true)
                 goToChat(tempDocKey())
             } else {
@@ -321,7 +353,7 @@ const Sessions = (props) => {
    
     const endSession = async () => {           
 
-        const docKey = [user.id, chats[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
+        const docKey = [user.id, chats.data[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
 
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -346,49 +378,49 @@ const Sessions = (props) => {
     }
 
     const btnDisabled = () => {
-        if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='none'){
+        if (chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages.length - 1].session ==='none'){
             return true
         } 
-         else if (chats[selectedChat]?.messages[chats[selectedChat]?.messages.length - 1].session ==='ended'){
+         else if (chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages.length - 1].session ==='ended'){
             return true
        } else {
            return false
        }
     }
 
-    const deleteMessage = async (i) => {
-        const docKey = [user.id, selectedUser.id].sort().join('')
+    const deleteMessage = async (timestamp) => {
+        const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+        const docKey = [user.id, selectedUserID].sort().join('')
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
-        let editMessage
         
-        editMessage =  {
-            sender: messages[i].sender,
-            message: messages[i].message,
-            session: messages[i].session,
-            timestamp: messages[i].timestamp,
-            isDeleted: true
-        }   
+        const newMessages = messages.reduce((acc, curr) => {
+            if ( curr.timestamp === timestamp ) {
+                curr = {
+                    ...curr,
+                    isDeleted: true
+                }
+            }
+            acc.push(curr)
+            return acc;
+        }, [])
               
-        messages[i] = editMessage        
-    
+
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
         })
         .then(() => {
             doc.ref.update({
-                messages
+                messages: newMessages
             })
          })
          .catch(function(error) {
-        // The document probably doesn't exist.
-        console.error(error);
+            // The document probably doesn't exist.
+            console.error(error);
          });
-        
-        
     }
 
-    
+    console.log('selectedUser', selectedUser, chats)
 
     // <!-- new chat -->
   
@@ -412,7 +444,7 @@ const Sessions = (props) => {
                     >
                     <Paper height="100%" width='100%' padding="0">
                         {
-                            !chats ? (
+                            chats.loading ? (
                                 <>
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
@@ -426,7 +458,7 @@ const Sessions = (props) => {
                                         history={props.history}
                                         selectChatFn={selectChat}
                                         closeChatList={handleLeftSidebarClose}                                        
-                                        chats={chats ? chats : null}
+                                        chats={ chats.data }
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
                                     />                                      
@@ -450,7 +482,7 @@ const Sessions = (props) => {
                         padding={isDesktop ? '1.5rem 3rem 3rem 3rem' : '1rem 1rem 1rem 1rem'}
                     >
                         {
-                            loading ? (
+                            chats.loading ? (
                                 <Box marginTop={3}>
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
@@ -458,7 +490,7 @@ const Sessions = (props) => {
                                 </Box>
                             ) :
                                 (
-                                    chats !== undefined  ?
+                                    chats.data.length  ?
                                         <ChatView 
                                             endBtn={btnDisabled}
                                             backBtn={handleLeftSidebarOpen}
@@ -467,8 +499,8 @@ const Sessions = (props) => {
                                             userClickedInput={userClickedInputFn}
                                             user={user} 
                                             deleteMessage={deleteMessage}
-                                            chatList={chats}
-                                            chat={chats[selectedChat]} 
+                                            chatList={chats.data}
+                                            chat={chats.data[selectedChat]} 
                                             submitMessage={submitMessage}
                                             selectedUser={selectedUser}
                                             prevReview={prevReview}

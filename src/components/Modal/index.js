@@ -14,7 +14,7 @@ import Share from '../Share'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit } = props
 
     return (
         <MuiModal
@@ -37,7 +37,7 @@ const Modal = props => {
                 { view === "writeJournal" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddJournalForm onClose={handleClose} />
+                            <AddJournalForm onClose={handleClose} pageLimit={pageLimit} />
                         </Paper>
                     )
                 }

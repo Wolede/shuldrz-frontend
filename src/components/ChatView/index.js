@@ -38,8 +38,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
         setOpenRightSidebar(false);
     };
 
+    const [ts, setTs] = useState(0);
 
-    const handleClick = (event) => {
+    const handleClick = (event, timestamp) => {
+        setTs(timestamp)
         setAnchorEl(event.currentTarget);
     };
 
@@ -174,9 +176,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                             size="tiny" variant='rounded' />
                                     }
                                     onClick={handleRightSidebarOpen}
+                                    disabled={ !selectedUser }
                                 >
                                     More
-                    </MuiButton>
+                                </MuiButton>
 
                             </Box>
                             <div className={classes.headerButtons}>
@@ -189,9 +192,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                             {
 
                                 chat.messages.map((msg, i) => {
-                                {/* chatList.find(item => item.users.includes(selectedUser.username))?.messages.map((msg, i) => { */}
+                                    
                                     return (
-                                        <div key={i}>
+                                        <div key={msg.timestamp || i}>
                                             {
                                                 msg.session === 'started' && (
                                                     <Divider>
@@ -216,7 +219,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     :
                                                     
                                                     msg.message && msg.sender === user.username ? (
-                                                        <div className={classes.userSent}>
+                                                        <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                                     <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
@@ -224,7 +227,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
                                                                         aria-haspopup="true"
-                                                                        onClick={handleClick}
+                                                                        onClick={(e) => {handleClick(e, msg.timestamp)}}
                                                                         color='secondary'
                                                                         style={{ padding: '0 0 0 5px' }}
                                                                     >
@@ -232,13 +235,12 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     </IconButton>
 
                                                                     <Menu
-                                                                        id="simple-menu"
+                                                                        id="simple-menu"                                                                        
                                                                         anchorEl={anchorEl}
-                                                                        keepMounted
                                                                         open={Boolean(anchorEl)}
                                                                         onClose={handleClose}
                                                                     >
-                                                                        <MenuItem onClick={() => deleteMessage(i)}>Delete message</MenuItem>
+                                                                        <MenuItem onClick={() => {deleteMessage(ts); handleClose();}}>Delete message</MenuItem>
                                                                     </Menu>
 
                                                                 </div>
@@ -255,7 +257,6 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                 <div>
                                                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                                         <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>                                                                 
-
                                                                     </div>
                                                                     <Typography color="secondary" className='timestamp'>
                                                                         {moment(msg.timestamp).calendar()}
