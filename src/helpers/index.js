@@ -1,9 +1,17 @@
 export const getProfileCompletion = (user) => {
-    const profileKeys = [
+    const volunteerProfileKeys = [
         'profileImage' ,'firstName', 'lastName', 'username', 'phoneNumber', 'DateOfBirth',
-        'gender', 'maritalStatus', 'personality_type', 'occupation', 'reference',
+        'gender', 'maritalStatus', 'personality_type', 'occupation',
         'experience', 'availableDays', 'availableTime', 'charity', 'topics'
     ]
+
+    const guestProfileKeys = [
+        'profileImage' ,'firstName', 'lastName', 'username', 'phoneNumber', 'DateOfBirth',
+        'gender', 'maritalStatus', 'personality_type', 'occupation',
+        'experience', 'availableDays', 'availableTime', 'topics'
+    ]
+
+    const profileKeys = user.userType === 'Volunteer' ? volunteerProfileKeys : guestProfileKeys;
 
     //handle empty array for calculation.
 
