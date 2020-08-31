@@ -11,11 +11,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
+const firebase = require("firebase/app");
 
 
 
 const AddSessionsForm = ({onClose}) => {
     const { user, loading } = useAuth();
+    
     const classes = useStyles()
 
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -24,6 +26,7 @@ const AddSessionsForm = ({onClose}) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
     const [buddies, setBuddies] = useState([]);
+    const [data, setData] = useState({})
 
     const getFormOptions = async () => {
         try {
@@ -50,6 +53,7 @@ const AddSessionsForm = ({onClose}) => {
         buddies: Yup.array().required('Buddies to chat with is empty'),
     })
 
+
     const onSubmit = async (values) => {
         
         const users = values.buddies;
@@ -57,15 +61,55 @@ const AddSessionsForm = ({onClose}) => {
         const usersDetails = values.buddies.reduce((acc, curr) => {
             const buddiesObject = buddies.find(bud => bud.username === curr);
             if (buddiesObject) {
-                acc.push({ userId: buddiesObject.id, image: buddiesObject?.profileImage?.url });
+                acc.push({ userId: buddiesObject.id, image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null });
             }
             return acc; 
         }, [])
         
+        
         const data = { users, usersDetails }
+        
+        // Add isAdmin & isPresent property to the userDetails object
+       data.usersDetails.map(_user => {
+            let detail = _user
+            detail.image === undefined ? null : detail.image
+            detail.isAdmin = false
+            detail.isPresent = true            
+            return detail
+        })
 
-        console.log('vali', data);
+        //Pushing the admin details to the usersDetails array
+        const userImage = user.profileImage ? user.profileImage.url : null
+        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true})
+        data.users.push(user.username)       
+       
+
+        //concatenate userName in the users array to create groupName
+        let groupName = users.join(', ').toString()
+        
+                
+        //Send group chat details to firebase
+        const docKey = new Date().getTime().toString();       
+        firebase
+        .firestore()
+        .collection('chats')
+        .doc(docKey)
+        .set({
+            messages: [{
+                sender: user.username,                                   
+            }],                
+            currentTime: Date.now(),
+            users: data.users,
+            usersDetails,
+            receiverHasRead: false,
+            docKey,
+            groupName
+        })
+
+        //close modal
+        onClose()
     }
+  
 
     return (
         <>
