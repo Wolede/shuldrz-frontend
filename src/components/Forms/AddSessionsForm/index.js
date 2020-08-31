@@ -68,6 +68,7 @@ const AddSessionsForm = ({onClose}) => {
         
         
         const data = { users, usersDetails }
+        
         // Add isAdmin & isPresent property to the userDetails object
        data.usersDetails.map(_user => {
             let detail = _user
@@ -81,12 +82,11 @@ const AddSessionsForm = ({onClose}) => {
         const userImage = user.profileImage ? user.profileImage.url : null
         data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true})
         data.users.push(user.username)       
-        console.log('USERS DETAILS', usersDetails)
-
+       
 
         //concatenate userName in the users array to create groupName
         let groupName = users.join(', ').toString()
-        console.log('DATA WITH USERS DETAILS', data)
+        
                 
         //Send group chat details to firebase
         const docKey = new Date().getTime().toString();       
