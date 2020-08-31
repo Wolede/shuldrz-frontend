@@ -82,7 +82,8 @@ const Sessions = (props) => {
                    
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
-                const firebase_chats = res.docs.map(doc => doc.data())    
+                const firebase_chats = res.docs.map(doc => doc.data())  
+                console.log('FIREBASE CHATS', firebase_chats)  
                 chatNotEmpty = firebase_chats.filter((chatList, i) => {
                     return chatList.messages.length > 1 || chatList.messages[0].sender  === user.username 
                 })
@@ -350,6 +351,8 @@ const Sessions = (props) => {
 
     }
 
+
+    
    
     const endSession = async () => {           
 
