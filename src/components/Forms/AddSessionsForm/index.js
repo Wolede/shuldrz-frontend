@@ -30,7 +30,7 @@ const AddSessionsForm = ({onClose}) => {
 
     const getFormOptions = async () => {
         try {
-            const resBuddies = await api.get(`/users?userType=Volunteer`)
+            const resBuddies = await api.get(`/users`)
             
             setBuddies(resBuddies.data);            
 
