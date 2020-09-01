@@ -126,6 +126,9 @@ const AddSessionsForm = ({onClose}) => {
                             <Typography variant="h4" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
                                 New Session
                             </Typography>
+                            <p>
+                                You can only select a maximum of 3 buddies to chat with
+                            </p>
                             
                             <div className={classes.fieldWrapper}>
                             <Autocomplete
@@ -138,7 +141,9 @@ const AddSessionsForm = ({onClose}) => {
                                     getOptionLabel={(option) => option}
                                     value={values.buddies}
                                     onChange={(event, newValue) => {
-                                        setFieldValue("buddies", newValue)
+                                        //first condition allows for selection to not exceed 3
+                                        //second condition allows you to deselect some selections even after selection has reached 3
+                                        values.buddies.length <= 2 || newValue.length <= 2  ? setFieldValue("buddies", newValue) : null
                                     } }
                                     renderOption={(option, { selected }) => {
                                         return (
@@ -147,7 +152,7 @@ const AddSessionsForm = ({onClose}) => {
                                                     icon={icon}
                                                     checkedIcon={checkedIcon}
                                                     style={{ marginRight: 8 }}
-                                                    checked={selected}
+                                                    checked={ values.buddies.length <= 3 ? selected : false}
                                                 />
                                                 {option}
                                             </React.Fragment>
