@@ -202,9 +202,19 @@ const Sessions = (props) => {
         const sessionState = chats.data[selectedChat].messages.length === 0 ? [] : 
         chats.data[selectedChat].messages[chats.data[selectedChat].messages.length - 1].session
 
-        const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
+        let session;
+        if (!chats.data[selectedChat].groupName) {
+            session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
+        } else {
+            session = null;
+        }
 
-        const docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+        let docKey;
+        if (!chats.data[selectedChat].groupName) {
+            docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+        } else {
+            docKey = chats.data[selectedChat].docKey
+        }
  
         firebase.firestore().collection('chats').doc(docKey)
         .update({
