@@ -11,11 +11,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
+const firebase = require("firebase/app");
 
 
 
 const AddSessionsForm = ({onClose}) => {
     const { user, loading } = useAuth();
+    
     const classes = useStyles()
 
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -24,10 +26,11 @@ const AddSessionsForm = ({onClose}) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
     const [buddies, setBuddies] = useState([]);
+    const [data, setData] = useState({})
 
     const getFormOptions = async () => {
         try {
-            const resBuddies = await api.get(`/users?userType=Volunteer`)
+            const resBuddies = await api.get(`/users`)
             
             setBuddies(resBuddies.data);            
 
@@ -50,6 +53,7 @@ const AddSessionsForm = ({onClose}) => {
         buddies: Yup.array().required('Buddies to chat with is empty'),
     })
 
+
     const onSubmit = async (values) => {
         
         const users = values.buddies;
@@ -57,15 +61,55 @@ const AddSessionsForm = ({onClose}) => {
         const usersDetails = values.buddies.reduce((acc, curr) => {
             const buddiesObject = buddies.find(bud => bud.username === curr);
             if (buddiesObject) {
-                acc.push({ userId: buddiesObject.id, image: buddiesObject?.profileImage?.url });
+                acc.push({ userId: buddiesObject.id, image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null });
             }
             return acc; 
         }, [])
         
+        
         const data = { users, usersDetails }
+        
+        // Add isAdmin & isPresent property to the userDetails object
+       data.usersDetails.map(_user => {
+            let detail = _user
+            detail.image === undefined ? null : detail.image
+            detail.isAdmin = false
+            detail.isPresent = true            
+            return detail
+        })
 
-        console.log('vali', data);
+        //Pushing the admin details to the usersDetails array
+        const userImage = user.profileImage ? user.profileImage.url : null
+        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true})
+        data.users.push(user.username)       
+       
+
+        //concatenate userName in the users array to create groupName
+        let groupName = users.join(', ').toString()
+        
+                
+        //Send group chat details to firebase
+        const docKey = new Date().getTime().toString();       
+        firebase
+        .firestore()
+        .collection('chats')
+        .doc(docKey)
+        .set({
+            messages: [{
+                sender: user.username,                                   
+            }],                
+            currentTime: Date.now(),
+            users: data.users,
+            usersDetails,
+            receiverHasRead: false,
+            docKey,
+            groupName
+        })
+
+        //close modal
+        onClose()
     }
+  
 
     return (
         <>
@@ -82,6 +126,9 @@ const AddSessionsForm = ({onClose}) => {
                             <Typography variant="h4" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
                                 New Session
                             </Typography>
+                            <p>
+                                You can only select a maximum of 3 buddies to chat with
+                            </p>
                             
                             <div className={classes.fieldWrapper}>
                             <Autocomplete
@@ -94,7 +141,9 @@ const AddSessionsForm = ({onClose}) => {
                                     getOptionLabel={(option) => option}
                                     value={values.buddies}
                                     onChange={(event, newValue) => {
-                                        setFieldValue("buddies", newValue)
+                                        //first condition allows for selection to not exceed 3
+                                        //second condition allows you to deselect some selections even after selection has reached 3
+                                        values.buddies.length <= 2 || newValue.length <= 2  ? setFieldValue("buddies", newValue) : null
                                     } }
                                     renderOption={(option, { selected }) => {
                                         return (
@@ -103,7 +152,7 @@ const AddSessionsForm = ({onClose}) => {
                                                     icon={icon}
                                                     checkedIcon={checkedIcon}
                                                     style={{ marginRight: 8 }}
-                                                    checked={selected}
+                                                    checked={ values.buddies.length <= 3 ? selected : false}
                                                 />
                                                 {option}
                                             </React.Fragment>
