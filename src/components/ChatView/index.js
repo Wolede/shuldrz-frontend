@@ -186,7 +186,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
                                 <Typography className={classes.h5} variant="h5">
                                     { chat.groupName 
-                                        ?`${getGroupName('chatView', chat.users).name} ${getGroupName('chatView', chat.users).more}`
+                                        ?`${getGroupName('chatView', chat.usersDetails, user).name} ${getGroupName('chatView', chat.usersDetails, user).more}`
                                         :null
                                     }
                                 </Typography>    
