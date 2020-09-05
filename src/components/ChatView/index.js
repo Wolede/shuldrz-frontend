@@ -20,7 +20,7 @@ import { getGroupName } from '../../helpers';
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex, submitMessage, userClickedInput, selectedUser, prevReview, deleteMessage, chatList, view }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex, submitMessage, userClickedInput, selectedUser, prevReview, deleteMessage, chatList }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -32,6 +32,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const view = chat.groupName ? 'groupChat' : 'singleChat'
 
     const handleRightSidebarOpen = () => {
         setOpenRightSidebar(true);
@@ -146,7 +148,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     prevReview={prevReview}
                                     chatProfile={selectedUser}
                                     closeChatProfile={handleRightSidebarClose}
-                                    view={ chat.groupName ? 'groupChat' : 'singleChat' }
+                                    view={view}
+                                    // view={ chat.groupName ? 'groupChat' : 'singleChat' }
                                     chat={chat}
                                 />
                             </MiniDrawer>
@@ -174,9 +177,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                         <Avatar
                                             className={classes.chatAvatar}
                                             alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
+                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null && view === "singleChat"
                                                 ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                chat.users.filter(_user => _user !== user.username)[0]
+                                                null
                                             }
                                             size="tiny" variant='rounded'
                                         >
@@ -190,7 +193,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                 </MuiButton>
 
                                 <Typography className={classes.h5} variant="h5">
-                                    { chat.groupName 
+                                    { view === 'groupChat'
                                         ?`${getGroupName('chatView', chat.usersDetails, user).name} ${getGroupName('chatView', chat.usersDetails, user).more}`
                                         :null
                                     }

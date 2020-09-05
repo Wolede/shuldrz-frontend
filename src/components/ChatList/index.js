@@ -87,37 +87,28 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                     alignItems="center"
                                     className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
                                 >
-                                    {
-                                        chat.receiverHasRead === false && !userIsSender(chat)
-                                            ?
-                                            <Badge
-                                                color="error"
-                                                variant="dot"
-                                                invisible={false}
-                                                overlap='Avatar'
-                                                anchorOrigin={{
-                                                    vertical: 'top',
-                                                    horizontal: 'left',
-                                                }}
-                                            >
-                                                <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                    src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                        ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                        chat.users.filter(_user => _user !== user.username)[0]}
-                                                    size="small"
-                                                    variant='rounded'
-                                                />
-                                            </Badge>
-                                            :
-
-                                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                    ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                    chat.users.filter(_user => _user !== user.username)[0]}
-                                                size="small"
-                                                variant='rounded'
-                                            />
-                                    }
+                                    <Badge
+                                        color="error"
+                                        variant="dot"
+                                        invisible={chat.receiverHasRead === false && !userIsSender(chat) ? false : true}
+                                        overlap='Avatar'
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'left',
+                                        }}
+                                    >
+                                        <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
+                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null && !chat.groupName
+                                                ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
+                                                null
+                                            }
+                                            size="small"
+                                            variant='rounded'
+                                        >
+                                            {chat.groupName && <GroupIcon/>}
+                                        </Avatar>
+                                    </Badge>
+                            
 
                                     <Grid
                                         container
@@ -154,40 +145,27 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                     alignItems="center"
                                     className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
                                 >
-                                    {
-                                        chat.receiverHasRead === false && !userIsSender(chat)
-                                            ?
-                                            <Badge
-                                                color="error"
-                                                variant="dot"
-                                                invisible={false}
-                                                overlap='Avatar'
-                                                anchorOrigin={{
-                                                    vertical: 'top',
-                                                    horizontal: 'left',
-                                                }}
-                                            >
-                                                <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                    src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                        ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                        chat.users.filter(_user => _user !== user.username)[0]
-                                                    }
-                                                    size="small"
-                                                    variant='rounded'
-                                                >
-                                                    {view === "groupChat" && <GroupIcon/>}
-                                                </Avatar>
-                                            </Badge>
-                                            :
-
-                                            <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                                src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
-                                                    ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                    chat.users.filter(_user => _user !== user.username)[0]}
-                                                size="small"
-                                                variant='rounded'
-                                            />
-                                    }
+                                    <Badge
+                                        color="error"
+                                        variant="dot"
+                                        invisible={chat.receiverHasRead === false && !userIsSender(chat) ? false : true}
+                                        overlap='Avatar'
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'left',
+                                        }}
+                                    >
+                                        <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
+                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null && !chat.groupName
+                                                ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
+                                                null
+                                            }
+                                            size="small"
+                                            variant='rounded'
+                                        >
+                                            {chat.groupName && <GroupIcon/>}
+                                        </Avatar>
+                                    </Badge>
 
                                     <Grid
                                         container
@@ -197,7 +175,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
                                         <Typography className={classes.h4} variant="h4">
                                             { chat.groupName 
-                                                ?`${getGroupName('chatList', chat.usersDetails).name, user} ${getGroupName('chatList', chat.usersDetails, user).more}`
+                                                ?`${getGroupName('chatList', chat.usersDetails, user).name} ${getGroupName('chatList', chat.usersDetails, user).more}`
                                                 :chat.users.filter(_user => _user !== user.username).find(user => user)
                                             }
                                         </Typography>                  
