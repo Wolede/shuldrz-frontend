@@ -14,7 +14,7 @@ import Modal from 'components/Modal'
 
 const ChatProfile = (props) => {
     const classes = useStyles(props)
-    const { closeChatProfile, chatProfile, prevReview, view } = props
+    const { closeChatProfile, chatProfile, prevReview, view, chat } = props
     const { user, loading } = useAuth()
 
     const [openModal, setOpenModal] = useState(false);
@@ -27,9 +27,6 @@ const ChatProfile = (props) => {
     const handleReviewClick = () => {
         setOpenModal(true);
     }
-
-    // if user is the admin of the group
-    const isAdmin = true
 
     const [openDialog, setOpenDialog] = useState(false);
     
@@ -68,11 +65,11 @@ const ChatProfile = (props) => {
             { view === "singleChat" && (
                 <Box margin="0 auto" maxWidth="300" textAlign='center'>
                     <Avatar 
-                            alt={chatProfile.firstName} 
-                            src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
-                            size="large"                         
-                            // autoWidth
-                            margin="1.5rem auto" 
+                        alt={chatProfile.firstName} 
+                        src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
+                        size="large"                         
+                        // autoWidth
+                        margin="1.5rem auto"
                     />
 
                     <Typography variant="h4" className={classes.text}>{chatProfile.firstName} {chatProfile.lastName}</Typography>
@@ -100,7 +97,7 @@ const ChatProfile = (props) => {
                         margin="1.5rem auto" 
                     />
 
-                    <Typography variant="h4" className={classes.text} gutterBottom>Group Title</Typography>
+                    <Typography variant="h4" className={classes.text} gutterBottom>{ chat.groupName }</Typography>
 
                     {/* Button to edit Title */}
                     {/* <Button variant="contained" size="tiny" color='secondary-light'>Edit Title</Button> */}
@@ -109,28 +106,34 @@ const ChatProfile = (props) => {
                         <Typography variant="h5" align="left">People</Typography>
 
                         {/* map through users here */}
-                        <Box marginTop="1rem">
-                            <Paper padding="0" borderRadius="1rem">
-                                <Box padding=".5rem" display="flex" alignItems="center">
-                                    <Box marginRight="1rem">
-                                        <Avatar 
-                                            alt="group" 
-                                            // src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
-                                            size="tiny"                         
-                                            margin="auto" 
-                                        />
-                                    </Box>
-                                    <Typography variant="subtitle1">Username</Typography>
+                        {chat.usersDetails.sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}) => (
+                            <Box marginTop="1rem">
+                                <Paper padding="0" borderRadius="1rem">
+                                    <Box padding=".5rem" display="flex" alignItems="center">
+                                        <Box marginRight="1rem">
+                                            <Avatar 
+                                                alt="group" 
+                                                src={image ? image : '/empty'} 
+                                                size="tiny"                         
+                                                margin="auto" 
+                                            />
+                                        </Box>
+                                        <Typography variant="subtitle1">{username}</Typography>
 
-                                    {/* CHip is for only admin  */}
-                                    <Chip label="admin" color="primary" size="small" margin="0 0 0 auto"/>
-                                </Box>
-                            </Paper>
-                        </Box>
+                                        {/* Chip is for only admin  */}
+                                        {isAdmin &&
+                                            <Chip label="admin" color="primary" size="small" margin="0 0 0 auto"/>
+                                        }
+                                    </Box>
+                                </Paper>
+                            </Box>
+                        )) 
+
+                        }
 
                     </Box>
                     <Button variant="contained" size="small" color="error-light" onClick={handleDialogOpen}>
-                        {isAdmin ? 'Disable Group and Leave' : 'Leave Group'}
+                        {chat?.usersDetails?.find(det => det.isAdmin)?.userId === user._id ? 'Disable Group and Leave' : 'Leave Group'}
                     </Button>
                 </Box>
             )}
@@ -153,7 +156,7 @@ const ChatProfile = (props) => {
                         disableEscape={false} 
                         view="leaveGroup"
                         leaveGroup={leaveGroup}
-                        isAdmin={isAdmin} // if user is an admin of the group
+                        isAdmin={chat?.usersDetails?.find(det => det.isAdmin)?.userId === user._id} // if user is an admin of the group
                     />
                 )
             }
