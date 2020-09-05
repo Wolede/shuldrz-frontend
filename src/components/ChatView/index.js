@@ -4,7 +4,9 @@ import { useTheme } from '@material-ui/styles';
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import GroupIcon from '@material-ui/icons/Group';
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
@@ -17,7 +19,7 @@ import ChatProfile from '../ChatProfile';
 
 
 
-const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex, submitMessage, userClickedInput, selectedUser, prevReview, deleteMessage, chatList }) => {
+const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex, submitMessage, userClickedInput, selectedUser, prevReview, deleteMessage, chatList, view }) => {
     const classes = useStyles()
 
     // More sidebar profile stuff 
@@ -143,7 +145,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     prevReview={prevReview}
                                     chatProfile={selectedUser}
                                     closeChatProfile={handleRightSidebarClose}
-                                    view="singleChat"
+                                    view={view}
                                 />
                             </MiniDrawer>
                         }
@@ -174,7 +176,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                 ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
                                                 chat.users.filter(_user => _user !== user.username)[0]
                                             }
-                                            size="tiny" variant='rounded' />
+                                            size="tiny" variant='rounded'
+                                        >
+                                            {view === "groupChat" && <GroupIcon/>}
+                                        </Avatar>
                                     }
                                     onClick={handleRightSidebarOpen}
                                     disabled={ !selectedUser }
@@ -183,10 +188,11 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                 </MuiButton>
 
                             </Box>
-                            <div className={classes.headerButtons}>
-                                {/* <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button> */}
-                                <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
-                            </div>
+                            {view === "singleChat" &&
+                                <div className={classes.headerButtons}>
+                                    <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
+                                </div>
+                            }
                         </Box>
                         <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
 
@@ -208,13 +214,14 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                 msg.message && msg.isDeleted ? (
                                                     <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
                                                         <div>
-                                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <Typography fontStyle="italic" variant="body1">message deleted</Typography>
-                                                            </div>
-                                                            <Typography color="secondary" className='timestamp'>
-                                                                {moment(msg.timestamp).calendar()}
+                                                            <Typography variant="body1" color="textPrimary" className={classes.messageBox}>
+                                                                message deleted
+                                                                <RemoveCircleOutlineIcon fontSize="small" style={{ margin: '0 .3rem 0 .3rem', verticalAlign: 'middle' }} />
                                                             </Typography>
                                                         </div>
+                                                        <Typography color="textSecondary" className='timestamp'>
+                                                            {moment(msg.timestamp).calendar()}
+                                                        </Typography>
                                                     </div>
                                                 )
                                                     :
@@ -222,8 +229,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     msg.message && msg.sender === user.username ? (
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                    <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
+                                                                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -232,7 +239,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                         color='secondary'
                                                                         style={{ padding: '0 0 0 5px' }}
                                                                     >
-                                                                        <MoreVertIcon style={{ color: '#ffffff' }} />
+                                                                        <KeyboardArrowDownIcon fontSize="medium" style={{ color: '#ffffff' }} />
                                                                     </IconButton>
 
                                                                     <Menu
@@ -243,12 +250,11 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     >
                                                                         <MenuItem onClick={() => {deleteMessage(ts); handleClose();}}>Delete message</MenuItem>
                                                                     </Menu>
-
                                                                 </div>
-                                                                <Typography color="secondary" className='timestamp'>
-                                                                    {moment(msg.timestamp).calendar()}
-                                                                </Typography>
                                                             </div>
+                                                            <Typography color="textSecondary" className='timestamp'>
+                                                                {moment(msg.timestamp).calendar()}
+                                                            </Typography>
                                                         </div>
                                                     )
                                                         :
@@ -256,13 +262,14 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         msg.message ? (
                                                             <div className={classes.friendSent}>
                                                                 <div>
-                                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                        <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>                                                                 
-                                                                    </div>
-                                                                    <Typography color="secondary" className='timestamp'>
-                                                                        {moment(msg.timestamp).calendar()}
-                                                                    </Typography>
+                                                                    {view === "groupChat" &&
+                                                                        <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
+                                                                    }
+                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
                                                                 </div>
+                                                                <Typography color="textSecondary" className='timestamp'>
+                                                                    {moment(msg.timestamp).calendar()}
+                                                                </Typography>
                                                            </div>
                                                         )
                                                         : 
@@ -285,7 +292,11 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
                         </Box>
 
-                        <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
+                        <ChatInput 
+                            userClickedInput={userClickedInput} 
+                            submitMessageFn={submitMessage} 
+                            isGroupDisabled={false} // to be made dynamic
+                        />
 
                     </>
 

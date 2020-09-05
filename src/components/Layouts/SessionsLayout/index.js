@@ -474,6 +474,7 @@ const Sessions = (props) => {
                                         chats={ chats.data }
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
+                                        view="groupChat" // to be made dynamic
                                     />                                      
 
                                 )
@@ -517,6 +518,7 @@ const Sessions = (props) => {
                                             submitMessage={submitMessage}
                                             selectedUser={selectedUser}
                                             prevReview={prevReview}
+                                            view="groupChat" // to be made dynamic
                                         /> 
                                         : 
                                     null                                        

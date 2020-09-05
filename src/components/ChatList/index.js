@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Notification from 'components/Notification'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import NotificationImportant from '@material-ui/icons/NotificationImportant';
+import GroupIcon from '@material-ui/icons/Group';
 import Button from 'components/Button'
 import ChatIcon from '@material-ui/icons/Chat';
 import { useStyles } from './styles'
@@ -15,7 +16,7 @@ import { useStyles } from './styles'
 
 
 
-const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist }) => {
+const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, view }) => {
 
 
     //this ensures that a user is always selected to chat with
@@ -163,10 +164,13 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                                 <Avatar className={classes.avatar} alt={chat.users.filter(_user => _user !== user.username)[0]}
                                                     src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
                                                         ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                        chat.users.filter(_user => _user !== user.username)[0]}
+                                                        chat.users.filter(_user => _user !== user.username)[0]
+                                                    }
                                                     size="small"
                                                     variant='rounded'
-                                                />
+                                                >
+                                                    {view === "groupChat" && <GroupIcon/>}
+                                                </Avatar>
                                             </Badge>
                                             :
 
