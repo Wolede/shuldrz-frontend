@@ -69,7 +69,7 @@ const AddSessionsForm = ({onClose}) => {
         
         const data = { users, usersDetails }
 
-        console.log('USER DETAILS', usersDetails)
+        
         
         // Add isAdmin & isPresent property to the userDetails object
        data.usersDetails.map(_user => {
@@ -86,6 +86,7 @@ const AddSessionsForm = ({onClose}) => {
         data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username})
         data.users.push(user.username)       
        
+        console.log('USER DETAILS', usersDetails)
 
         //concatenate userName in the users array to create groupName
         let groupName = users.join(', ').toString()

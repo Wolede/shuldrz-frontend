@@ -284,8 +284,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     )
 
                                 })
+
+                                
                             }
-                            
+
                         </Box>
 
                         <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
