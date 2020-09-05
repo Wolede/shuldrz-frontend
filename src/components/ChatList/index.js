@@ -193,7 +193,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
                                         <Typography className={classes.h4} variant="h4">
                                             { chat.groupName 
-                                                ?`${getGroupName('chatList', chat.usersDetails).name, user} ${getGroupName('chatList', chat.usersDetails, user).more}`
+                                                ?`${getGroupName('chatList', chat.usersDetails, user).name} ${getGroupName('chatList', chat.usersDetails, user).more}`
                                                 :chat.users.filter(_user => _user !== user.username).find(user => user)
                                             }
                                         </Typography>                  
