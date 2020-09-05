@@ -61,26 +61,29 @@ const AddSessionsForm = ({onClose}) => {
         const usersDetails = values.buddies.reduce((acc, curr) => {
             const buddiesObject = buddies.find(bud => bud.username === curr);
             if (buddiesObject) {
-                acc.push({ userId: buddiesObject.id, image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null });
+                acc.push({ userId: buddiesObject.id, username: buddiesObject.username, image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null });
             }
             return acc; 
         }, [])
         
         
         const data = { users, usersDetails }
+
+        console.log('USER DETAILS', usersDetails)
         
         // Add isAdmin & isPresent property to the userDetails object
        data.usersDetails.map(_user => {
             let detail = _user
             detail.image === undefined ? null : detail.image
             detail.isAdmin = false
-            detail.isPresent = true            
+            detail.isPresent = true   
+            detail.username = _user.username                     
             return detail
         })
 
         //Pushing the admin details to the usersDetails array
         const userImage = user.profileImage ? user.profileImage.url : null
-        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true})
+        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username})
         data.users.push(user.username)       
        
 

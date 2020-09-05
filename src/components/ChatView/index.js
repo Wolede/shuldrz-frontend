@@ -279,11 +279,13 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                 )
                                             }
                                         </div>
+
+
                                     )
 
                                 })
                             }
-
+                            
                         </Box>
 
                         <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
