@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import { Fab, Box, Typography, Container } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
+import GroupIcon from '@material-ui/icons/Group';
 import Avatar from 'components/Avatar'
 import Paper from 'components/Paper'
 import Chip from 'components/Chip'
@@ -123,7 +124,9 @@ const ChatProfile = (props) => {
                         // src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
                         size="small"                         
                         margin="1.5rem auto" 
-                    />
+                    >
+                        <GroupIcon/>
+                    </Avatar>
 
                     <Typography variant="h4" className={classes.text} gutterBottom>{ chat.usersDetails.filter(det => det.isPresent).map(usr => usr.username).join(', ') }</Typography>
 
