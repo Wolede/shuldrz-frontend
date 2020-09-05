@@ -403,7 +403,15 @@ const Sessions = (props) => {
 
     const deleteMessage = async (timestamp) => {
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
-        const docKey = [user.id, selectedUserID].sort().join('')
+        
+        let docKey;
+        if (!chats.data[selectedChat].groupName){
+            docKey = [user.id, selectedUserID].sort().join('')
+        } else {
+            docKey = chats.data[selectedChat].docKey
+        }
+        
+        console.log('DOCKEY', docKey)
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
         
