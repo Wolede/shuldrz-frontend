@@ -138,7 +138,11 @@ const useStyles = makeStyles(theme => ({
     chatAvatar: {
         height: `45px`
 
-    }
+    },
+
+    h5: {
+        marginLeft: '24px'
+    },
 
 
 

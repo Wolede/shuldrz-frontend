@@ -12,6 +12,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import Button from 'components/Button'
 import ChatIcon from '@material-ui/icons/Chat';
 import { useStyles } from './styles'
+import { getGroupName } from '../../helpers'
 
 
 
@@ -124,7 +125,12 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         className={classes.typography}
                                     >
 
-                                        <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>
+                                        <Typography className={classes.h4} variant="h4">
+                                            { chat.groupName 
+                                                ?`${getGroupName('chatList', chat.usersDetails, user).name} ${getGroupName('chatList', chat.usersDetails, user).more}`
+                                                :chat.users.filter(_user => _user !== user.username).find(user => user)
+                                            }
+                                        </Typography>
                                         <Typography variant="body2">
                                                     {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
                                                         chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
@@ -189,7 +195,12 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         className={classes.typography}
                                     >
 
-                                        <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>                    
+                                        <Typography className={classes.h4} variant="h4">
+                                            { chat.groupName 
+                                                ?`${getGroupName('chatList', chat.usersDetails).name, user} ${getGroupName('chatList', chat.usersDetails, user).more}`
+                                                :chat.users.filter(_user => _user !== user.username).find(user => user)
+                                            }
+                                        </Typography>                  
                                         
                                         <Typography variant="body2">
                                         {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
