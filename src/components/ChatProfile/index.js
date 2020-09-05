@@ -10,6 +10,7 @@ import Button from 'components/Button'
 import Dialog from 'components/Dialog'
 import useAuth from 'contexts/Auth'
 import Modal from 'components/Modal'
+const firebase = require("firebase/app");
 
 
 const ChatProfile = (props) => {
@@ -38,9 +39,36 @@ const ChatProfile = (props) => {
         setOpenDialog(false)
     }
 
-    const leaveGroup = () => {
+    const leaveGroup = async () => {
         // leave group functionality
-        console.log('group-left');
+        console.log('group-left'); 
+
+        const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
+        let usersDetails = doc.data().usersDetails
+        console.log('USERS DETAILS', usersDetails)
+
+        const newUsersDetails = usersDetails.reduce( (acc, curr) => {
+            
+            if ( curr.username === user.username ) {
+                curr = {
+                    ...curr,
+                    isPresent: false
+                }
+            }
+            acc.push(curr)
+            return acc;
+        }, [])
+
+        console.log('NEW USERS DETAILS', newUsersDetails)
+        return doc.ref.update({
+            "usersDetails": firebase.firestore.FieldValue.arrayRemove({})
+        })
+        .then(() => {
+            doc.ref.update({
+                usersDetails: newUsersDetails
+            })
+        })       
+
         handleDialogClose()
     }
 
@@ -160,8 +188,6 @@ const ChatProfile = (props) => {
                     />
                 )
             }
-
-
         </div>
     )
 }

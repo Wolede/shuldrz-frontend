@@ -279,9 +279,13 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                 )
                                             }
                                         </div>
+
+
                                     )
 
                                 })
+
+                                
                             }
 
                         </Box>

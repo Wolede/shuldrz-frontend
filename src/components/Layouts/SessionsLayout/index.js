@@ -416,6 +416,7 @@ const Sessions = (props) => {
         let messages = doc.data().messages
         
         const newMessages = messages.reduce((acc, curr) => {
+            
             if ( curr.timestamp === timestamp ) {
                 curr = {
                     ...curr,
