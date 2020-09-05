@@ -30,3 +30,27 @@ export const getProfileCompletion = (user) => {
 
     return profilePercentage
 }
+
+export const getGroupName = (mode, usersDetails) => {
+
+    const members = usersDetails.filter(det => det.isPresent).map(item => item.username) //if a user isPresent is false then don't render it
+
+    const displayLimit = mode == 'chatList' ? 2 : 3
+
+    const membersMinusUser = members.filter((member, memberIndex) => memberIndex < members.length - 1); //it's assumed the user will always be the last entry in the array
+
+    const more = (membersMinusUser.length - displayLimit) ? `+${membersMinusUser.length - displayLimit}` : '';
+
+    const truncateValue = more ? 11 : 14
+
+    const name = mode == 'chatList'
+                    ?membersMinusUser.filter((member, memberIndex) => memberIndex < displayLimit).join(', ').substring(0, truncateValue)
+                    :membersMinusUser.filter((member, memberIndex) => memberIndex < displayLimit).join(', ')
+
+    const finalName = more && mode == 'chatList' ? name + '...' : name
+
+    return {
+        name: finalName,
+        more
+    }
+}
