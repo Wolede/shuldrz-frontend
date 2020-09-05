@@ -13,6 +13,7 @@ import Divider from 'components/Divider'
 import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
+import { getGroupName } from '../../helpers';
 
 
 
@@ -182,6 +183,13 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                 >
                                     More
                                 </MuiButton>
+
+                                <Typography className={classes.h5} variant="h5">
+                                    { chat.groupName 
+                                        ?`${getGroupName('chatView', chat.usersDetails, user).name} ${getGroupName('chatView', chat.usersDetails, user).more}`
+                                        :null
+                                    }
+                                </Typography>    
 
                             </Box>
                             <div className={classes.headerButtons}>
