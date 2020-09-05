@@ -128,7 +128,7 @@ const ChatProfile = (props) => {
                         <GroupIcon/>
                     </Avatar>
 
-                    <Typography variant="h4" className={classes.text} gutterBottom>{ chat.groupName }</Typography>
+                    <Typography variant="h4" className={classes.text} gutterBottom>{ chat.usersDetails.filter(det => det.isPresent).map(usr => usr.username).join(', ') }</Typography>
 
                     {/* Button to edit Title */}
                     {/* <Button variant="contained" size="tiny" color='secondary-light'>Edit Title</Button> */}
@@ -137,7 +137,7 @@ const ChatProfile = (props) => {
                         <Typography variant="h5" align="left">People</Typography>
 
                         {/* map through users here */}
-                        {chat.usersDetails.sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}) => (
+                        {chat.usersDetails.filter(det => det.isPresent).sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}) => (
                             <Box marginTop="1rem">
                                 <Paper padding="0" borderRadius="1rem">
                                     <Box padding=".5rem" display="flex" alignItems="center">

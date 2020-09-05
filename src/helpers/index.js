@@ -35,8 +35,7 @@ export const getGroupName = (mode, usersDetails, user) => {
 
     const members = usersDetails.filter(det => det.isPresent) //if a user isPresent is false then don't render it
 
-    const membersMinusUser = members.filter((member, memberIndex) => member.userId !== user?.id).map(item => item.username); //it's assumed the user will always be the last entry in the array
-    
+    const membersMinusUser = members.filter((member, memberIndex) => member.userId !== user?.id).map(item => item.username); 
     const displayLimit = mode == 'chatList' ? 2 : 3
 
     const more = (membersMinusUser.length - displayLimit > 0) ? `+${membersMinusUser.length - displayLimit}` : '';
@@ -49,7 +48,7 @@ export const getGroupName = (mode, usersDetails, user) => {
 
     const finalName = more && mode == 'chatList' ? name + '...' : name
 
-    console.log('e b tings', {usersDetails, members, membersMinusUser, more, truncateValue, name, finalName} )
+    // console.log('e b tings', {usersDetails, members, membersMinusUser, more, truncateValue, name, finalName} )
 
     return {
         name: finalName,
