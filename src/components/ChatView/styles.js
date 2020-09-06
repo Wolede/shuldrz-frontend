@@ -46,15 +46,17 @@ const useStyles = makeStyles(theme => ({
 
     userSent: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        
 
         [' & > div '] : {
-            backgroundColor: '#F3B700',
-            color: 'white',
+            backgroundColor: theme.palette.warning.main,
+            color: theme.palette.primary.contrastText,
             width: 'fit-content',
             maxWidth: '90%',
             borderRadius: '1.8rem 0.6rem 0.6rem 1.8rem',
-            padding: '1rem 1.5rem',
+            padding: '.6rem .8rem .6rem 1.2rem',
             wordWrap: 'break-word',
             marginTop: '1rem',
         },
@@ -62,21 +64,22 @@ const useStyles = makeStyles(theme => ({
         '& .timestamp' : {
             fontSize: '.7rem',
             fontWeight: '500',
-            textAlign: 'right'
+            textAlign: 'right',
+            padding: '.3rem .3rem 0 0',
         },
     },
 
     friendSent: {
-        display: 'flex',
-        justifyContent: 'flex-start',
+        // display: 'flex',
+        // justifyContent: 'flex-start',
 
         [' & > div '] : {
-            backgroundColor: '#00C766',
-            color: 'white',
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
             width: 'fit-content',
             maxWidth: '90%',
             borderRadius: '0.6rem 1.8rem 1.8rem 0.6rem',
-            padding: '1rem 1.5rem',
+            padding: '.6rem 1rem',
             wordWrap: 'break-word',
             marginTop: '1rem',
         },
@@ -84,8 +87,13 @@ const useStyles = makeStyles(theme => ({
         '& .timestamp' : {
             fontSize: '.7rem',
             fontWeight: '500',
-            textAlign: 'right'
+            textAlign: 'left',
+            padding: '.3rem 0 0 .3rem',
         },
+    },
+
+    messageBox: {
+        fontSize: '16px'
     },
 
     chatHeader: {
@@ -130,7 +138,11 @@ const useStyles = makeStyles(theme => ({
     chatAvatar: {
         height: `45px`
 
-    }
+    },
+
+    h5: {
+        marginLeft: '24px'
+    },
 
 
 

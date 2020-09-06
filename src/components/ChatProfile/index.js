@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import { Fab, Box, Typography, Container } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close';
+import GroupIcon from '@material-ui/icons/Group';
 import Avatar from 'components/Avatar'
 import Paper from 'components/Paper'
 import Chip from 'components/Chip'
@@ -132,9 +133,11 @@ const ChatProfile = (props) => {
                         // src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
                         size="small"                         
                         margin="1.5rem auto" 
-                    />
+                    >
+                        <GroupIcon/>
+                    </Avatar>
 
-                    <Typography variant="h4" className={classes.text} gutterBottom>{ chat.groupName }</Typography>
+                    <Typography variant="h4" className={classes.text} gutterBottom>{ chat.usersDetails.filter(det => det.isPresent).map(usr => usr.username).join(', ') }</Typography>
 
                     {/* Button to edit Title */}
                     {/* <Button variant="contained" size="tiny" color='secondary-light'>Edit Title</Button> */}
@@ -143,7 +146,7 @@ const ChatProfile = (props) => {
                         <Typography variant="h5" align="left">People</Typography>
 
                         {/* map through users here */}
-                        {chat.usersDetails.sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}) => (
+                        {chat.usersDetails.filter(det => det.isPresent).sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}) => (
                             <Box marginTop="1rem">
                                 <Paper padding="0" borderRadius="1rem">
                                     <Box padding=".5rem" display="flex" alignItems="center">
