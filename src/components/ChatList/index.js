@@ -275,7 +275,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                 </>
             ))
 
-        ) : (
+        ) : ( 
             <div style={{
                 display: "flex",
                 justifyContent: "center",
