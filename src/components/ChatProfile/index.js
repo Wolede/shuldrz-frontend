@@ -77,9 +77,7 @@ const ChatProfile = (props) => {
                     timestamp: Date.now()                    
                 }),
             })
-        })           
-
-        
+        })            
     }
 
 

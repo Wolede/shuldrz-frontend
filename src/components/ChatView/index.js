@@ -33,6 +33,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [groupDisabled, setGroupDisabled] = React.useState(false);
 
     const view = chat.groupName ? 'groupChat' : 'singleChat'
 
@@ -56,17 +57,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     };
     // const shouldOpenRightSidebar = isDesktop ? false : openRightSidebar;
 
-    const updateMessages = () => {
+    //check if admin or user left the group chat  
+    useEffect(() => {
+        setGroupDisabled(false)
+        const userDetail = chat?.usersDetails.find(_user => _user.username === user.username)?.isPresent
+        console.log('CHECK IF USER IS PRESENT', userDetail)
 
-    }
-
-
-
-    const setSchedule = () => {
-        console.log('schedule has been set')
-        setOpenModal(true);
-    }
-
+        if(chat?.usersDetails.some(user => user.isAdmin && !user.isPresent) || !userDetail){
+            setGroupDisabled(true)
+        }
+    }, [chat])
+    
 
     const endSession = () => {
         endSessionFn()
@@ -319,9 +320,10 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                         </Box>
 
                         <ChatInput 
+                            chat={chat}
                             userClickedInput={userClickedInput} 
                             submitMessageFn={submitMessage} 
-                            isGroupDisabled={false} // to be made dynamic
+                            isGroupDisabled={groupDisabled} // to be made dynamic
                         />
 
                     </>

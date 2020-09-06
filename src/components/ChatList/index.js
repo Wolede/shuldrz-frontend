@@ -56,7 +56,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     const selectChat = (index) => selectChatFn(index);
 
-    console.log('chatListChats', chats)
+    
 
     return (
         <>
