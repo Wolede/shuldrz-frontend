@@ -61,77 +61,83 @@ const AddSessionsForm = ({onClose}) => {
         const usersDetails = values.buddies.reduce((acc, curr) => {
             const buddiesObject = buddies.find(bud => bud.username === curr);
             if (buddiesObject) {
-                acc.push({ userId: buddiesObject.id, username: buddiesObject.username, image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null });
+                acc.push({ 
+                    userId: buddiesObject.id, 
+                    username: buddiesObject.username, 
+                    image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null,
+                    isAdmin: false,
+                    isPresent: true
+                });
             }
             return acc; 
         }, [])
+
+        console.log('jer', users, usersDetails);
         
         
-        const data = { users, usersDetails }
+        const data = { users: [...users], usersDetails: [...usersDetails] }
 
         
         
         // Add isAdmin & isPresent property to the userDetails object
-       data.usersDetails.map(_user => {
-            let detail = _user
-            detail.image === undefined ? null : detail.image
-            detail.isAdmin = false
-            detail.isPresent = true   
-            detail.username = _user.username                     
-            return detail
-        })
+    //    data.usersDetails.map(_user => {
+    //         let detail = _user
+    //         detail.image === undefined ? null : detail.image
+    //         detail.isAdmin = false
+    //         detail.isPresent = true   
+    //         detail.username = _user.username                     
+    //         return detail
+    //     })
 
         //Pushing the admin details to the usersDetails array
         const userImage = user.profileImage ? user.profileImage.url : null
         data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username})
         data.users.push(user.username)       
        
-        console.log('USER DETAILS', usersDetails)
+        console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
 
-        //concatenate userName in the users array to create groupName
-        let groupName = users.join(', ').toString()
-
-
-        const chatBody = usersDetails.length > 2 
-                            ? {
-                                messages: [{
-                                    sender: user.username,                                   
-                                }],                
-                                currentTime: Date.now(),
-                                users: data.users,
-                                usersDetails,
-                                receiverHasRead: false,
-                                docKey,
-                                groupName
-                            }
-                            : {
-                                messages: [{
-                                    sender: user.username,
-                                    session: 'none',  
-                                }],                
-                                currentTime: Date.now(),
-                                users,
-                                usersDetails,
-                                receiverHasRead: false
-                            }
-                
-        //Send group chat details to firebase
-        const docKey = new Date().getTime().toString();       
-        firebase
-        .firestore()
-        .collection('chats')
-        .doc(docKey)
-        .set({
-            messages: [{
-                sender: user.username,                                   
-            }],                
-            currentTime: Date.now(),
-            users: data.users,
-            usersDetails,
-            receiverHasRead: false,
-            docKey,
-            groupName
-        })
+        
+      
+        if (data.usersDetails.length > 2 ) {
+            //concatenate userName in the users array to create groupName
+            let groupName = users.join(', ').toString()
+            //Send group chat details to firebase
+            const docKey = new Date().getTime().toString();       
+            await
+            firebase
+            .firestore()
+            .collection('chats')
+            .doc(docKey)
+            .set({
+                messages: [{
+                    sender: user.username,                                   
+                }],                
+                currentTime: Date.now(),
+                users: data.users,
+                usersDetails: data.usersDetails,
+                receiverHasRead: false,
+                docKey,
+                groupName
+            })
+        } else {
+            const newBuildDocKey = () =>  data.usersDetails.map(det => det.userId).sort().join('');
+            const docKey = newBuildDocKey();  
+            await 
+            firebase
+            .firestore()
+            .collection('chats')
+            .doc(docKey)
+            .set({
+                messages: [{
+                    sender: user.username,
+                    session: 'none',  
+                }],                
+                currentTime: Date.now(),
+                users: data.users,
+                usersDetails: data.usersDetails.map( usr => ({ userId: usr.userId, image: usr.image }) ),
+                receiverHasRead: false
+            })
+        }
 
         //close modal
         onClose()
