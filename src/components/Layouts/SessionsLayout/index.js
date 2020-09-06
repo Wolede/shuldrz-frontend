@@ -83,7 +83,7 @@ const Sessions = (props) => {
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
                 const firebase_chats = res.docs.map(doc => doc.data())  
-                console.log('FIREBASE CHATS', firebase_chats)  
+                
                 chatNotEmpty = firebase_chats.filter((chatList, i) => {
                     return chatList.messages.length > 1 || chatList.messages[0].sender  === user.username 
                 })
@@ -129,8 +129,7 @@ const Sessions = (props) => {
     //     }
     // })
 
-   console.log('chats', chats, selectedUser)
-    
+   
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)         
@@ -167,7 +166,7 @@ const Sessions = (props) => {
                 const { data } = await api.get(`/users/${chatReceiverID}`)           
                 
                 // console.log('USER INFO', data)   
-                console.log('kini', chatReceiverID, data)            
+                         
                 setSelectedUser(data)
             } catch(error){
                 console.log(error)
@@ -253,7 +252,14 @@ const Sessions = (props) => {
 
     const messageRead = () => {               
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
-        const docKey = [user?.id, selectedUserID].sort().join('');   
+        
+        let docKey;
+        if (!chats.data[selectedChat].groupName){
+            docKey = [user?.id, selectedUserID].sort().join(''); 
+        } else {
+            docKey = chats.data[selectedChat].docKey          
+        }
+          
         
         if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
@@ -411,7 +417,7 @@ const Sessions = (props) => {
             docKey = chats.data[selectedChat].docKey
         }
         
-        console.log('DOCKEY', docKey)
+        
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
         

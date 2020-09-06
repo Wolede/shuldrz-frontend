@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, createRef} from 'react'
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
 import { Fab, Box, Typography, Container } from '@material-ui/core'
@@ -46,7 +46,7 @@ const ChatProfile = (props) => {
 
         const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
         let usersDetails = doc.data().usersDetails
-        console.log('USERS DETAILS', usersDetails)
+        
 
         const newUsersDetails = usersDetails.reduce( (acc, curr) => {
             
@@ -68,9 +68,17 @@ const ChatProfile = (props) => {
             doc.ref.update({
                 usersDetails: newUsersDetails
             })
-        })       
-
-        handleDialogClose()
+            handleDialogClose()
+            closeChatProfile()
+        }).then(() => {
+            doc.ref.update({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    sender: user.username,
+                    present: false,
+                    timestamp: Date.now()                    
+                }),
+            })
+        })            
     }
 
 

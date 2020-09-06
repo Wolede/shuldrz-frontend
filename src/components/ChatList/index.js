@@ -56,7 +56,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     const selectChat = (index) => selectChatFn(index);
 
-    console.log('chatListChats', chats)
+    
 
     return (
         <>
@@ -68,7 +68,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                 <ChatIcon fontSize="small" />
             </Fab>
         </Box>
-        { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username) ? (
+        { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username)  ? (
             chats.map((chat, i) => (
                 <>
                     {
@@ -116,25 +116,63 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         className={classes.typography}
                                     >
 
-                                        <Typography className={classes.h4} variant="h4">
-                                            { chat.groupName 
-                                                ?`${getGroupName('chatList', chat.usersDetails, user).name} ${getGroupName('chatList', chat.usersDetails, user).more}`
-                                                :chat.users.filter(_user => _user !== user.username).find(user => user)
-                                            }
-                                        </Typography>
-                                        <Typography variant="body2">
-                                                    {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
-                                                        chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
-                                                        :
-                                                        null
-                                                    )}
-                                        </Typography>
+                                    <Typography className={classes.h4} variant="h4">
+                                    { chat.groupName 
+                                    ?`${getGroupName('chatList', chat.usersDetails, user).name}
+                                    ${getGroupName('chatList', chat.usersDetails, user).more}` :chat.users.filter(_user => _user !== user.username).find(user => user)
+                                    }
+                                    </Typography>
+                                        {
+                                        chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted && (
+                                            <Typography variant="body2">
+                                                message deleted
+                                            </Typography>
+                                        )
+                                        }
+                                        
+                                        {
+                                            chat.messages[chat.messages.length - 1].message && chat.messages[chat.messages.length - 1].isDeleted === false && (
+                                                <Typography variant="body2">
+                                                {
+                                                    chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'}
+                                                </Typography>
+                                            )
+                                        }
+
+
+                                        {
+                                            chat.messages[chat.messages.length - 1].session == 'ended' &&
+                                            (
+                                                <Typography variant="body2">
+                                                    Session ended
+                                                </Typography>
+                                            )
+                                        }
+
+                                        {
+                                            chat.messages[chat.messages.length - 1].present == false && chat.messages[chat.messages.length - 1].sender === user.username ?  
+                                            (
+                                                <Typography variant="body2">
+                                                    You left the group
+                                                </Typography>
+                                            )
+
+                                            :  chat.messages[chat.messages.length - 1].present === false ?
+                                            ( 
+                                                <Typography variant="body2">
+                                                    {
+                                                        chat.messages[chat.messages.length - 1].sender 
+                                                    } left the group
+                                                </Typography>    
+                                            ): null
+                                        }
+                                        
 
                                     </Grid>
                                 </Grid>
                             </div>
 
-                        ) : (  chat.messages.length > 1 ? 
+                        ) : (  chat.messages.length > 1 && (chat.groupName && chat.usersDetails.find(_user => _user.userId === user.id).isPresent) ? 
                             <div onClick={closeChatList}>
                                 <Grid
                                     key={i}
@@ -174,20 +212,61 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                     >
 
                                         <Typography className={classes.h4} variant="h4">
-                                            { chat.groupName 
-                                                ?`${getGroupName('chatList', chat.usersDetails, user).name} ${getGroupName('chatList', chat.usersDetails, user).more}`
-                                                :chat.users.filter(_user => _user !== user.username).find(user => user)
-                                            }
-                                        </Typography>                  
-                                        
-                                        <Typography variant="body2">
-                                        {chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted ? 'message deleted' : (chat.messages[chat.messages.length - 1].message ?
-                                            chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'
-                                            :( 
-                                            chat.messages[chat.messages.length - 1].sender == user.username ? 'You ended the session' : `${chat.messages[chat.messages.length - 1].sender} ended the session`)
-                                        )}
+                                        { chat.groupName 
+                                        ?`${getGroupName('chatList', chat.usersDetails, user).name}
+                                        ${getGroupName('chatList', chat.usersDetails, user).more}` :chat.users.filter(_user => _user !== user.username).find(user => user)
+                                        }
                                         </Typography>
-                                                
+
+
+                                        {
+                                        chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted && (
+                                            <Typography variant="body2">
+                                                message deleted
+                                            </Typography>
+                                        )
+                                        }
+                                        
+                                        {
+                                            chat.messages[chat.messages.length - 1].message && chat.messages[chat.messages.length - 1].isDeleted === false && (
+                                                <Typography variant="body2">
+                                                {
+                                                    chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'}
+                                                </Typography>
+                                            )
+                                        }
+
+
+                                        {
+                                            chat.messages[chat.messages.length - 1].session == 'ended' &&
+                                            (
+                                                <Typography variant="body2">
+                                                    Session ended
+                                                </Typography>
+                                            )
+                                        }
+
+                                        {
+                                            chat.messages[chat.messages.length - 1].present == false && chat.messages[chat.messages.length - 1].sender === user.username ?  
+                                            (
+                                                <Typography variant="body2">
+                                                    You left the group
+                                                </Typography>
+                                            )
+
+                                            :  chat.messages[chat.messages.length - 1].present === false ?
+                                            ( 
+                                                <Typography variant="body2">
+                                                    {
+                                                        chat.messages[chat.messages.length - 1].sender 
+                                                    } left the group
+                                                </Typography>    
+                                            ): null
+                                        }
+                                        
+                                        
+                                        
+                                         
                                         
                                         
 
@@ -200,12 +279,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                         )             
                     }        
                     
-                    {/* Load Custom Modal COmponent */}
-                    {openModal === true &&
-                        (
-                            <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
-                        )
-                    }
+                    
 
                 </>
             ))
@@ -241,6 +315,12 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
             </div>
         )
 
+        }
+        {/* Load Custom Modal COmponent */}
+        {openModal === true &&
+            (
+                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
+            )
         }
         </>
     )
