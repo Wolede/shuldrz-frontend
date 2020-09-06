@@ -32,9 +32,9 @@ const AddSessionsForm = ({onClose}) => {
         try {
             const resBuddies = await api.get(`/users`)
             
-            setBuddies(resBuddies.data);            
+            setBuddies(resBuddies.data.filter(usr => usr.id !== user?.id));         
 
-            console.log('budsss', resBuddies.data)
+            console.log('budsss', resBuddies.data.filter(usr => usr.id !== user?.id))
 
         } catch (error) {
             setBuddies(null)
@@ -90,7 +90,30 @@ const AddSessionsForm = ({onClose}) => {
 
         //concatenate userName in the users array to create groupName
         let groupName = users.join(', ').toString()
-        
+
+
+        const chatBody = usersDetails.length > 2 
+                            ? {
+                                messages: [{
+                                    sender: user.username,                                   
+                                }],                
+                                currentTime: Date.now(),
+                                users: data.users,
+                                usersDetails,
+                                receiverHasRead: false,
+                                docKey,
+                                groupName
+                            }
+                            : {
+                                messages: [{
+                                    sender: user.username,
+                                    session: 'none',  
+                                }],                
+                                currentTime: Date.now(),
+                                users,
+                                usersDetails,
+                                receiverHasRead: false
+                            }
                 
         //Send group chat details to firebase
         const docKey = new Date().getTime().toString();       
@@ -131,7 +154,7 @@ const AddSessionsForm = ({onClose}) => {
                                 New Session
                             </Typography>
                             <p>
-                                You can only select a maximum of 3 buddies to chat with
+                                You can only select a maximum of 3 users to chat with
                             </p>
                             
                             <div className={classes.fieldWrapper}>
