@@ -116,7 +116,12 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         className={classes.typography}
                                     >
 
-                                        <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}</Typography>
+                                    <Typography className={classes.h4} variant="h4">
+                                    { chat.groupName 
+                                    ?`${getGroupName('chatList', chat.usersDetails, user).name}
+                                    ${getGroupName('chatList', chat.usersDetails, user).more}` :chat.users.filter(_user => _user !== user.username).find(user => user)
+                                    }
+                                    </Typography>
                                         {
                                         chat.messages[chat.messages.length - 1].message  && chat.messages[chat.messages.length - 1].isDeleted && (
                                             <Typography variant="body2">
@@ -167,7 +172,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                 </Grid>
                             </div>
 
-                        ) : (  chat.messages.length > 1 || (chat.groupName && chat.usersDetails.find(_user => _user.userId === user.id).isPresent) ? 
+                        ) : (  chat.messages.length > 1 && (chat.groupName && chat.usersDetails.find(_user => _user.userId === user.id).isPresent) ? 
                             <div onClick={closeChatList}>
                                 <Grid
                                     key={i}
@@ -206,8 +211,12 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         className={classes.typography}
                                     >
 
-                                        <Typography className={classes.h4} variant="h4">{chat.users.filter(_user => _user !== user.username).find(user => user)}
-                                        </Typography>  
+                                        <Typography className={classes.h4} variant="h4">
+                                        { chat.groupName 
+                                        ?`${getGroupName('chatList', chat.usersDetails, user).name}
+                                        ${getGroupName('chatList', chat.usersDetails, user).more}` :chat.users.filter(_user => _user !== user.username).find(user => user)
+                                        }
+                                        </Typography>
 
 
                                         {

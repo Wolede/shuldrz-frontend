@@ -28,6 +28,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true
     });
+
     
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
@@ -320,6 +321,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                         </Box>
 
                         <ChatInput 
+                            user={user}
                             chat={chat}
                             userClickedInput={userClickedInput} 
                             submitMessageFn={submitMessage} 
