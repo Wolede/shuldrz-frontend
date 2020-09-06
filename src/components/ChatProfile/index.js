@@ -46,7 +46,7 @@ const ChatProfile = (props) => {
 
         const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
         let usersDetails = doc.data().usersDetails
-        console.log('USERS DETAILS', usersDetails)
+        
 
         const newUsersDetails = usersDetails.reduce( (acc, curr) => {
             
@@ -69,6 +69,7 @@ const ChatProfile = (props) => {
                 usersDetails: newUsersDetails
             })
             handleDialogClose()
+            closeChatProfile()
         }).then(() => {
             doc.ref.update({
                 messages: firebase.firestore.FieldValue.arrayUnion({
