@@ -270,12 +270,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                         )             
                     }        
                     
-                    {/* Load Custom Modal COmponent */}
-                    {openModal === true &&
-                        (
-                            <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
-                        )
-                    }
+                    
 
                 </>
             ))
@@ -311,6 +306,12 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
             </div>
         )
 
+        }
+        {/* Load Custom Modal COmponent */}
+        {openModal === true &&
+            (
+                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
+            )
         }
         </>
     )
