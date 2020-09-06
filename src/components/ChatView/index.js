@@ -25,6 +25,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true
     });
+    
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
 
@@ -64,8 +65,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
     const endSession = () => {
         endSessionFn()
-
     }
+
 
     useEffect(() => {
         const container = document.getElementById('chatview-container');
@@ -278,13 +279,22 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     </Divider>
                                                 )
                                             }
-                                        </div>
 
+                                            {
+                                                msg.present === false && (
+                                                    <Divider>
+                                                        <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} left the group </Typography>
+                                                    </Divider>
+                                                )
+                                            }
+                                            
+                                            
+                                        </div>
+                                            
 
                                     )
 
                                 })
-
                                 
                             }
 
