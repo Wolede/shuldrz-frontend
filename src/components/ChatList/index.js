@@ -68,7 +68,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                 <ChatIcon fontSize="small" />
             </Fab>
         </Box>
-        { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username) ? (
+        { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username)  ? (
             chats.map((chat, i) => (
                 <>
                     {
@@ -167,7 +167,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                 </Grid>
                             </div>
 
-                        ) : (  chat.messages.length > 1 ? 
+                        ) : (  chat.messages.length > 1 || (chat.groupName && chat.usersDetails.find(_user => _user.userId === user.id).isPresent) ? 
                             <div onClick={closeChatList}>
                                 <Grid
                                     key={i}
