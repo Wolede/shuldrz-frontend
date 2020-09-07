@@ -30,14 +30,11 @@ const LoginForm = () => {
 
     const onSubmit = async (values) => {
         try {
-
             const res = await api.post('auth/local', {
                 identifier: values.email,
                 password: values.password
             })
             const token = res.data.jwt
-
-           
             
             if(token) {
                 console.log('got token');
@@ -45,7 +42,7 @@ const LoginForm = () => {
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
                 const user = res.data
-               
+                
                 setUser(user)
                 console.log("Got user", user)
                 Router.push('/app')
@@ -90,9 +87,9 @@ const LoginForm = () => {
             validationSchema={validationSchema}
             onSubmit={onSubmit}
             >
-            {({values, errors, touched, getFieldProps, isSubmitting}) => (
+            {({values, errors, touched, getFieldProps, isSubmitting, submitCount}) => (
                 <Form noValidate autoComplete="off">
-
+                    {/* {console.log(submitCount)} */}
                     <FormControl className={classes.formControl}>
                         <TextField 
                         name="email" 
