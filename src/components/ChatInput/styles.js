@@ -4,7 +4,7 @@ const useStyles = makeStyles(theme => ({
     formControl: {
         minWidth : `100%`,
         // margin : theme.spacing(0,0,2,0),
-        backgroundColor: `white`,
+        backgroundColor: props => props.isGroupDisabled && props.chat.groupName ? theme.palette.grey[300] : theme.palette.background.paper,
         borderRadius: '30px',
         color: `black`,
     },

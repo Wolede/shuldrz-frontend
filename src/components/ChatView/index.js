@@ -4,7 +4,9 @@ import { useTheme } from '@material-ui/styles';
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import GroupIcon from '@material-ui/icons/Group';
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
@@ -13,6 +15,7 @@ import Divider from 'components/Divider'
 import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
+import { getGroupName } from '../../helpers';
 
 
 
@@ -26,9 +29,14 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
         defaultMatches: true
     });
 
+    
+
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [groupDisabled, setGroupDisabled] = React.useState(false);
+
+    const view = chat.groupName ? 'groupChat' : 'singleChat'
 
     const handleRightSidebarOpen = () => {
         setOpenRightSidebar(true);
@@ -50,28 +58,28 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     };
     // const shouldOpenRightSidebar = isDesktop ? false : openRightSidebar;
 
-    const updateMessages = () => {
+    //check if admin or user left the group chat  
+    useEffect(() => {
+        setGroupDisabled(false)
+        const userDetail = chat?.usersDetails.find(_user => _user.username === user.username)?.isPresent
+        console.log('CHECK IF USER IS PRESENT', userDetail)
 
-    }
-
-
-
-    const setSchedule = () => {
-        console.log('schedule has been set')
-        setOpenModal(true);
-    }
-
+        if(chat?.usersDetails.some(user => user.isAdmin && !user.isPresent) || !userDetail){
+            setGroupDisabled(true)
+        }
+    }, [chat])
+    
 
     const endSession = () => {
         endSessionFn()
-
     }
+
 
     useEffect(() => {
         const container = document.getElementById('chatview-container');
-        if (container)
+        if (container && !anchorEl)
             container.scrollTo(0, container.scrollHeight);
-    })
+    }, [chat.messages.length])
 
     const [ mostRecentTimestamp, setMostRecentTimeStamp ] = useState(0);
     useEffect(() => {
@@ -143,6 +151,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     prevReview={prevReview}
                                     chatProfile={selectedUser}
                                     closeChatProfile={handleRightSidebarClose}
+                                    view={view}
+                                    // view={ chat.groupName ? 'groupChat' : 'singleChat' }
+                                    chat={chat}
                                 />
                             </MiniDrawer>
                         }
@@ -169,11 +180,14 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                         <Avatar
                                             className={classes.chatAvatar}
                                             alt={chat.users.filter(_user => _user !== user.username)[0]}
-                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null
+                                            src={chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image !== null && view === "singleChat"
                                                 ? chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image :
-                                                chat.users.filter(_user => _user !== user.username)[0]
+                                                null
                                             }
-                                            size="tiny" variant='rounded' />
+                                            size="tiny" variant='rounded'
+                                        >
+                                            {view === "groupChat" && <GroupIcon/>}
+                                        </Avatar>
                                     }
                                     onClick={handleRightSidebarOpen}
                                     disabled={ !selectedUser }
@@ -181,11 +195,19 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     More
                                 </MuiButton>
 
+                                <Typography className={classes.h5} variant="h5">
+                                    { view === 'groupChat'
+                                        ?`${getGroupName('chatView', chat.usersDetails, user).name} ${getGroupName('chatView', chat.usersDetails, user).more}`
+                                        :null
+                                    }
+                                </Typography>    
+
                             </Box>
-                            <div className={classes.headerButtons}>
-                                {/* <Button onClick={setSchedule} variant="contained" size="tiny" color="secondary-light">Set schedule</Button> */}
-                                <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
-                            </div>
+                            {view === "singleChat" &&
+                                <div className={classes.headerButtons}>
+                                    <Button onClick={endSession} variant="contained" size="tiny" color="error-light" disabled={endBtn()}>End session</Button>
+                                </div>
+                            }
                         </Box>
                         <Box flexGrow='1' padding='2rem 0 2rem 0' overflow="auto" id="chatview-container">
 
@@ -207,13 +229,14 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                 msg.message && msg.isDeleted ? (
                                                     <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
                                                         <div>
-                                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <Typography fontStyle="italic" variant="body1">message deleted</Typography>
-                                                            </div>
-                                                            <Typography color="secondary" className='timestamp'>
-                                                                {moment(msg.timestamp).calendar()}
+                                                            <Typography variant="body1" color="textPrimary" className={classes.messageBox}>
+                                                                message deleted
+                                                                <RemoveCircleOutlineIcon fontSize="small" style={{ margin: '0 .3rem 0 .3rem', verticalAlign: 'middle' }} />
                                                             </Typography>
                                                         </div>
+                                                        <Typography color="textSecondary" className='timestamp'>
+                                                            {moment(msg.timestamp).calendar()}
+                                                        </Typography>
                                                     </div>
                                                 )
                                                     :
@@ -221,8 +244,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     msg.message && msg.sender === user.username ? (
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                    <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>
+                                                                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -231,7 +254,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                         color='secondary'
                                                                         style={{ padding: '0 0 0 5px' }}
                                                                     >
-                                                                        <MoreVertIcon style={{ color: '#ffffff' }} />
+                                                                        <KeyboardArrowDownIcon fontSize="medium" style={{ color: '#ffffff' }} />
                                                                     </IconButton>
 
                                                                     <Menu
@@ -242,12 +265,11 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     >
                                                                         <MenuItem onClick={() => {deleteMessage(ts); handleClose();}}>Delete message</MenuItem>
                                                                     </Menu>
-
                                                                 </div>
-                                                                <Typography color="secondary" className='timestamp'>
-                                                                    {moment(msg.timestamp).calendar()}
-                                                                </Typography>
                                                             </div>
+                                                            <Typography color="textSecondary" className='timestamp'>
+                                                                {moment(msg.timestamp).calendar()}
+                                                            </Typography>
                                                         </div>
                                                     )
                                                         :
@@ -255,13 +277,14 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         msg.message ? (
                                                             <div className={classes.friendSent}>
                                                                 <div>
-                                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                        <Typography fontStyle="italic" variant="body1">{msg.message}</Typography>                                                                 
-                                                                    </div>
-                                                                    <Typography color="secondary" className='timestamp'>
-                                                                        {moment(msg.timestamp).calendar()}
-                                                                    </Typography>
+                                                                    {view === "groupChat" &&
+                                                                        <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
+                                                                    }
+                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
                                                                 </div>
+                                                                <Typography color="textSecondary" className='timestamp'>
+                                                                    {moment(msg.timestamp).calendar()}
+                                                                </Typography>
                                                            </div>
                                                         )
                                                         : 
@@ -276,15 +299,34 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                     </Divider>
                                                 )
                                             }
+
+                                            {
+                                                msg.present === false && (
+                                                    <Divider>
+                                                        <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} left the group </Typography>
+                                                    </Divider>
+                                                )
+                                            }
+                                            
+                                            
                                         </div>
+                                            
+
                                     )
 
                                 })
+                                
                             }
 
                         </Box>
 
-                        <ChatInput userClickedInput={userClickedInput} submitMessageFn={submitMessage} />
+                        <ChatInput 
+                            user={user}
+                            chat={chat}
+                            userClickedInput={userClickedInput} 
+                            submitMessageFn={submitMessage} 
+                            isGroupDisabled={groupDisabled} // to be made dynamic
+                        />
 
                     </>
 

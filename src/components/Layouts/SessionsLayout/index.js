@@ -82,7 +82,8 @@ const Sessions = (props) => {
                    
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
             .onSnapshot(res => {
-                const firebase_chats = res.docs.map(doc => doc.data())    
+                const firebase_chats = res.docs.map(doc => doc.data())  
+                
                 chatNotEmpty = firebase_chats.filter((chatList, i) => {
                     return chatList.messages.length > 1 || chatList.messages[0].sender  === user.username 
                 })
@@ -128,8 +129,7 @@ const Sessions = (props) => {
     //     }
     // })
 
-   console.log('chats', chats, selectedUser)
-    
+   
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)         
@@ -158,7 +158,7 @@ const Sessions = (props) => {
         
     // }, [chats.length])
 
-
+   
     useEffect(() => {
         // console.log('CHAT RECEIVER ID', chatReceiverID)
         const getUserInfo = async() => {            
@@ -166,7 +166,7 @@ const Sessions = (props) => {
                 const { data } = await api.get(`/users/${chatReceiverID}`)           
                 
                 // console.log('USER INFO', data)   
-                console.log('kini', chatReceiverID, data)            
+                         
                 setSelectedUser(data)
             } catch(error){
                 console.log(error)
@@ -201,9 +201,19 @@ const Sessions = (props) => {
         const sessionState = chats.data[selectedChat].messages.length === 0 ? [] : 
         chats.data[selectedChat].messages[chats.data[selectedChat].messages.length - 1].session
 
-        const session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
+        let session;
+        if (!chats.data[selectedChat].groupName) {
+            session = sessionState === 'ended' || sessionState === 'none' || sessionState.length === 0 ? 'started' : sessionState === 'started' ? 'continuing' : 'continuing'
+        } else {
+            session = null;
+        }
 
-        const docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+        let docKey;
+        if (!chats.data[selectedChat].groupName) {
+            docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+        } else {
+            docKey = chats.data[selectedChat].docKey
+        }
  
         firebase.firestore().collection('chats').doc(docKey)
         .update({
@@ -242,7 +252,14 @@ const Sessions = (props) => {
 
     const messageRead = () => {               
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
-        const docKey = [user?.id, selectedUserID].sort().join('');   
+        
+        let docKey;
+        if (!chats.data[selectedChat].groupName){
+            docKey = [user?.id, selectedUserID].sort().join(''); 
+        } else {
+            docKey = chats.data[selectedChat].docKey          
+        }
+          
         
         if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
@@ -350,6 +367,8 @@ const Sessions = (props) => {
 
     }
 
+
+    
    
     const endSession = async () => {           
 
@@ -390,11 +409,20 @@ const Sessions = (props) => {
 
     const deleteMessage = async (timestamp) => {
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
-        const docKey = [user.id, selectedUserID].sort().join('')
+        
+        let docKey;
+        if (!chats.data[selectedChat].groupName){
+            docKey = [user.id, selectedUserID].sort().join('')
+        } else {
+            docKey = chats.data[selectedChat].docKey
+        }
+        
+        
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
         
         const newMessages = messages.reduce((acc, curr) => {
+            
             if ( curr.timestamp === timestamp ) {
                 curr = {
                     ...curr,

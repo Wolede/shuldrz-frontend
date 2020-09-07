@@ -328,8 +328,9 @@ const ProfileForm = ({ user }) => {
                                 { ...getFieldProps('personality_type')}
                                 label="Personality Type"
                                 >
+                                {/* {formOptions.length < 1 && <MenuItem value={null}>Loading...</MenuItem>} */}
                                 {formOptions?.personalities?.map((value, key) => (
-                                    <MenuItem key={key} value={value.id}>{value.personalityType}</MenuItem>
+                                    <MenuItem key={key} value={value.id}>{value.name} - {value.personalityType}</MenuItem>
                                 ))}
                                 </Select>
                             </FormControl>

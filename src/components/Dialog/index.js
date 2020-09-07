@@ -67,10 +67,36 @@ const Dialog = (props) => {
                                 </DialogContent> */}
                                 <DialogActions>
                                     <MuiButton onClick={props.handleClose} color="primary">
-                                        No
+                                        No, go back
                                     </MuiButton>
                                     <MuiButton onClick={props.deleteImage} style={{color: "#FD2D55"}}>
-                                        Yes
+                                        Yes, delete
+                                    </MuiButton>
+                                </DialogActions>
+                            </>
+                        )
+                    }
+
+
+                    { props.view === "leaveGroup" &&
+                        (
+                            <>
+                                <Typography variant="h4" align="left" gutterBottom>
+                                    {props.isAdmin ?
+                                        "Are you sure you want to leave and disable the group?"
+                                    : 
+                                        "Are you sure you want to leave the group?"
+                                    }
+                                </Typography>
+                                <Typography variant="body1" align="left" gutterBottom>
+                                    If you leave, you won't be able to join again.                                  
+                                </Typography>
+                                <DialogActions>
+                                    <MuiButton onClick={props.handleClose} color="primary">
+                                        No, go back
+                                    </MuiButton>
+                                    <MuiButton onClick={props.leaveGroup} style={{color: "#FD2D55"}}>
+                                        Yes, leave
                                     </MuiButton>
                                 </DialogActions>
                             </>

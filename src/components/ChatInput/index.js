@@ -4,8 +4,10 @@ import { Send } from '@material-ui/icons';
 import { useStyles } from './styles'
 
 const ChatInput = (props) => {
-    const classes = useStyles()
+    const classes = useStyles(props)
     const [chatText, updateChatText] = useState('')
+
+    const { isGroupDisabled, chat, user} = props
 
     const userTyping = (e) => {
         // when shift and enter is pressed 
@@ -30,6 +32,7 @@ const ChatInput = (props) => {
         setValue('')
     }
 
+
     return (
         <Box
             position='sticky'
@@ -41,20 +44,24 @@ const ChatInput = (props) => {
                 onKeyUp={(e) => userTyping(e)}
                 variant="outlined"
                 id='chattextbox'
-                placeholder='Say something nice...'
+                placeholder={isGroupDisabled && chat.groupName && chat?.usersDetails?.find(det => det.isAdmin)?.userId === user.id ? 'You can no longer send messages here. This group has been disabled by the admin.' : isGroupDisabled && chat.groupName ? 'You can no longer send messages here' : 'Say something nice...'}
                 // multiline
                 // rows={1}
                 autoComplete="off"
                 onFocus={props.userClickedInput}
                 value={value}
                 onChange={handleChange}
-                InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                    <Send className={classes.sendBtn} onClick={submitMessage}/>
-                    </InputAdornment>
-                ),
-                }}
+                InputProps={
+                    (isGroupDisabled && chat.groupName) ? null :
+                    {
+                        endAdornment: (
+                            <InputAdornment position="end">
+                            <Send className={classes.sendBtn} onClick={submitMessage}/>
+                            </InputAdornment>
+                        ),
+                    }
+                }
+                disabled={isGroupDisabled && chat.groupName ? true : false}
             />
 
         </Box>
