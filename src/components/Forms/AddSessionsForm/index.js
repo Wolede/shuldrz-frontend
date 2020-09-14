@@ -176,7 +176,7 @@ const AddSessionsForm = ({onClose}) => {
                                     onChange={(event, newValue) => {
                                         //first condition allows for selection to not exceed 3
                                         //second condition allows you to deselect some selections even after selection has reached 3
-                                        values.buddies.length <= 2 || newValue.length <= 2  ? setFieldValue("buddies", newValue) : null
+                                        values.buddies.length <= 3 || newValue.length <= 3  ? setFieldValue("buddies", newValue) : null
                                     } }
                                     renderOption={(option, { selected }) => {
                                         return (
@@ -185,7 +185,7 @@ const AddSessionsForm = ({onClose}) => {
                                                     icon={icon}
                                                     checkedIcon={checkedIcon}
                                                     style={{ marginRight: 8 }}
-                                                    checked={ values.buddies.length <= 3 ? selected : false}
+                                                    checked={ values.buddies.length <= 4 ? selected : false}
                                                 />
                                                 {option}
                                             </React.Fragment>
