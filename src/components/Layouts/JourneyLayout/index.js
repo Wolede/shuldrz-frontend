@@ -140,7 +140,7 @@ const JourneyLayout = () => {
 
         //maybe we keep the following lines, maybe we don't
         if (user) {
-            getSuggestedBuddies(user?.topics);
+            getSuggestedBuddies(user?.topics?.map(top => top._id));
 
             getChats();
         }
@@ -209,7 +209,7 @@ const JourneyLayout = () => {
             })  
     }
 
-    // console.log('things', isMoreData, isLoadingMore, )
+    console.log('things', user, chats, suggestedBuddies )
     return (
         <div>
             { (user && getProfileCompletion(user) !== '100%' && showProfileBox) &&
