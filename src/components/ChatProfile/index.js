@@ -47,7 +47,6 @@ const ChatProfile = (props) => {
         const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
         let usersDetails = doc.data().usersDetails
         
-
         const newUsersDetails = usersDetails.reduce( (acc, curr) => {
             
             if ( curr.username === user.username ) {
@@ -59,7 +58,7 @@ const ChatProfile = (props) => {
             acc.push(curr)
             return acc;
         }, [])
-
+        
         console.log('NEW USERS DETAILS', newUsersDetails)
         return doc.ref.update({
             "usersDetails": firebase.firestore.FieldValue.arrayRemove({})

@@ -259,7 +259,6 @@ const Sessions = (props) => {
         } else {
             docKey = chats.data[selectedChat].docKey          
         }
-          
         
         if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
@@ -293,7 +292,8 @@ const Sessions = (props) => {
         }
 
         const chatExists = async () => {
-            const docKey = newBuildDocKey();
+            let docKey
+            docKey = newBuildDocKey();
             const chat = await
                 firebase
                 .firestore()
@@ -354,22 +354,20 @@ const Sessions = (props) => {
             //                         selectedUser,
             //                         chats.data[0].usersDetails.some(_user => _user.userId === selectedUser.id)
             // )
-
-            if(chatExist && chats.data.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){              
-                setChatExist(true)
+            
+            if(chatExist && chats.data.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){   
+                setChatExist(true)                
                 goToChat(tempDocKey())
-            } else {
+            } else {                
                 newChatSubmit()
-            }    
-          
+            }           
         }
 
 
     }
 
 
-    
-   
+
     const endSession = async () => {           
 
         const docKey = [user.id, chats.data[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
