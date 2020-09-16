@@ -17,7 +17,7 @@ import { getGroupName } from '../../helpers'
 
 
 
-const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, view }) => {
+const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, view, submitNewChat }) => {
 
 
     //this ensures that a user is always selected to chat with
@@ -319,7 +319,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
         {/* Load Custom Modal COmponent */}
         {openModal === true &&
             (
-                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
+                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' callback={submitNewChat} />
             )
         }
         </>

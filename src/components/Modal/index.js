@@ -68,7 +68,7 @@ const Modal = props => {
                 { view === "addSessions" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddSessionsForm onClose={handleClose} />
+                            <AddSessionsForm onClose={handleClose} submitNewChat={callback} />
                         </Paper>
                     )
                 }

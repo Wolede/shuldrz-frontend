@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/Api'
 import { Formik, Form } from 'formik'
@@ -11,11 +11,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
+// import { SelectedUserContext } from 'contexts/SelectedUserContext';
 const firebase = require("firebase/app");
 
 
 
-const AddSessionsForm = ({onClose}) => {
+const AddSessionsForm = ({onClose, submitNewChat}) => {
     const { user, loading } = useAuth();
     
     const classes = useStyles()
@@ -26,7 +27,8 @@ const AddSessionsForm = ({onClose}) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
     const [buddies, setBuddies] = useState([]);
-    const [data, setData] = useState({})
+    // const [data, setData] = useState({})
+    // const [ , setSelectedUser ] = useContext(SelectedUserContext)
 
     const getFormOptions = async () => {
         try {
@@ -120,23 +122,28 @@ const AddSessionsForm = ({onClose}) => {
                 groupName
             })
         } else {
-            const newBuildDocKey = () =>  data.usersDetails.map(det => det.userId).sort().join('');
-            const docKey = newBuildDocKey();  
-            await 
-            firebase
-            .firestore()
-            .collection('chats')
-            .doc(docKey)
-            .set({
-                messages: [{
-                    sender: user.username,
-                    session: 'none',  
-                }],                
-                currentTime: Date.now(),
-                users: data.users,
-                usersDetails: data.usersDetails.map( usr => ({ userId: usr.userId, image: usr.image }) ),
-                receiverHasRead: false
-            })
+            const selectedUser = buddies.find(usr => usr.id === usersDetails.find(usr => usr)?.userId)
+            console.log('motif', selectedUser)
+            // await setSelectedUser(selectedUser)
+            submitNewChat(selectedUser);
+
+            // const newBuildDocKey = () =>  data.usersDetails.map(det => det.userId).sort().join('');
+            // const docKey = newBuildDocKey();  
+            // await 
+            // firebase
+            // .firestore()
+            // .collection('chats')
+            // .doc(docKey)
+            // .set({
+            //     messages: [{
+            //         sender: user.username,
+            //         session: 'none',  
+            //     }],                
+            //     currentTime: Date.now(),
+            //     users: data.users,
+            //     usersDetails: data.usersDetails.map( usr => ({ userId: usr.userId, image: usr.image }) ),
+            //     receiverHasRead: false
+            // })
         }
 
         //close modal
@@ -160,7 +167,7 @@ const AddSessionsForm = ({onClose}) => {
                                 New Session
                             </Typography>
                             <p>
-                                You can only select a maximum of 3 users to chat with
+                                You can only select a maximum of 4 users to chat with
                             </p>
                             
                             <div className={classes.fieldWrapper}>
