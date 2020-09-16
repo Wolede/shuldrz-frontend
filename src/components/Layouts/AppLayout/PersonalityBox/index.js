@@ -27,7 +27,7 @@ const PersonalityBox = ({userData, otherUser}) => {
                         </Typography>
                         <Paper color="secondary" padding='2px' marginBottom='.5rem'>
                             <Typography variant='h4' style={{textAlign: 'center'}}>
-                                {userData?.personality_type?.personalityType}
+                                {userData?.personality_type?.name}
                             </Typography>
                         </Paper>
                         <a 
