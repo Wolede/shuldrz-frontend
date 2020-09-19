@@ -73,7 +73,7 @@ const AddNoteForm = props => {
                 >
                 {({values, errors, touched, getFieldProps, setFieldValue, isSubmitting}) => (
                     <Form noValidate autoComplete="off">
-                        {console.log(values) }
+                        {/* {console.log(values) } */}
                         <FormControl className={classes.formControl}>
                             <FormControlLabel
                                 control={<Switch { ...getFieldProps('dedication')} name="dedication" color="secondary" />}
