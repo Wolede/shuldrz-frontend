@@ -67,7 +67,7 @@ const WallNote = props => {
             const res = await api.put(`wall-notes/${id}`, {
                 usersLiked: [
                     ...usersLiked,
-                    user.id
+                    user?.id
                 ]
             })
             setLikes({
@@ -82,7 +82,7 @@ const WallNote = props => {
     const unlike = async () => {
         console.log('unlike');
         setLikes({...likes, loading: true})
-        const newUsersLiked = usersLiked.filter(item => item.id !== user.id)
+        const newUsersLiked = usersLiked.filter(item => item.id !== user?.id)
         
         try {
             const res = await api.put(`wall-notes/${id}`, {
@@ -100,7 +100,7 @@ const WallNote = props => {
     const getLikeStatus = () => {
         if(!isPublic) {
             setLikes({
-                userHasLiked: usersLiked.some((curr) => curr.username === user.username),
+                userHasLiked: usersLiked.some((curr) => curr.username === user?.username),
                 count: usersLiked.length
             })
         }
@@ -201,7 +201,7 @@ const WallNote = props => {
                 </a>
                 </Link>
                 <Box flexGrow='1' display="flex" justifyContent="flex-end">
-                    {!isPublic && userData.username === user.username && (
+                    {!isPublic && userData.username === user?.username && (
                         <div className={classes.iconButtons}>
                             <BoxMenu
                                 className={classes.iconButton} 
