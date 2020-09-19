@@ -169,7 +169,7 @@ const WallLayout = ({isPublic}) => {
         setOpenModal(false);
     };
 
-    console.log('pini', isMoreData)
+    // console.log('pini', isMoreData, pages)
 
     return (
         <div>
@@ -254,9 +254,11 @@ const WallLayout = ({isPublic}) => {
                     
                 </div>
             }
-            { pages.length < 2 && !isMoreData &&
-                <Box textAlign="center" paddingTop="100"> 
-                    <Typography align="center" variant="body1">No notes for now</Typography>
+
+            {/* Not perfect - if general notes page is empty, no msg will be displayed */}
+            { pages?.filter(page => !page.key.includes('user') && !page.key.includes('null')).length < 2 && !isMoreData &&
+                <Box textAlign="center" paddingTop="100px"> 
+                    <Typography align="center" variant="body2">No notes for now</Typography>
                 </Box>
             }
         </div>
