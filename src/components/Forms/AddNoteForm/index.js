@@ -122,7 +122,7 @@ const AddNoteForm = props => {
                                 <TextField 
                                     name="link" 
                                     id="link" 
-                                    label={values.title.length > 0 ? `Add a link to ${values.title}` : 'Add link to dedication'}
+                                    label={values.title.length > 0 ? `Share a link to ${values.title} (website, article, social media link) - optional` : 'Share link to dedication (website, article, social media link) - optional'}
                                     { ...getFieldProps('link')}
                                     variant="outlined"
                                     helperText={ errors.link && touched.link ?

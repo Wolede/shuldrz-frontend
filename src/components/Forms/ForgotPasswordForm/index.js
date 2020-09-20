@@ -21,6 +21,7 @@ const ForgotPasswordForm = props => {
 
 
     const onSubmit = async (values) => {
+        console.log('lol');
         try {
             const res = await api.post(`auth/forgot-password`, {
                     email: values.email,
@@ -30,10 +31,12 @@ const ForgotPasswordForm = props => {
             })
             
         } catch (error) {
-            const message = error.response.data.message[0].messages[0].message
+            // console.log('message', error.response)
+            // const message = error.response.data?.message[0]?.messages[0]?.message
+            // console.log('message', message);
             setIsSuccessful({
-                status: false,
-                message: message
+                status: true, // let's watch the behaviour
+                // message: message ? message : 'an error occurred'
             })
         }
 

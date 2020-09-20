@@ -226,7 +226,7 @@ const WallNote = props => {
                     {truncate(note, 200)}
                 </Typography>
             )}
-            {dedication && (
+            {dedication && link && (
                 <a href={`https://${link}`} target='_blank'>
                     <Typography variant='caption'>
                         Dedication Link
