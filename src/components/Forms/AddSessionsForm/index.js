@@ -123,7 +123,7 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
             })
         } else {
             const selectedUser = buddies.find(usr => usr.id === usersDetails.find(usr => usr)?.userId)
-            console.log('motif', selectedUser)
+            // console.log('motif', selectedUser)
             // await setSelectedUser(selectedUser)
             submitNewChat(selectedUser);
 
@@ -167,7 +167,7 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                                 New Session
                             </Typography>
                             <p>
-                                You can only select a maximum of 4 users to chat with
+                                Select up to 4 users to chat with.
                             </p>
                             
                             <div className={classes.fieldWrapper}>
