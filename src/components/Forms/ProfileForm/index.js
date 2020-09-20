@@ -101,13 +101,13 @@ const ProfileForm = ({ user }) => {
         DateOfBirth: Yup.date().nullable(),
         gender: Yup.string(),
         maritalStatus: Yup.string(),
-        personality_type: Yup.string(),
+        personality_type: Yup.string().required('Pick a personality type'),
         occupation: Yup.string().max(20, 'Maximum of 20 characters'),
         reference: Yup.string().max(50, 'Maximum of 50 characters'),
         experience: Yup.string().max(74, 'Maximum of 74 characters'),
         availableDays: Yup.array(),
         availableTime: Yup.string(),
-        charity: Yup.string(),
+        charity: Yup.string().required('Pick a charity'),
         topics: Yup.array().required('Interested topics is empty'),
     })
 
@@ -274,7 +274,7 @@ const ProfileForm = ({ user }) => {
                                     // disableToolbar
                                     // variant="inline"
                                     inputVariant="outlined"
-                                    format="DD/MM/YYYY"
+                                    format="MM/DD/YYYY"
                                     margin="normal"
                                     id="DateOfBirth"
                                     label="DateOfBirth"
@@ -327,12 +327,19 @@ const ProfileForm = ({ user }) => {
                                 id="personality_type"
                                 { ...getFieldProps('personality_type')}
                                 label="Personality Type"
+                                disabled={!formOptions}
                                 >
-                                {/* {formOptions.length < 1 && <MenuItem value={null}>Loading...</MenuItem>} */}
                                 {formOptions?.personalities?.map((value, key) => (
                                     <MenuItem key={key} value={value.id}>{value.name} - {value.personalityType}</MenuItem>
                                 ))}
                                 </Select>
+                                <FormHelperText error={errors.personality_type && touched.personality_type ? true : false}>
+                                    {!formOptions && <>Loading...</>}
+                                    
+                                    { errors.personality_type && touched.personality_type ?
+                                        errors.personality_type : null
+                                    }
+                                </FormHelperText>
                             </FormControl>
 
 
@@ -476,12 +483,19 @@ const ProfileForm = ({ user }) => {
                                         id="charity"
                                         { ...getFieldProps('charity')}
                                         label="Charity"
-                                        >
-                                            {/* <MenuItem value={'none'}>No Charity</MenuItem> */}
+                                        disabled={!formOptions}
+                                        >                                               
                                         {formOptions?.charities?.map((value, key) => (
                                             <MenuItem key={key} value={value.id}>{value.name}</MenuItem>
                                         ))}
                                         </Select>
+                                        <FormHelperText error={errors.charity && touched.charity ? true : false}>
+                                            {!formOptions && <>Loading...</>}
+                                            
+                                            { errors.charity && touched.charity ?
+                                                errors.charity : null
+                                            }
+                                        </FormHelperText>
                                     </FormControl>
 
                                 </div>
