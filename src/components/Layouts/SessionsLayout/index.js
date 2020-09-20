@@ -307,6 +307,7 @@ const Sessions = (props) => {
             const usersInChat = docKey.split(':');
             //find singlechat that meets criterion
             const chat = [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+            // const chat = [...chats.data].filter((chat) => !chat.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             //update chatList with the indexOf singlechat found above
             updateSelectedChat(chats.data.indexOf(chat));
         }
@@ -345,6 +346,7 @@ const Sessions = (props) => {
         }
 
         const userExist = await userExists();
+        console.log('userExists?', userExist)
         if (userExist) {
             const chatExist = await chatExists();
 
@@ -356,14 +358,17 @@ const Sessions = (props) => {
             //                         selectedUser,
             //                         chats.data[0].usersDetails.some(_user => _user.userId === selectedUser.id)
             // )
-            // console.log('trynado',chatExist, chats.data.sort((a,b) => !!a.groupName - !!b.groupName), chats.data.sort((a,b) => !!a.groupName - !!b.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1, selectedUser)
+            // console.log('trynado',chatExist, [...chats.data].filter((chat) => !chat.groupName),  selectedUser)
 
             //sort to send all cha with groupName property to bottom - this is done to  make sure a singlechat that meets the find criterion is found first
-            if(chatExist && [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){              
+            // if(chatExist && [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){    
+            if(chatExist && [...chats.data].filter((chat) => !chat.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){    
+                console.log('a')          
                 setChatExist(true);
                 goToChat(tempDocKey());
                 setSelectedUser(selectedUser);
             } else {
+                console.log('b')          
                 newChatSubmit();
                 setSelectedUser(selectedUser);
             }    
