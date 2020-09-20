@@ -256,11 +256,11 @@ const WallLayout = ({isPublic}) => {
             }
 
             {/* Not perfect - if general notes page is empty, no msg will be displayed */}
-            { pages?.filter(page => !page.key.includes('user') && !page.key.includes('null')).length < 2 && !isMoreData &&
+            {/* { pages?.filter(page => !page.key.includes('user') && !page.key.includes('null')).length < 2 && !isMoreData &&
                 <Box textAlign="center" paddingTop="100px"> 
                     <Typography align="center" variant="body2">No notes for now</Typography>
                 </Box>
-            }
+            } */}
         </div>
     )
 }
