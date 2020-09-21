@@ -112,7 +112,7 @@ const Sessions = (props) => {
                 
         console.log('present chat', chats)
         if (selectedUser && !chats.loading) {                  
-            submitNewChat()                        
+            submitNewChat(selectedUser)                        
         }
 
     }, [chats.loading])
@@ -272,7 +272,7 @@ const Sessions = (props) => {
 
 
     // <!-- Submit new chat when user cliks on the chat button on a profile --> 
-    const submitNewChat = async () => {
+    const submitNewChat = async (selectedUser) => {
 
         const newBuildDocKey = () =>  [user.id, selectedUser.id].sort().join('');
         const tempDocKey = () =>  [user.username, selectedUser.username].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
@@ -305,7 +305,10 @@ const Sessions = (props) => {
 
         const goToChat = (docKey) => {
             const usersInChat = docKey.split(':');
-            const chat = chats.data.find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+            //find singlechat that meets criterion
+            const chat = [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+            // const chat = [...chats.data].filter((chat) => !chat.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+            //update chatList with the indexOf singlechat found above
             updateSelectedChat(chats.data.indexOf(chat));
         }
 
@@ -339,10 +342,11 @@ const Sessions = (props) => {
                 receiverHasRead: false
             })
 
-            
+            updateSelectedChat(0);
         }
 
         const userExist = await userExists();
+        console.log('userExists?', userExist)
         if (userExist) {
             const chatExist = await chatExists();
 
@@ -354,13 +358,20 @@ const Sessions = (props) => {
             //                         selectedUser,
             //                         chats.data[0].usersDetails.some(_user => _user.userId === selectedUser.id)
             // )
-            
-            if(chatExist && chats.data.find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){   
-                setChatExist(true)                
-                goToChat(tempDocKey())
-            } else {                
-                newChatSubmit()
-            }           
+            // console.log('trynado',chatExist, [...chats.data].filter((chat) => !chat.groupName),  selectedUser)
+
+            //sort to send all cha with groupName property to bottom - this is done to  make sure a singlechat that meets the find criterion is found first
+            // if(chatExist && [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){    
+            if(chatExist && [...chats.data].filter((chat) => !chat.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){    
+                console.log('a')          
+                setChatExist(true);
+                goToChat(tempDocKey());
+                setSelectedUser(selectedUser);
+            } else {
+                console.log('b')          
+                newChatSubmit();
+                setSelectedUser(selectedUser);
+            }          
         }
 
 
@@ -487,7 +498,8 @@ const Sessions = (props) => {
                                         chats={ chats.data }
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
-                                    />               
+                                        submitNewChat={submitNewChat}
+                                    />                                      
 
                                 )
                         }

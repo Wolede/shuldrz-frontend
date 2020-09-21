@@ -21,7 +21,7 @@ const UserPageLayout = ({username}) => {
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
 
-    const PAGE_SIZE = 5;
+    const PAGE_SIZE = 10;
     const START_POSITION_IN_CONFIG_URL = 21; // index location of the first digit of the start position in the config url
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
@@ -101,7 +101,7 @@ const UserPageLayout = ({username}) => {
 
     useEffect(() => {
         loader.current = loadMore;
-    }, [loadMore, loading])
+    }, [loadMore])
 
     useEffect(() => {
         const currentElement = element;
@@ -153,6 +153,8 @@ const UserPageLayout = ({username}) => {
         getUser() // get user data
     }, [username])
 
+    // console.log('fancy', isMoreData, isLoadingMore)
+
     return (
         <div>
             <Box marginBottom="1.5rem">
@@ -185,11 +187,11 @@ const UserPageLayout = ({username}) => {
                 <Box textAlign="center" paddingTop="100"> 
                     <Typography align="center" variant="body1">No profile activity yet</Typography>
                 </Box>
-            }
+            } 
 
-            { isMoreData && !isLoadingMore &&
+            {/* { isMoreData && !isLoadingMore &&
                 <Skeleton variant="rect" height={150} animation="wave"/>
-            }
+            } */}
 
         </div>
     )

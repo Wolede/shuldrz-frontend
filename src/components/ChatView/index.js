@@ -172,9 +172,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     </Fab>
                                 )
                                 }
-                                <MuiButton
+                                <Button
                                     variant="contained"
-                                    color="secondary"
+                                    color="secondary-light"
                                     size='small'
                                     startIcon={
                                         <Avatar
@@ -193,7 +193,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     disabled={ !selectedUser }
                                 >
                                     More
-                                </MuiButton>
+                                </Button>
 
                                 <Typography className={classes.h5} variant="h5">
                                     { view === 'groupChat'
