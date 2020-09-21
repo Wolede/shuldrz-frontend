@@ -131,7 +131,7 @@ const ProfileForm = ({ user }) => {
             
         })
 
-        let ref = firebase.firestore.collection('users').doc(user.id);
+        let ref = firebase.firestore().collection('users').doc(user.id);
         ref.update({
             username: newUsername
         })       
@@ -161,7 +161,6 @@ const ProfileForm = ({ user }) => {
             
             res = await api.put(`users/${id}`, values)
             
-            console.log('RESP', res)
             if(res){
                 updateFirebaseData(res.data.username) 
             }

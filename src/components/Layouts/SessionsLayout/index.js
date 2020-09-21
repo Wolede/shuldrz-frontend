@@ -483,11 +483,11 @@ const Sessions = (props) => {
                                         user={user}
                                         history={props.history}
                                         selectChatFn={selectChat}
-                                        closeChatList={handleLeftSidebarClose}                                        
+                                        closeChatList={handleLeftSidebarClose}  a                                      
                                         chats={ chats.data }
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
-                                    />                                      
+                                    />               
 
                                 )
                         }
