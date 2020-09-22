@@ -19,33 +19,32 @@ function HideOnScroll(props) {
         {children}
       </Slide>
     );
-  }
-  
+}
+
+function ScrollTop(props) {
+    const { children } = props;
+    const classes = useStyles();
+
+    const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+    });
+
+    const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector('#hero-front');
+
+    if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    };
     
-  function ScrollTop(props) {
-      const { children } = props;
-      const classes = useStyles();
-  
-      const trigger = useScrollTrigger({
-        disableHysteresis: true,
-        threshold: 100,
-      });
-    
-      const handleClick = (event) => {
-        const anchor = (event.target.ownerDocument || document).querySelector('#hero-front');
-    
-        if (anchor) {
-          anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      };
-    
-      return (
+    return (
         <Zoom in={trigger}>
           <div onClick={handleClick} role="presentation" className={classes.scroll}>
             {children}
           </div>
         </Zoom>
-      );
+    );
 }
 
 

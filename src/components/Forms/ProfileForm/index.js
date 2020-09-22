@@ -114,26 +114,30 @@ const ProfileForm = ({ user }) => {
 
 
     console.log('FETCHED USERNAME', user.username)
+
+    /**Update username in firebase on update */
     const updateFirebaseData = async (newUsername) => {
         const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
+        console.log('USER', user.username)
+        console.log('USER', user.id)
+        console.log('NEW USERNAME', newUsername)
 
-            console.log('USER', user.username)
-            console.log('USER', user.id)
-            console.log('NEW USERNAME', newUsername)
-
-            snapshot.forEach(doc => {         
-                const selectedUser = doc.data().users.filter(_user => _user !== user.id)[0]
-                
-                
-                    console.log('SELECTED USER', selectedUser.username)
-                    const users = [newUsername, selectedUser]
-
-                    doc.ref.update({
-                        users: [...users]
-                    })
+        snapshot.forEach(doc => {         
+            const selectedUser = doc.data().users.filter(_user => _user !== user.id)[0]
+            const users = [newUsername, selectedUser]
+            doc.ref.update({
+                    users: [...users]
+                })        
             
-                
-            })
+        })
+
+        let ref = firebase.firestore().collection('users').doc(user.id);
+        ref.update({
+            username: newUsername
+        })       
+        .catch(function(error) {
+            console.error(error);
+        });
     }
 
     const onSubmit = async (values) => {
@@ -157,12 +161,12 @@ const ProfileForm = ({ user }) => {
             
             res = await api.put(`users/${id}`, values)
             
-            res ? updateFirebaseData(res.data.username) : null
+            if(res){
+                updateFirebaseData(res.data.username) 
+            }
             
             
-
             const profileCompletion = getProfileCompletion(res.data)
-
             if (profileCompletion === '100%' && !res.data.isProfileCompleted) {
                 //update the hearts count
                 if (res.data.heart) {
@@ -172,16 +176,9 @@ const ProfileForm = ({ user }) => {
                 }
                 //update the isProfileCompleted property
                 values.isProfileCompleted = true;
-                res = await api.put(`users/${id}`, values)
+                res = await api.put(`users/${id}`, values)               
             }
-                    
-
-            
-
-            
             // console.log('letsee', res, profileCompletion);
-
-
             //set global user
             setUser(res.data)
             
@@ -509,7 +506,7 @@ const ProfileForm = ({ user }) => {
                             </Typography>
 
                             <Typography variant="body1" style={{ marginBottom: '1rem' }}>
-                            These are the topics we'd use to match you with {userType === 'Volunteer' ? 'buds' : 'buddies'}.
+                            These are the topics we'd use to match you with {userType === 'Volunteer' ? 'buds' : 'buddies'}
                             </Typography>
                             
                             <div className={classes.fieldWrapper}>
@@ -666,12 +663,12 @@ const ProfileForm = ({ user }) => {
 
                     </Form>
             )}
-            </Formik>
+                </Formik>
             </Box>
-
         </>
     )
 }
+                                        
 
 ProfileForm.propTypes = {
     user: PropTypes.object

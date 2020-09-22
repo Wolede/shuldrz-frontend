@@ -68,7 +68,8 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                     username: buddiesObject.username, 
                     image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null,
                     isAdmin: false,
-                    isPresent: true
+                    isPresent: true,
+                    hasDeletedChat: false
                 });
             }
             return acc; 
@@ -93,7 +94,7 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
 
         //Pushing the admin details to the usersDetails array
         const userImage = user.profileImage ? user.profileImage.url : null
-        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username})
+        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username, hasDeletedChat: false})
         data.users.push(user.username)       
        
         console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))

@@ -22,7 +22,7 @@ const AppLayout = (props) => {
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
 
     const handleLeftSidebarOpen = () => {
-      setOpenLeftSidebar(true);
+     setOpenLeftSidebar(true);
     };
   
     const handleLeftSidebarClose = () => {
@@ -63,12 +63,12 @@ const AppLayout = (props) => {
             <div className={classes.root}>
                 <Grid container>
                     <Grid 
-                      item 
-                      xs={12}
-                      md={withRightSidebar ? 12 : 12} 
-                      lg={withRightSidebar ? 9 : 11} 
-                      xl={withRightSidebar ? 8 : 11} 
-                      >
+                    item 
+                    xs={12}
+                    md={withRightSidebar ? 12 : 12} 
+                    lg={withRightSidebar ? 9 : 11} 
+                    xl={withRightSidebar ? 8 : 11} 
+                    >
 
                         {children}
 
