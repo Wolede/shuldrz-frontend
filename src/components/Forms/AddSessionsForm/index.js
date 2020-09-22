@@ -68,7 +68,8 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                     username: buddiesObject.username, 
                     image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null,
                     isAdmin: false,
-                    isPresent: true
+                    isPresent: true,
+                    hasDeletedChat: false
                 });
             }
             return acc; 
