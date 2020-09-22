@@ -213,7 +213,7 @@ const SignupForm = ({volunteer}) => {
                         disabled={isSubmitting}
                         loading={isSubmitting}
                         >
-                            Signup
+                            Sign up
                         </Button>
                     </FormControl>
                     

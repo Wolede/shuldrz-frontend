@@ -94,7 +94,7 @@ const BuddiesLayout = () => {
     return (
         <div>
             <Box marginBottom="2rem">
-                <Typography variant="h3"> Buddies </Typography>
+                <Typography variant="h3"> Humans </Typography>
             </Box>
             
             {/* Render the page data */}

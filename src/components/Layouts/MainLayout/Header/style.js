@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
     root: {
         boxShadow: 'none',
+        backgroundColor: props => props.isLight ? "transparent" : theme.palette.background.default
     },
     toolBar: {
         padding: theme.spacing(2, 0),
