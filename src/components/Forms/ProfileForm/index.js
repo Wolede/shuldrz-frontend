@@ -165,6 +165,7 @@ const ProfileForm = ({ user }) => {
                 updateFirebaseData(res.data.username) 
             }
             
+            
             const profileCompletion = getProfileCompletion(res.data)
             if (profileCompletion === '100%' && !res.data.isProfileCompleted) {
                 //update the hearts count
@@ -175,7 +176,7 @@ const ProfileForm = ({ user }) => {
                 }
                 //update the isProfileCompleted property
                 values.isProfileCompleted = true;
-                res = await api.put(`users/${id}`, values)
+                res = await api.put(`users/${id}`, values)               
             }
             // console.log('letsee', res, profileCompletion);
             //set global user
@@ -505,7 +506,7 @@ const ProfileForm = ({ user }) => {
                             </Typography>
 
                             <Typography variant="body1" style={{ marginBottom: '1rem' }}>
-                            These are the topics we'd use to match you with {userType === 'Volunteer' ? 'buds' : 'buddies'}.
+                            These are the topics we'd use to match you with {userType === 'Volunteer' ? 'buds' : 'buddies'}
                             </Typography>
                             
                             <div className={classes.fieldWrapper}>
@@ -662,12 +663,12 @@ const ProfileForm = ({ user }) => {
 
                     </Form>
             )}
-            </Formik>
+                </Formik>
             </Box>
-
         </>
     )
 }
+                                        
 
 ProfileForm.propTypes = {
     user: PropTypes.object

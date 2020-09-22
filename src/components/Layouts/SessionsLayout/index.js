@@ -92,6 +92,8 @@ const Sessions = (props) => {
 
         }
 
+        console.log('FIREBASE CHATS', chats)
+
     }, [user]);
 
     // useEffect(() => {
@@ -226,8 +228,25 @@ const Sessions = (props) => {
             }),
             currentTime: Date.now(),
             receiverHasRead: false
-        }); 
-
+        }).then(async () => {       
+            const doc = await firebase.firestore().collection('chats').doc(docKey).get()    
+            const usersDetails = doc.data().usersDetails
+            
+            const newUsersDetails = usersDetails.reduce((acc, curr)=> {
+                
+                if(curr.userId !== user.id){
+                    curr = {
+                        ...curr,
+                        hasDeletedChat: false
+                    }
+                }
+                acc.push(curr)
+                return acc;
+            }, [])
+            doc.ref.update({
+                usersDetails: newUsersDetails
+            })
+        })
         updateSelectedChat(0)       
         
     }
@@ -303,14 +322,50 @@ const Sessions = (props) => {
             return chat.exists;
         }
 
-        const goToChat = (docKey) => {
-            const usersInChat = docKey.split(':');
+        const goToChat = async (users) => {
+            const usersInChat = users.split(':');
+
             //find singlechat that meets criterion
             const chat = [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             // const chat = [...chats.data].filter((chat) => !chat.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             //update chatList with the indexOf singlechat found above
             updateSelectedChat(chats.data.indexOf(chat));
+            updateHasDeleted(chats.data.indexOf(chat))
         }
+
+        //update hasDeletedChat property of the selected chat to true so it displays on the chatList
+        const updateHasDeleted = async (selectedChat) => {
+            const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+
+            let docKey;
+            if (!chats.data[selectedChat].groupName){
+                docKey = [user.id, selectedUserID].sort().join('')
+            } else {
+                docKey = chats.data[selectedChat].docKey
+            }
+            
+            const doc = await firebase.firestore().collection('chats').doc(docKey).get()
+
+            const usersDetails = doc.data().usersDetails
+            
+
+            const newUsersDetails = usersDetails.reduce((acc, curr) => {
+                
+                if(curr.userId === user.id){
+                    curr = {
+                        ...curr,
+                        hasDeletedChat: false
+                    }
+                }
+                acc.push(curr)
+                return acc;
+            }, [])
+            doc.ref.update({
+                usersDetails: newUsersDetails
+            })
+        }
+
+
 
         const newChatSubmit = async () => {            
             const docKey = newBuildDocKey();  
@@ -332,11 +387,13 @@ const Sessions = (props) => {
                 usersDetails: [
                     {
                         userId: user.id,
-                        image: userImage
+                        image: userImage,
+                        hasDeletedChat: false
                     },
                     {   
                         userId: selectedUser.id,
-                        image: selectedUserImage
+                        image: selectedUserImage,
+                        hasDeletedChat: false
                     }
                 ],
                 receiverHasRead: false
@@ -379,8 +436,7 @@ const Sessions = (props) => {
 
 
 
-    const endSession = async () => {           
-
+    const endSession = async () => {  
         const docKey = [user.id, chats.data[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
 
         firebase.firestore().collection('chats').doc(docKey)
@@ -441,8 +497,6 @@ const Sessions = (props) => {
             acc.push(curr)
             return acc;
         }, [])
-              
-
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
         })
@@ -458,6 +512,46 @@ const Sessions = (props) => {
     }
 
     console.log('selectedUser', selectedUser, chats)
+
+    const deleteChat = async () => {
+        const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
+
+        let docKey;
+        if (!chats.data[selectedChat].groupName){
+            docKey = [user.id, selectedUserID].sort().join('')
+        } else {
+            docKey = chats.data[selectedChat].docKey
+        }
+        
+        const doc = await firebase.firestore().collection('chats').doc(docKey).get()
+        firebase.firestore().collection('chats').doc(docKey).update({
+            messages: firebase.firestore.FieldValue.arrayUnion({
+                sender: user.username,                    
+                session: 'deleted',
+                timestamp: Date.now()
+            }),
+            currentTime: Date.now(),
+            receiverHasRead: false
+        }).then( () => {
+            const usersDetails = doc.data().usersDetails
+            
+            const newUsersDetails = usersDetails.reduce((acc, curr)=> {
+                
+                if(curr.userId === user.id){
+                    curr = {
+                        ...curr,
+                        hasDeletedChat: true
+                    }
+                }
+                acc.push(curr)
+                return acc;
+            }, [])
+            doc.ref.update({
+                usersDetails: newUsersDetails
+            })
+        })
+    
+    }
 
     // <!-- new chat -->
   
@@ -494,11 +588,12 @@ const Sessions = (props) => {
                                         user={user}
                                         history={props.history}
                                         selectChatFn={selectChat}
-                                        closeChatList={handleLeftSidebarClose}  a                                      
+                                        closeChatList={handleLeftSidebarClose}               
                                         chats={ chats.data }
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
                                         submitNewChat={submitNewChat}
+                                        deleteChat={deleteChat}
                                     />                                      
 
                                 )
