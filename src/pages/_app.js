@@ -1,6 +1,9 @@
 // import App from 'next/app'
 import React from 'react';
 import 'swiper/swiper-bundle.css'
+import Router from 'next/router'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { shuldrzTheme } from 'styles/theme'
@@ -31,6 +34,11 @@ try{
     }
 }
 
+//Binding Progress bar to router
+NProgress.configure({ showSpinner: false });
+Router.events.on('routeChangeStart', () => NProgress.start()); 
+Router.events.on('routeChangeComplete', () => NProgress.done()); 
+Router.events.on('routeChangeError', () => NProgress.done());
 
 
 
@@ -58,5 +66,5 @@ const MyApp = ({ Component, pageProps }) => {
         </>
     )
 }
-  
-  export default MyApp
+
+export default MyApp

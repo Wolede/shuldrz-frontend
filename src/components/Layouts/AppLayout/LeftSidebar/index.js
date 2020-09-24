@@ -26,7 +26,7 @@ const LeftSidebar = props => {
           icon: <Grid />
         },
         {
-          title: 'Buddies',
+          title: 'Humans',
           href: '/app/buddies',
           icon: <Users />
         },
@@ -46,26 +46,26 @@ const LeftSidebar = props => {
           icon: <MessageSquare />
         },
     ] : [
-       {
+      {
         title: 'Home',
         href: '/app',
         icon: <Home />
-       },
-       {
+      },
+      {
         title: 'Wall',
         href: '/app/wall',
         icon: <Grid />
-       },
-       {
-        title: 'Buddies',
+      },
+      {
+        title: 'Humans',
         href: '/app/buddies',
         icon: <Users />
-       },
-       {
+      },
+      {
         title: 'Sessions',
         href: '/app/sessions',
         icon: <MessageCircle />
-       },    
+      },    
     ];
 
     return (

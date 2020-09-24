@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/Api'
 import { Formik, Form } from 'formik'
@@ -11,11 +11,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
+// import { SelectedUserContext } from 'contexts/SelectedUserContext';
 const firebase = require("firebase/app");
 
 
 
-const AddSessionsForm = ({onClose}) => {
+const AddSessionsForm = ({onClose, submitNewChat}) => {
     const { user, loading } = useAuth();
     
     const classes = useStyles()
@@ -26,15 +27,16 @@ const AddSessionsForm = ({onClose}) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
     const [buddies, setBuddies] = useState([]);
-    const [data, setData] = useState({})
+    // const [data, setData] = useState({})
+    // const [ , setSelectedUser ] = useContext(SelectedUserContext)
 
     const getFormOptions = async () => {
         try {
             const resBuddies = await api.get(`/users`)
             
-            setBuddies(resBuddies.data);            
+            setBuddies(resBuddies.data.filter(usr => usr.id !== user?.id));         
 
-            console.log('budsss', resBuddies.data)
+            console.log('budsss', resBuddies.data.filter(usr => usr.id !== user?.id))
 
         } catch (error) {
             setBuddies(null)
@@ -50,7 +52,7 @@ const AddSessionsForm = ({onClose}) => {
     }
 
     const validationSchema = Yup.object({
-        buddies: Yup.array().required('Buddies to chat with is empty'),
+        buddies: Yup.array().required("You can't do this alone. Choose at least one human 😊"),
     })
 
 
@@ -61,54 +63,89 @@ const AddSessionsForm = ({onClose}) => {
         const usersDetails = values.buddies.reduce((acc, curr) => {
             const buddiesObject = buddies.find(bud => bud.username === curr);
             if (buddiesObject) {
-                acc.push({ userId: buddiesObject.id, username: buddiesObject.username, image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null });
+                acc.push({ 
+                    userId: buddiesObject.id, 
+                    username: buddiesObject.username, 
+                    image: buddiesObject?.profileImage?.url ? buddiesObject?.profileImage?.url : null,
+                    isAdmin: false,
+                    isPresent: true,
+                    hasDeletedChat: false
+                });
             }
             return acc; 
         }, [])
+
+        console.log('jer', users, usersDetails);
         
         
-        const data = { users, usersDetails }
+        const data = { users: [...users], usersDetails: [...usersDetails] }
 
         
         
         // Add isAdmin & isPresent property to the userDetails object
-       data.usersDetails.map(_user => {
-            let detail = _user
-            detail.image === undefined ? null : detail.image
-            detail.isAdmin = false
-            detail.isPresent = true   
-            detail.username = _user.username                     
-            return detail
-        })
+    //    data.usersDetails.map(_user => {
+    //         let detail = _user
+    //         detail.image === undefined ? null : detail.image
+    //         detail.isAdmin = false
+    //         detail.isPresent = true   
+    //         detail.username = _user.username                     
+    //         return detail
+    //     })
 
         //Pushing the admin details to the usersDetails array
         const userImage = user.profileImage ? user.profileImage.url : null
-        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username})
+        data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username, hasDeletedChat: false})
         data.users.push(user.username)       
        
-        console.log('USER DETAILS', usersDetails)
+        console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
 
-        //concatenate userName in the users array to create groupName
-        let groupName = users.join(', ').toString()
         
-                
-        //Send group chat details to firebase
-        const docKey = new Date().getTime().toString();       
-        firebase
-        .firestore()
-        .collection('chats')
-        .doc(docKey)
-        .set({
-            messages: [{
-                sender: user.username,                                   
-            }],                
-            currentTime: Date.now(),
-            users: data.users,
-            usersDetails,
-            receiverHasRead: false,
-            docKey,
-            groupName
-        })
+      
+        if (data.usersDetails.length > 2 ) {
+            //concatenate userName in the users array to create groupName
+            let groupName = users.join(', ').toString()
+            //Send group chat details to firebase
+            const docKey = new Date().getTime().toString();       
+            await
+            firebase
+            .firestore()
+            .collection('chats')
+            .doc(docKey)
+            .set({
+                messages: [{
+                    sender: user.username,                                   
+                }],                
+                currentTime: Date.now(),
+                users: data.users,
+                usersDetails: data.usersDetails,
+                receiverHasRead: false,
+                docKey,
+                groupName
+            })
+        } else {
+            const selectedUser = buddies.find(usr => usr.id === usersDetails.find(usr => usr)?.userId)
+            // console.log('motif', selectedUser)
+            // await setSelectedUser(selectedUser)
+            submitNewChat(selectedUser);
+
+            // const newBuildDocKey = () =>  data.usersDetails.map(det => det.userId).sort().join('');
+            // const docKey = newBuildDocKey();  
+            // await 
+            // firebase
+            // .firestore()
+            // .collection('chats')
+            // .doc(docKey)
+            // .set({
+            //     messages: [{
+            //         sender: user.username,
+            //         session: 'none',  
+            //     }],                
+            //     currentTime: Date.now(),
+            //     users: data.users,
+            //     usersDetails: data.usersDetails.map( usr => ({ userId: usr.userId, image: usr.image }) ),
+            //     receiverHasRead: false
+            // })
+        }
 
         //close modal
         onClose()
@@ -127,11 +164,25 @@ const AddSessionsForm = ({onClose}) => {
                     <Form noValidate autoComplete="off">
                     
                         <Box>
-                            <Typography variant="h4" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
-                                New Session
-                            </Typography>
+                            <Box display="flex" marginBottom=".5rem">
+                                <Typography variant="h4" style={{ fontWeight: 600, flexGrow: 1 }}>
+                                    New Session
+                                </Typography>
+                                <FormControl className={classes.formControl}>
+                                    <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    type="submit"
+                                    size="small"
+                                    disabled={isSubmitting}
+                                    loading={isSubmitting}
+                                    >
+                                        Continue
+                                    </Button>
+                                </FormControl>
+                            </Box>
                             <p>
-                                You can only select a maximum of 3 buddies to chat with
+                                Select up to 4 humans
                             </p>
                             
                             <div className={classes.fieldWrapper}>
@@ -147,7 +198,7 @@ const AddSessionsForm = ({onClose}) => {
                                     onChange={(event, newValue) => {
                                         //first condition allows for selection to not exceed 3
                                         //second condition allows you to deselect some selections even after selection has reached 3
-                                        values.buddies.length <= 2 || newValue.length <= 2  ? setFieldValue("buddies", newValue) : null
+                                        values.buddies.length <= 3 || newValue.length <= 3  ? setFieldValue("buddies", newValue) : null
                                     } }
                                     renderOption={(option, { selected }) => {
                                         return (
@@ -156,7 +207,7 @@ const AddSessionsForm = ({onClose}) => {
                                                     icon={icon}
                                                     checkedIcon={checkedIcon}
                                                     style={{ marginRight: 8 }}
-                                                    checked={ values.buddies.length <= 3 ? selected : false}
+                                                    checked={ values.buddies.length <= 4 ? selected : false}
                                                 />
                                                 {option}
                                             </React.Fragment>
@@ -167,9 +218,9 @@ const AddSessionsForm = ({onClose}) => {
                                             {...params} 
                                             name="buddies" 
                                             variant="outlined" 
-                                            label="Buddies" 
-                                            placeholder="Buddies to chat with"
-                                            error={errors.buddies && touched.buddies ? true : false}
+                                            label="Humans" 
+                                            placeholder="Add to a session"
+                                            // error={errors.buddies && touched.buddies ? true : false}
                                             helperText={ errors.buddies && touched.buddies ?
                                                 errors.buddies : null
                                             }
@@ -180,7 +231,7 @@ const AddSessionsForm = ({onClose}) => {
                         </Box>
 
                         <Box display='flex' justifyContent='flex-end'>
-                            <FormControl className={classes.formControl}>
+                            {/* <FormControl className={classes.formControl}>
                                 <Button 
                                 variant="contained" 
                                 color="primary" 
@@ -191,7 +242,7 @@ const AddSessionsForm = ({onClose}) => {
                                 >
                                     Continue
                                 </Button>
-                            </FormControl>
+                            </FormControl> */}
                             
                             <FormControl className={classes.formControl}>
                                 <Box>

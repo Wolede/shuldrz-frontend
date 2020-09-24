@@ -12,7 +12,7 @@ import Dialog from 'components/Dialog'
 import useAuth from 'contexts/Auth'
 import Modal from 'components/Modal'
 const firebase = require("firebase/app");
-
+import Link from 'next/link'
 
 const ChatProfile = (props) => {
     const classes = useStyles(props)
@@ -47,7 +47,6 @@ const ChatProfile = (props) => {
         const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
         let usersDetails = doc.data().usersDetails
         
-
         const newUsersDetails = usersDetails.reduce( (acc, curr) => {
             
             if ( curr.username === user.username ) {
@@ -59,7 +58,7 @@ const ChatProfile = (props) => {
             acc.push(curr)
             return acc;
         }, [])
-
+        
         console.log('NEW USERS DETAILS', newUsersDetails)
         return doc.ref.update({
             "usersDetails": firebase.firestore.FieldValue.arrayRemove({})
@@ -101,13 +100,17 @@ const ChatProfile = (props) => {
 
             { view === "singleChat" && (
                 <Box margin="0 auto" maxWidth="300" textAlign='center'>
-                    <Avatar 
-                        alt={chatProfile.firstName} 
-                        src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
-                        size="large"                         
-                        // autoWidth
-                        margin="1.5rem auto"
-                    />
+                    <Link href={`/app/users/${chatProfile.username}`}>
+                        <a style={{textDecoration:'none'}}>
+                            <Avatar 
+                                alt={chatProfile.firstName} 
+                                src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
+                                size="large"                         
+                                // autoWidth
+                                margin="1.5rem auto"
+                            />
+                        </a>
+                    </Link>
 
                     <Typography variant="h4" className={classes.text}>{chatProfile.firstName} {chatProfile.lastName}</Typography>
 

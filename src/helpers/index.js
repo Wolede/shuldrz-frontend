@@ -36,7 +36,7 @@ export const getGroupName = (mode, usersDetails, user) => {
     const members = usersDetails.filter(det => det.isPresent) //if a user isPresent is false then don't render it
 
     const membersMinusUser = members.filter((member, memberIndex) => member.userId !== user?.id).map(item => item.username); 
-    const displayLimit = mode == 'chatList' ? 2 : 3
+    const displayLimit = mode == 'chatList' ? 2 : 4
 
     const more = (membersMinusUser.length - displayLimit > 0) ? `+${membersMinusUser.length - displayLimit}` : '';
 

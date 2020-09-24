@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Typography, Badge, Box, Fab } from '@material-ui/core'
+import { Grid, Typography, Badge, Box, Fab, IconButton, MenuItem, Menu } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import Avatar from 'components/Avatar'
 import Paper from 'components/Paper'
 import Modal from 'components/Modal'
 import Link from 'next/link'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Notification from 'components/Notification'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import NotificationImportant from '@material-ui/icons/NotificationImportant';
@@ -17,7 +18,7 @@ import { getGroupName } from '../../helpers'
 
 
 
-const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, view }) => {
+const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, view, submitNewChat, deleteChat }) => {
 
 
     //this ensures that a user is always selected to chat with
@@ -36,21 +37,30 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
 
     const classes = useStyles()
-
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    
 
     // open add sessions modal
     const [openModal, setOpenModal] = useState(false);
-    const handleOpen = () => {
+    const modalOpen = () => {
         setOpenModal(true);
     };
 
-    const handleClose = () => {
+    const closeModal = () => {
         setOpenModal(false);
     };
 
     const userIsSender = (chat) => {        
         chat.messages[chat.messages.length - 1].sender === user.email
     }
+
+    const handleClick = (event) => {        
+        setAnchorEl(event.currentTarget);
+    };
+
+    const closeAnchor = () => {
+        setAnchorEl(null);
+    };
 
 
 
@@ -64,7 +74,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
             <Typography variant="h5">
                 Sessions
             </Typography>
-            <Fab color="primary" aria-label="new-session" size="small" onClick={handleOpen}>
+            <Fab color="primary" aria-label="new-session" size="small" onClick={modalOpen}>
                 <ChatIcon fontSize="small" />
             </Fab>
         </Box>
@@ -74,7 +84,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                     {
                         // chat.receiverHasRead === false && !userIsSender(chat) ?
                         // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
-                        chat.messages[0].sender === user.username ? (
+                        chat.messages[0].sender === user.username && !chat.usersDetails.find(_user => _user.userId === user.id).hasDeletedChat ? (
 
                             <div onClick={closeChatList}>
 
@@ -86,7 +96,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                     justify="center"
                                     alignItems="center"
                                     className={i === selectedChatIndex ? classes.chatActive : classes.chatItem}
-                                >
+                                >   
                                     <Badge
                                         color="error"
                                         variant="dot"
@@ -169,10 +179,30 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         
 
                                     </Grid>
+
+                                    <IconButton
+                                        aria-label="more"
+                                        aria-controls="long-menu"
+                                        aria-haspopup="true"
+                                        onClick={(e) => {handleClick(e, chat.usersDetails.find(_user => _user.userId === user.id))}}
+                                        color='secondary'
+                                        style={{ padding: '0 0 0 5px' }}
+                                    >
+                                        <KeyboardArrowDownIcon fontSize="large" style={i === selectedChatIndex ? { color: '#ffffff' } : { color: '#3f316b' }} />
+                                    </IconButton>
+
+                                    <Menu
+                                        id="simple-menu"                                                                        
+                                        anchorEl={anchorEl}
+                                        open={Boolean(anchorEl)}
+                                        onClose={closeAnchor}
+                                    >
+                                        <MenuItem onClick={() => {deleteChat(); closeAnchor();}}>Delete conversation</MenuItem>
+                                    </Menu>
                                 </Grid>
                             </div>
 
-                        ) : (  chat.messages.length > 1 && (chat.groupName && chat.usersDetails.find(_user => _user.userId === user.id).isPresent) ? 
+                        ) : ( chat.messages.length > 1 && ((chat.groupName && chat.usersDetails.find(_user => _user.userId === user.id).isPresent) || !chat.groupName) && !chat.usersDetails.find(_user => _user.userId === user.id).hasDeletedChat ? 
                             <div onClick={closeChatList}>
                                 <Grid
                                     key={i}
@@ -264,18 +294,31 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                             ): null
                                         }
                                         
-                                        
-                                        
-                                         
-                                        
-                                        
-
                                     </Grid>
+                                    <IconButton
+                                        aria-label="more"
+                                        aria-controls="long-menu"
+                                        aria-haspopup="true"
+                                        onClick={(e) => {handleClick(e, chat.usersDetails.find(_user => _user.userId === user.id))}}
+                                        color='secondary'
+                                        style={{ padding: '0 0 0 5px' }}
+                                    >
+                                        <KeyboardArrowDownIcon fontSize="large" style={i === selectedChatIndex ? { color: '#ffffff' } : { color: '#3f316b' }} />
+                                    </IconButton>
+
+                                    <Menu
+                                        id="simple-menu"                                                                        
+                                        anchorEl={anchorEl}
+                                        open={Boolean(anchorEl)}
+                                        onClose={closeAnchor}
+                                    >
+                                        <MenuItem onClick={() => {deleteChat(); closeAnchor();}}>Delete conversation</MenuItem>
+                                    </Menu>
+                                    
                                 </Grid>                         
                                 </div>       
                             : 
                             null
-                                            
                         )             
                     }        
                     
@@ -319,7 +362,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
         {/* Load Custom Modal COmponent */}
         {openModal === true &&
             (
-                <Modal handleClose={handleClose} openModal={openModal} view='addSessions' />
+                <Modal handleClose={closeModal} openModal={openModal} view='addSessions' callback={submitNewChat} />
             )
         }
         </>

@@ -35,6 +35,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [groupDisabled, setGroupDisabled] = React.useState(false);
+    // const [chatFilter, setChatFilter] = useState([...filteredChat(chat.messages)])
 
     const view = chat.groupName ? 'groupChat' : 'singleChat'
 
@@ -56,6 +57,23 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const filteredChat = (chat) => {
+        const data = chat.reduce((acc, curr) => {
+            acc.push(curr)
+            const deletedMessages = acc.find(item => item.session == 'deleted' && item.sender === user.username)
+
+            if(deletedMessages) {
+                acc = []
+                acc.push(curr)
+            }
+
+            return acc
+        }, [])
+        console.log('FILTERED CHAT', data)
+
+        return data
+    }
     // const shouldOpenRightSidebar = isDesktop ? false : openRightSidebar;
 
     //check if admin or user left the group chat  
@@ -67,6 +85,8 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
         if(chat?.usersDetails.some(user => user.isAdmin && !user.isPresent) || !userDetail){
             setGroupDisabled(true)
         }
+
+        filteredChat(chat.messages)
     }, [chat])
     
 
@@ -172,9 +192,9 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     </Fab>
                                 )
                                 }
-                                <MuiButton
+                                <Button
                                     variant="contained"
-                                    color="secondary"
+                                    color="secondary-light"
                                     size='small'
                                     startIcon={
                                         <Avatar
@@ -193,7 +213,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     disabled={ !selectedUser }
                                 >
                                     More
-                                </MuiButton>
+                                </Button>
 
                                 <Typography className={classes.h5} variant="h5">
                                     { view === 'groupChat'
@@ -213,7 +233,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
                             {
 
-                                chat.messages.map((msg, i) => {
+                                filteredChat(chat.messages).length > 0 ? filteredChat(chat.messages).map((msg, i) => {
                                     
                                     return (
                                         <div key={msg.timestamp || i}>
@@ -285,13 +305,13 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}
                                                                 </Typography>
-                                                           </div>
+                                                        </div>
                                                         )
                                                         : 
-                                                        null
+                                                    null
                                                     
                                             }
-
+                                            
                                             {
                                                 msg.session === 'ended' && (
                                                     <Divider>
@@ -315,8 +335,111 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                     )
 
                                 })
+                                : 
+                                chat.messages.map ((msg, i) => {
+                                    
+                                    return (
+                                        <div key={msg.timestamp || i}>
+                                            {
+                                                msg.session === 'started' && (
+                                                    <Divider>
+                                                        <Typography variant="body1">Session Started</Typography>
+                                                    </Divider>
+                                                )
+                                            }
+
+                                            {
+                                                msg.message && msg.isDeleted ? (
+                                                    <div className={msg.sender === user.username ? classes.userSent : classes.friendSent}>
+                                                        <div>
+                                                            <Typography variant="body1" color="textPrimary" className={classes.messageBox}>
+                                                                message deleted
+                                                                <RemoveCircleOutlineIcon fontSize="small" style={{ margin: '0 .3rem 0 .3rem', verticalAlign: 'middle' }} />
+                                                            </Typography>
+                                                        </div>
+                                                        <Typography color="textSecondary" className='timestamp'>
+                                                            {moment(msg.timestamp).calendar()}
+                                                        </Typography>
+                                                    </div>
+                                                )
+                                                    :
+                                                    
+                                                    msg.message && msg.sender === user.username ? (
+                                                        <div className={classes.userSent}>                                                            
+                                                            <div>
+                                                                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <IconButton
+                                                                        aria-label="more"
+                                                                        aria-controls="long-menu"
+                                                                        aria-haspopup="true"
+                                                                        onClick={(e) => {handleClick(e, msg.timestamp)}}
+                                                                        color='secondary'
+                                                                        style={{ padding: '0 0 0 5px' }}
+                                                                    >
+                                                                        <KeyboardArrowDownIcon fontSize="medium" style={{ color: '#ffffff' }} />
+                                                                    </IconButton>
+
+                                                                    <Menu
+                                                                        id="simple-menu"                                                                        
+                                                                        anchorEl={anchorEl}
+                                                                        open={Boolean(anchorEl)}
+                                                                        onClose={handleClose}
+                                                                    >
+                                                                        <MenuItem onClick={() => {deleteMessage(ts); handleClose();}}>Delete message</MenuItem>
+                                                                    </Menu>
+                                                                </div>
+                                                            </div>
+                                                            <Typography color="textSecondary" className='timestamp'>
+                                                                {moment(msg.timestamp).calendar()}
+                                                            </Typography>
+                                                        </div>
+                                                    )
+                                                        :
+                                                            
+                                                        msg.message ? (
+                                                            <div className={classes.friendSent}>
+                                                                <div>
+                                                                    {view === "groupChat" &&
+                                                                        <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
+                                                                    }
+                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                </div>
+                                                                <Typography color="textSecondary" className='timestamp'>
+                                                                    {moment(msg.timestamp).calendar()}
+                                                                </Typography>
+                                                        </div>
+                                                        )
+                                                        : 
+                                                    null
+                                                    
+                                            }
+                                            
+                                            {
+                                                msg.session === 'ended' && (
+                                                    <Divider>
+                                                        <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} ended the session</Typography>
+                                                    </Divider>
+                                                )
+                                            }
+
+                                            {
+                                                msg.present === false && (
+                                                    <Divider>
+                                                        <Typography variant="body1">{msg.sender == user.username ? 'You' : msg.sender} left the group </Typography>
+                                                    </Divider>
+                                                )
+                                            }
+                                            
+                                            
+                                        </div>
+                                            
+
+                                    )
                                 
-                            }
+                                })
+
+                        }   
 
                         </Box>
 

@@ -44,7 +44,8 @@ const useStyles = makeStyles(theme => ({
         cursor: 'pointer'
     },
     h4: {
-        marginBottom: '8px'
+        marginBottom: '8px',
+        fontSize: '1.7rem',
     },
     typography:{
         marginLeft: '16px',
