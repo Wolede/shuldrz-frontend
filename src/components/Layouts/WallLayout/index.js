@@ -164,7 +164,7 @@ const WallLayout = ({isPublic}) => {
     const handleOpen = () => {
         setOpenModal(true);
     };
- 
+
     const handleClose = () => {
         setOpenModal(false);
     };
