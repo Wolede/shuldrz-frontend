@@ -15,17 +15,17 @@ const Footer = () => {
             <Box id='footer' paddingBottom='3rem' textAlign='center'>
                 <Box id='social-links' display='flex' justifyContent='center' marginBottom='2rem' flexDirection={isMobile ? 'column' : 'row'}>
                     <Typography variant="h4">
-                        <a href='#' className={classes.linkBig}>Facebook</a>
+                        <a href='https://www.facebook.com/Shuldrz-100372758487141' target="_blank" className={classes.linkBig}>Facebook</a>
                     </Typography>
                     <Typography variant="h4">
-                        <a href='#' className={classes.linkBig}>Instagram</a>
+                        <a href='https://www.instagram.com/shuldrz_/' target="_blank" className={classes.linkBig}>Instagram</a>
                     </Typography>
                     <Typography variant="h4">
-                        <a href='#' className={classes.linkBig}>Twitter</a>
+                        <a href='https://twitter.com/shuldrz_' target="_blank" className={classes.linkBig}>Twitter</a>
                     </Typography>
-                    <Typography variant="h4">
+                    {/* <Typography variant="h4">
                         <a href='#' className={classes.linkBig}>Medium</a>
-                    </Typography>
+                    </Typography> */}
                 </Box>
                 <Box id='doc-links' display='flex' justifyContent='center' marginBottom='2.5rem'>
                     {/* <Typography variant="body2">

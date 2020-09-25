@@ -3,7 +3,7 @@ import React from 'react';
 import 'swiper/swiper-bundle.css'
 import Router from 'next/router'
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import 'styles/nprogress.css'
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { shuldrzTheme } from 'styles/theme'
