@@ -156,7 +156,7 @@ const ProfileForm = ({ user }) => {
             topics: newTopics
         }
 
-
+ 
         try {
             
             res = await api.put(`users/${id}`, values)
