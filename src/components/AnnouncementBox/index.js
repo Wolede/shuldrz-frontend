@@ -5,6 +5,7 @@ import Paper from 'components/Paper'
 import { useTheme } from '@material-ui/styles';
 import { useStyles } from './style'
 import ReactMarkdown from "react-markdown"
+import VideoBox from '../VideoBox';
 
 const AnnouncementBox = ( { announcement } ) => {
     const classes = useStyles()
@@ -13,10 +14,14 @@ const AnnouncementBox = ( { announcement } ) => {
     const isMobile= useMediaQuery(theme.breakpoints.up('sm'));
 
     // console.log('announcement', announcement);
-    const { message, title } = announcement
+    const { message, title, link, type } = announcement
 
     return (
-        <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="primary">
+        <>
+        { type === 'video' ? (
+            <VideoBox link={link} title={title} type="announcement" backgroundImage="/images/scenic-view.jpg" />
+        ) : (
+            <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="primary">
             <Box display="flex" className={classes.root}>
                 <Box>
                     <Paper 
@@ -26,7 +31,7 @@ const AnnouncementBox = ( { announcement } ) => {
                         padding=".5rem"
                     >
                         <Box display='flex' alignItems='center' justifyContent='center' height='100%'>
-                            logo
+                            <img src='/images/favicon.png' alt="Shuldrz Icon" style={{ width: '3rem' }}/>
                         </Box>
                     </Paper>
                 </Box>
@@ -48,6 +53,9 @@ const AnnouncementBox = ( { announcement } ) => {
                 </Box>
             </Box>
         </Paper>
+        )}
+        </>
+        
     )
 }
 
