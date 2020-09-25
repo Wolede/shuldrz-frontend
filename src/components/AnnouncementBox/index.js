@@ -19,7 +19,7 @@ const AnnouncementBox = ( { announcement } ) => {
     return (
         <>
         { type === 'video' ? (
-            <VideoBox link={link} title={title} type="announcement" backgroundImage="/images/scenic-view.jpg" />
+            <VideoBox link={link} title={title} type="announcement" backgroundImage="/images/VolunteerSignup.jpg" message={message} />
         ) : (
             <Paper borderRadius="1.875rem 0.625rem 1.875rem 1.875rem" padding="1rem" marginBottom="1.5rem" color="primary">
             <Box display="flex" className={classes.root}>

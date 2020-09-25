@@ -88,7 +88,7 @@ const ProfileForm = ({ user }) => {
         experience: experience ? experience : '',
         availableDays: availableDays ? availableDays : [],
         availableTime: availableTime ? availableTime : '',
-        charity: charity ? charity.id : '',
+        charity: charity ? charity.id : null,
         // topics: topics ? topics.map((option) => option.name) : [],
         topics: topics ? topics.map(topic => topic.name) : [],
     }
@@ -107,7 +107,7 @@ const ProfileForm = ({ user }) => {
         experience: Yup.string().max(74, 'Maximum of 74 characters'),
         availableDays: Yup.array(),
         availableTime: Yup.string(),
-        charity: Yup.string().required('Pick a charity'),
+        charity: Yup.string().nullable(),
         topics: Yup.array().required('Interested topics is empty'),
     })
 
