@@ -6,10 +6,11 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import { useStyles } from './style'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
+import ReactMarkdown from "react-markdown"
 
 const VideoBox = props => {
     const classes = useStyles(props)
-    const { title, link, type } = props
+    const { title, link, type, message } = props
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -22,9 +23,40 @@ const VideoBox = props => {
     };
 
     return (
-        <Paper borderRadius="1.875rem 1.875rem 1.875rem 1.875rem" padding="1rem" marginBottom="3rem">
-            <Box paddingLeft="1rem">
-                <Typography variant="subtitle1" gutterBottom>{ title }</Typography>
+        <Paper borderRadius="1.875rem 1.875rem 1.875rem 1.875rem" padding="1rem" marginBottom="3rem" color={type === 'announcement' ? 'primary' : null}>
+            <Box marginBottom="1rem" paddingLeft="1rem">
+                {type === "announcement" ? (
+                    <>
+                    <Box display="flex">
+                        <Paper 
+                            width={'3.125rem'} 
+                            borderRadius={'1.25rem'} 
+                            height={'3.125rem'} 
+                            padding=".5rem"
+                        >
+                            <Box display='flex' alignItems='center' justifyContent='center' height='100%'>
+                                <img src='/images/favicon.png' alt="Shuldrz Icon" style={{ width: '3rem' }}/>
+                            </Box>
+                        </Paper>
+                        <Box flexGrow="1" padding=".4rem 0 0 1rem" >
+                            <Typography variant="subtitle1">{ title }</Typography>
+                        </Box>
+                    </Box>
+                    {message && (
+                        <Box>
+                            <Typography 
+                                variant="subtitle1" 
+                                // dangerouslySetInnerHTML={{ __html : message }} 
+                                style={{ fontSize: '1.2rem', fontWeight: 400 }} 
+                            >
+                                <ReactMarkdown source={message} />
+                            </Typography>
+                        </Box>
+                    )}
+                    </>
+                ) : (
+                    <Typography variant="subtitle1">{ title }</Typography>
+                )}
             </Box>
             
             <Box 
@@ -34,7 +66,7 @@ const VideoBox = props => {
                 alignItems="center"
                 borderRadius="1.875rem"
             >
-                { type === 'video' && (
+                { type === 'video' || 'announcement' && (
                     <Fab color="primary" aria-label="play" className={classes.fabButton} onClick={handleOpen}>
                         <PlayArrowIcon />
                     </Fab>
