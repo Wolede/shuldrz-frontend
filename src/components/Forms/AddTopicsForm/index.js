@@ -151,8 +151,7 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
                             </Box>
 
                             <p>
-                                Tell us the topics you need help with. This will help us better match you with humans.
-                                {/* Tell us the topics you need help with. This will help us better match you with {user?.userType === 'Volunteer' ? 'buds' : 'buddies'}. */}
+                                Tell us the topics you need help with. This will help us better match you with {user?.userType === 'Volunteer' ? 'buds' : 'buddies'}.
                             </p>
                             
                             <div className={classes.fieldWrapper}>
