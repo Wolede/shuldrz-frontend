@@ -16,7 +16,7 @@ const firebase = require("firebase/app");
 
 
 
-const AddSessionsForm = ({onClose, submitNewChat}) => {
+const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
     const { user, loading } = useAuth();
     
     const classes = useStyles()
@@ -122,6 +122,8 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                 docKey,
                 groupName
             })
+            //when a new group chat is created, make the index 0 chat (which is the newly created group chat) active
+            updateSelectedChat(0);
         } else {
             const selectedUser = buddies.find(usr => usr.id === usersDetails.find(usr => usr)?.userId)
             // console.log('motif', selectedUser)
