@@ -31,7 +31,6 @@ const Quotes = () => {
             const {data} = await api.get('quotes')
             const shuffledQuotes = data.quotes.sort(() => Math.random() - 0.5)
             const limitQuotes = shuffledQuotes.slice(0, 3);
-            console.log(limitQuotes);
             setQuotes(limitQuotes);
         } catch (error) {
 

@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     circle: {
-        backgroundImage : 'url(/images/scenic-view.jpg)',
+        backgroundImage : props => `url(${props.heroImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
