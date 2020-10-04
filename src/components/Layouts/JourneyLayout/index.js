@@ -294,9 +294,11 @@ const JourneyLayout = () => {
                 </Box>
             }
 
-            { isMoreData && !isLoadingMore &&
+            {/* { isMoreData && !isLoadingMore &&
                 <Skeleton variant="rect" height={150} animation="wave"/>
-            }
+            } */}
+
+            <div style={{ backgroundColor: 'transparent', width: '150px', height: '1px', margin: 0, padding: 0 }}></div>
 
         </div>
     )

@@ -131,13 +131,28 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
                     <Form noValidate autoComplete="off">
                     
                         <Box>
-                            <Typography variant="h4" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
-                                Quick One
-                            </Typography>
 
-                            <Typography variant="body1" style={{ marginBottom: '1rem' }}>
+                            <Box display="flex" marginBottom=".5rem">
+                                <Typography variant="h4" style={{ fontWeight: 600, flexGrow: 1 }}>
+                                    Quick One
+                                </Typography>
+                                <FormControl className={classes.formControl}>
+                                    <Button 
+                                        variant="contained" 
+                                        color="primary" 
+                                        type="submit"
+                                        size="small"
+                                        disabled={isSubmitting}
+                                        loading={isSubmitting}
+                                    >
+                                        Continue
+                                    </Button>
+                                </FormControl>
+                            </Box>
+
+                            <p>
                                 Tell us the topics you need help with. This will help us better match you with {user?.userType === 'Volunteer' ? 'buds' : 'buddies'}.
-                            </Typography>
+                            </p>
                             
                             <div className={classes.fieldWrapper}>
                                 <Autocomplete
@@ -245,7 +260,7 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
                         </Box>
 
                         <Box display='flex' justifyContent='flex-end'>
-                            <FormControl className={classes.formControl}>
+                            {/* <FormControl className={classes.formControl}>
                                 <Button 
                                 variant="contained" 
                                 color="primary" 
@@ -255,9 +270,9 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
                                 >
                                     Save
                                 </Button>
-                            </FormControl>
+                            </FormControl> */}
                             
-                            <FormControl className={classes.formControl}>
+                            {/* <FormControl className={classes.formControl}>
                                 <Box>
                                     <FormHelperText 
                                             style={{ textAlign: 'center' }} 
@@ -282,7 +297,7 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
                                             }
                                         </FormHelperText>
                                 </Box>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
 
                     </Form>
