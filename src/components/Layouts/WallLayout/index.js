@@ -177,7 +177,7 @@ const WallLayout = ({isPublic}) => {
                 <>
                 <Box marginBottom="2rem" display="flex">
                     <Box className={classes.headerText}>
-                        <Typography variant="h3">Wall</Typography>
+                        <Typography variant="h3">Shuldrz Wall</Typography>
                     </Box>
                     <Box>
                         <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add Note</Button>

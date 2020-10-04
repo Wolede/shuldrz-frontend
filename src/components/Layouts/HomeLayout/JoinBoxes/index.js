@@ -11,7 +11,7 @@ const JoinBoxes = props => {
     const classes = useStyles()
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
-
+    const { guestSignupText, volunteerSignupText } = props
     return (
         <Container maxWidth={ isDesktop ? 'xl' : 'lg' }>
             <Box id='about' paddingBottom='10rem'>
@@ -20,7 +20,7 @@ const JoinBoxes = props => {
                         <Paper color="secondary" padding='4rem' borderRadius='3.75rem' height="100%">
                             <Box height='100%' textAlign='center' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                                 <Typography variant='h4' gutterBottom>
-                                    Join Shuldrz here!
+                                    {guestSignupText || 'Join Shuldrz here!'}
                                 </Typography>
                                 <Link href='/signup'>
                                     <a style={{textDecoration: 'none'}}>
@@ -35,7 +35,7 @@ const JoinBoxes = props => {
                         <Paper color="primary" padding='4rem 2rem' borderRadius='3.75rem' height="100%">
                             <Box height='100%' textAlign='center' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                                 <Typography variant='h4' gutterBottom>
-                                    Want to give help? Become a Buddy 
+                                    {volunteerSignupText || 'Wanna help others? Become a buddy' }
                                 </Typography>
                                 <Link href='/volunteer-signup'>
                                     <a style={{textDecoration: 'none'}}>
