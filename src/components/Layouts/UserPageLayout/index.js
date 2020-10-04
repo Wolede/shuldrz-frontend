@@ -153,7 +153,7 @@ const UserPageLayout = ({username}) => {
         getUser() // get user data
     }, [username])
 
-    // console.log('fancy', isMoreData, isLoadingMore)
+    // console.log('fancy', isMoreData, isLoadingMore, pages)
 
     return (
         <div>
@@ -192,6 +192,8 @@ const UserPageLayout = ({username}) => {
             {/* { isMoreData && !isLoadingMore &&
                 <Skeleton variant="rect" height={150} animation="wave"/>
             } */}
+
+            <div style={{ backgroundColor: 'transparent', width: '150px', height: '1px', margin: 0, padding: 0 }}></div>
 
         </div>
     )

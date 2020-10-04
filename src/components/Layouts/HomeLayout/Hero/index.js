@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 const Hero = (props) => {
     const { heroTitle, heroImage } = props
-    const classes = useStyles()
+    const classes = useStyles(props)
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));
 

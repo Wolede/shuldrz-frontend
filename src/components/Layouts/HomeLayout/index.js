@@ -7,7 +7,7 @@ import JoinBoxes from './JoinBoxes'
 import FAQ from './FAQ'
 import Quotes from '../../Quotes'
 
-const HomeLayout = ({home}) => {
+const HomeLayout = ({home, heroes}) => {
     const { 
         heroTitle,
         heroImage,
@@ -43,6 +43,7 @@ const HomeLayout = ({home}) => {
             <HeroesWall
                 heroesWallTitle={HeroesWallTitle}
                 heroesWallContent={HeroesWallContent}
+                heroes={heroes}
             />
             <FAQ 
                 faqs={qAndA} 
