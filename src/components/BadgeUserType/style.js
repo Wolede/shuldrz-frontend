@@ -5,7 +5,7 @@ const useStyles = makeStyles(theme => ({
     },
     badgeContent: {
         padding: '.2rem .7rem',
-        background: props => props.userType === "Volunteer" ? theme.palette.error.main : theme.palette.warning.main,
+        background: props => props.userType === "Volunteer" ? theme.palette.warning.main : theme.palette.secondary.main,
         color: theme.palette.background.paper,
         borderRadius: '30px',
         marginTop: '-1.2rem',
