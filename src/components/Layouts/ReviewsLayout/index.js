@@ -34,6 +34,7 @@ const ReviewsLayout = () => {
                     hearts={result.hearts} 
                     userImage={result.review_users[1].profileImage ? result.review_users[1].profileImage.url : null} 
                     username={result.review_users[1].username} 
+                    userType={result.review_users[1].userType}
                 />
             ))
         },

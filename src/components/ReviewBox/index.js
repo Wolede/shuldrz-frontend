@@ -25,9 +25,10 @@ const ReviewBox = props => {
                     <a style={{textDecoration:'none'}}>
                         <Avatar 
                             alt={username} 
-                            src={userImage ? userImage : '/'} 
+                            src={userImage ? userImage : null} 
                             size={isMobile ? 'small' : 'tiny'} 
-                        />
+                            userType={userType}
+                        >{!userImage ? username.substring(0,1) : null}</Avatar>
                     </a>
                     </Link>
                     </Box>
@@ -67,7 +68,8 @@ ReviewBox.propTypes = {
     hearts: PropTypes.number,
     userImage: PropTypes.string,
     username: PropTypes.string,
-    otherUser: PropTypes.string
+    userType: PropTypes.string,
+    otherUser: PropTypes.string,
 }
 
 export default ReviewBox
