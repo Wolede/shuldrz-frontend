@@ -12,7 +12,7 @@ const TrainingsLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
-    const PAGE_SIZE = 2;
+    const PAGE_SIZE = 30;
     const START_POSITION_IN_CONFIG_URL = 18;
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(

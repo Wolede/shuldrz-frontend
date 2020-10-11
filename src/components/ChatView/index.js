@@ -207,6 +207,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                             size="tiny" variant='rounded'
                                         >
                                             {view === "groupChat" && <GroupIcon/>}
+                                            {!chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image && view === "singleChat" ? chat.users.filter(_user => _user !== user.username)[0].substring(0,1) : null}
                                         </Avatar>
                                     }
                                     onClick={handleRightSidebarOpen}

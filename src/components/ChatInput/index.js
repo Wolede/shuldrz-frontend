@@ -44,7 +44,7 @@ const ChatInput = (props) => {
                 onKeyUp={(e) => userTyping(e)}
                 variant="outlined"
                 id='chattextbox'
-                placeholder={isGroupDisabled && chat.groupName && chat?.usersDetails?.find(det => det.isAdmin)?.userId === user.id ? 'You can no longer send messages here. This group has been disabled by the admin.' : isGroupDisabled && chat.groupName ? 'You can no longer send messages here' : 'Say something nice...'}
+                placeholder={isGroupDisabled && chat.groupName && chat?.usersDetails?.find(det => det.isAdmin)?.userId === user.id ? 'You can no longer send messages here. This group has been disabled.' : isGroupDisabled && chat.groupName ? 'You can no longer send messages here' : 'Say something nice...'}
                 // multiline
                 // rows={1}
                 autoComplete="off"

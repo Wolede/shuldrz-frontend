@@ -33,9 +33,10 @@ const UpcomingBox = () => {
                             <Card className={classes.card}>
                                 <Avatar 
                                     alt={upcoming.sessionUser.firstName} 
-                                    src={upcoming.sessionUser.profileImage ? upcoming.sessionUser.profileImage.url : '/'} 
+                                    src={upcoming.sessionUser.profileImage ? upcoming.sessionUser.profileImage.url : null} 
                                     size="small" 
-                                />
+                                    userType={upcoming.sessionUser.userType}
+                                >{!upcoming.sessionUser.profileImage ? upcoming.sessionUser.username.substring(0,1) : null}</Avatar>
                                 <div className={classes.details}>
                                     <CardContent className={classes.content}>
                                         <Typography variant="h5" className={classes.text}>

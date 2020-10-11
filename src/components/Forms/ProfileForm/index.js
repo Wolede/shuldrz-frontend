@@ -104,7 +104,7 @@ const ProfileForm = ({ user }) => {
         personality_type: Yup.string().required('Pick a personality type'),
         occupation: Yup.string().max(20, 'Maximum of 20 characters'),
         reference: Yup.string().max(50, 'Maximum of 50 characters'),
-        experience: Yup.string().max(74, 'Maximum of 74 characters'),
+        experience: Yup.string().max(74, 'Maximum of 74 characters').required("Come on! I'm sure you can think of something"),
         availableDays: Yup.array(),
         availableTime: Yup.string(),
         charity: Yup.string().nullable(),
@@ -208,13 +208,14 @@ const ProfileForm = ({ user }) => {
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
                 >
-                {({values, errors, touched, getFieldProps, setFieldValue, isSubmitting}) => (
+                {({values, errors, touched, getFieldProps, setFieldValue, isSubmitting, isValid}) => (
                     <Form noValidate autoComplete="off">
                         <Box>
                             <Typography variant="body2" style={{ fontWeight: 600, marginBottom: '1rem' }}>
                                 Personal Information
                             </Typography>
                             {/* {console.log(values)} */}
+                            {/* {console.log(isValid)} */}
                             <div className={classes.fieldWrapper}>
                                 <TextField 
                                 name="firstName" 
@@ -643,17 +644,23 @@ const ProfileForm = ({ user }) => {
                                                     : 'an error occured' 
                                                 : null
                                             }
-                                        </FormHelperText>
-                                        <FormHelperText 
-                                            style={{ textAlign: 'center' }} 
-                                            error={isSuccessful?.status === false ? true : false}
-                                        >
+
                                             {
                                                 isSuccessful?.status === true ? 
                                                     'Saved!'
                                                 : null
                                             }
+
+                                            
+
                                         </FormHelperText>
+                                    <FormHelperText error={errors}>
+                                        <p>
+                                            {
+                                                !isValid ? 'There are some errors in the form' : ''
+                                            }
+                                        </p>
+                                    </FormHelperText>
                                 </Box>
                             </FormControl>
                         </Box>

@@ -24,9 +24,9 @@ const SessionLogBox = ( { sessionLog } ) => {
                     <a style={{textDecoration:'none'}}>
                         <Avatar 
                             alt={sessionUser.username} 
-                            src={sessionUser.profileImage ? sessionUser.profileImage.url : '/'} 
+                            src={sessionUser.profileImage ? sessionUser.profileImage.url : null} 
                             size={isMobile ? 'small' : 'tiny'} 
-                        />
+                        >{!sessionUser.profileImage ? sessionUser.username.substring(0,1) : null}</Avatar>
                     </a>
                 </Link>
                 </Box>
