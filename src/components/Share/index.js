@@ -26,7 +26,7 @@ const Share = ({note}) => {
                 <a
                     target="_blank"
                     href={`
-                       mailto:?subject=${note.title} by ${note.userData.username} from shuldrz.com&body=${note.title} -%0D%0A%0D%0A${note.note}%0D%0A%0D%0AVisit https://shuldrz-frontend.now.sh/wall?note=${note.id}
+                       mailto:?subject=${note.title} by ${note.userData.username} from shuldrz.com&body=${note.title} -%0D%0A%0D%0A${note.note}%0D%0A%0D%0AVisit https://shuldrz.com/wall?note=${note.id}
                     `}
                 >
                     <Button variant="contained" startIcon={<Mail/>} size="small">Send as Email</Button>
@@ -34,7 +34,7 @@ const Share = ({note}) => {
                 <a
                     target="_blank"
                     href={`
-                        https://twitter.com/intent/tweet/?text=${note.title} by ${note.userData.username}%0D%0A%0D%0A${truncate(note.note, 150)}%0D%0A%0D%0A at&url=https://shuldrz-frontend.now.sh/wall?note=${note.id}
+                        https://twitter.com/intent/tweet/?text=${note.title} by ${note.userData.username}%0D%0A%0D%0A${truncate(note.note, 150)}%0D%0A%0D%0A at&url=https://shuldrz.com/wall?note=${note.id}
                     `}
                 >
                     <Button variant="contained" startIcon={<Twitter/>} size="small">Twitter</Button>
@@ -42,7 +42,7 @@ const Share = ({note}) => {
                 <a
                     target="_blank"
                     href={`
-                        https://facebook.com/sharer/sharer.php?u=https://shuldrz-frontend.now.sh/wall?note=${note.id}
+                        https://facebook.com/sharer/sharer.php?u=https://shuldrz.com/wall?note=${note.id}
                     `}
                 >
                     <Button variant="contained" startIcon={<Facebook/>} size="small">Facebook</Button>

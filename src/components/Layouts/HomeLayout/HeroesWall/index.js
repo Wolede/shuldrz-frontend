@@ -30,11 +30,11 @@ const HeroesWall = props => {
                                 <Box display='flex' flexDirection='column' alignItems='flex-start' justifyContent='center'>
                                 <Avatar
                                     alt={hero.user.username}
-                                    src={hero.user.profileImage ? hero.user.profileImage.url : '/empty'}
+                                    src={hero.user.profileImage ? hero.user.profileImage.url : null}
                                     size="large"
                                     autoWidth
                                     marginBottom="1.5rem"
-                                />
+                                >{!hero.user.profileImage ? hero.user.username.substring(0,1) : null}</Avatar>
                                 <Typography variant='h4' className={classes.headerText}>
                                     {hero.user.firstName} {hero.user.lastName}
                                 </Typography>

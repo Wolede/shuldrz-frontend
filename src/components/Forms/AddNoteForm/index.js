@@ -102,9 +102,9 @@ const AddNoteForm = props => {
                                 label={
                                     values.dedication ? 
                                         values.title.length > 0 ? 
-                                        `How has ${values.title} helped you?` : 
-                                        "How have they helped you?" 
-                                    : "Write something"
+                                        `What makes ${values.title} rock?` : 
+                                        "What makes them rock?" 
+                                    : "Write something sweet..."
                                 }
                                 { ...getFieldProps('note')}
                                 variant="outlined"
@@ -122,7 +122,7 @@ const AddNoteForm = props => {
                                 <TextField 
                                     name="link" 
                                     id="link" 
-                                    label={values.title.length > 0 ? `Share a link to ${values.title} (website, article, social media link) - optional` : 'Share link to dedication (website, article, social media link) - optional'}
+                                    label={values.title.length > 0 ? `Optional - Share a link to ${values.title} (website, article, social media link)` : 'Optional - Share link to dedication (website, article, social media link)'}
                                     { ...getFieldProps('link')}
                                     variant="outlined"
                                     helperText={ errors.link && touched.link ?

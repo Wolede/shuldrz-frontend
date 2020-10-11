@@ -20,7 +20,7 @@ const JoinBoxes = props => {
                         <Paper color="secondary" padding='4rem' borderRadius='3.75rem' height="100%">
                             <Box height='100%' textAlign='center' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                                 <Typography variant='h4' gutterBottom>
-                                    {guestSignupText || 'Join Shuldrz here!'}
+                                    {guestSignupText || 'Want to talk? Join Shuldrz'}
                                 </Typography>
                                 <Link href='/signup'>
                                     <a style={{textDecoration: 'none'}}>
@@ -35,7 +35,7 @@ const JoinBoxes = props => {
                         <Paper color="primary" padding='4rem 2rem' borderRadius='3.75rem' height="100%">
                             <Box height='100%' textAlign='center' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                                 <Typography variant='h4' gutterBottom>
-                                    {volunteerSignupText || 'Wanna help others? Become a buddy' }
+                                    {volunteerSignupText || 'Want to help others? Become a buddy' }
                                 </Typography>
                                 <Link href='/volunteer-signup'>
                                     <a style={{textDecoration: 'none'}}>

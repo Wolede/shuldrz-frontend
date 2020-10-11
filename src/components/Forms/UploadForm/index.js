@@ -157,12 +157,13 @@ const UploadForm = ({ user }) => {
                 <Box position='relative' width='fit-content'>
                     <Avatar 
                         alt={user.username} 
-                        src={user.profileImage ? user.profileImage.url : '/'} 
+                        src={user.profileImage ? user.profileImage.url : null} 
                         size={'small'} 
-                    />
+                    >{!user.profileImage ? user.username.substring(0,1) : null}</Avatar>
                     {uploading && 
                         <CircularProgress size={24} className={classes.buttonProgress}/>
                     }
+                    
                 </Box>
                 <Box display="flex" alignItems="center" className={classes.childRoot}>
                     <Box>

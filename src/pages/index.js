@@ -8,7 +8,7 @@ const Home = ({home, heroes}) => {
   return (
     <div>
       <Head>
-        <title>Shuldrz | Here for a lean-on</title>
+        <title>Shuldrz | For Perfectly Imperfect People</title>
       </Head>
       <MainLayout withFooter>
         <HomeLayout home={home} heroes={heroes}/>

@@ -44,11 +44,11 @@ const ProfileCard = (props) => {
                 <Box display="flex" justifyContent="center" width="100%">
                     <Avatar
                         alt={username}
-                        src={profileImage ? profileImage.url : '/empty'}
+                        src={profileImage ? profileImage.url : null}
                         size="small"
-                        // autoWidth
                         marginBottom="1.5rem"
-                    />
+                        userType={userType}
+                    >{!profileImage ? username.substring(0,1) : null}</Avatar>
                 </Box>
                 <Typography variant="h4" className={classes.headerText}>{username}</Typography>
 

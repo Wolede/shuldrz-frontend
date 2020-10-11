@@ -104,11 +104,10 @@ const ChatProfile = (props) => {
                         <a style={{textDecoration:'none'}}>
                             <Avatar 
                                 alt={chatProfile.firstName} 
-                                src={chatProfile.profileImage ? chatProfile.profileImage.url : '/empty'} 
+                                src={chatProfile.profileImage ? chatProfile.profileImage.url : null} 
                                 size="large"                         
-                                // autoWidth
                                 margin="1.5rem auto"
-                            />
+                            >{!chatProfile.profileImage ? chatProfile.firstName.substring(0,1) : null}</Avatar>
                         </a>
                     </Link>
 
@@ -148,17 +147,17 @@ const ChatProfile = (props) => {
                         <Typography variant="h5" align="left">People</Typography>
 
                         {/* map through users here */}
-                        {chat.usersDetails.filter(det => det.isPresent).sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}) => (
-                            <Box marginTop="1rem">
+                        {chat.usersDetails.filter(det => det.isPresent).sort((a,b) => b.isAdmin - a.isAdmin ).map(({image, userId, isAdmin, username}, key) => (
+                            <Box marginTop="1rem" key={key}>
                                 <Paper padding="0" borderRadius="1rem">
                                     <Box padding=".5rem" display="flex" alignItems="center">
                                         <Box marginRight="1rem">
                                             <Avatar 
                                                 alt="group" 
-                                                src={image ? image : '/empty'} 
+                                                src={image ? image : null} 
                                                 size="tiny"                         
                                                 margin="auto" 
-                                            />
+                                            >{!image ? username.substring(0,1) : null}</Avatar>
                                         </Box>
                                         <Typography variant="subtitle1">{username}</Typography>
 
