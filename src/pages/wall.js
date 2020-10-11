@@ -1,16 +1,24 @@
-import Head from 'next/head'
 import MainLayout from 'components/Layouts/MainLayout'
 import WallLayout from 'components/Layouts/WallLayout'
 import { Box, Container, Typography } from '@material-ui/core'
 import Button from 'components/Button'
 import Link from 'next/link'
+import { NextSeo } from 'next-seo'
 
 const PublicWall = () => {
+    const SEO = {
+        title: 'Shuldrz | Shuldrz Wall',
+        description: 'Public Shuldrz Wall',
+    
+        openGraph: {
+          title: `Shuldrz | Shuldrz Wall`,
+          description: 'Public Shuldrz Wall',
+        }
+      }
+
     return (
         <div>
-            <Head>
-                <title>Shuldrz | Wall</title>
-            </Head>
+            <NextSeo {...SEO}/>
             <MainLayout withFooter>
                 <Box id='hero-front' paddingTop='9.25rem' paddingBottom="4rem">
                     <Container maxWidth='lg'>
