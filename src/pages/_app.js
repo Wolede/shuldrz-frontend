@@ -10,6 +10,8 @@ import { shuldrzTheme } from 'styles/theme'
 import { useStyles } from 'styles/global'
 import ContextWrapper from '../contexts/ContextWrapper';
 import { SWRConfig } from 'swr'
+import { DefaultSeo } from 'next-seo'
+import SEO from '../../next-seo.config'
 import axios from 'axios'
 const firebase = require("firebase");
 require("firebase/firestore");
@@ -55,6 +57,7 @@ const MyApp = ({ Component, pageProps }) => {
 
     return (
         <>
+        <DefaultSeo {...SEO} />
         <ThemeProvider theme={shuldrzTheme}>
             <CssBaseline />
             <SWRConfig value={{ fetcher: (url) => axios(url).then(res => res.data) }}>

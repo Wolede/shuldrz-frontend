@@ -17,6 +17,21 @@ class MyDocument extends Document {
             {/* PWA primary color */}
             <meta name="theme-color" content={shuldrzTheme.palette.primary.main} />
             <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&family=Sen:wght@700&display=swap" rel="stylesheet" />   
+
+            {/* Global site tag (gtag.js) - Google Analytics */}
+            <script
+                async
+                src="https://www.googletagmanager.com/gtag/js?id=UA-180305092-1" >
+            </script>
+            <script dangerouslySetInnerHTML={
+                { __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){window.dataLayer.push(arguments)}
+                    gtag("js", new Date());
+                    gtag("config", "UA-180305092-1");
+                `}
+            }>
+            </script>
         </Head>
         <body>
           <Main />
