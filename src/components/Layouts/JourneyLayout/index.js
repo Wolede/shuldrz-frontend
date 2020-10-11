@@ -28,7 +28,7 @@ const JourneyLayout = () => {
     const [suggestedBuddies, setSuggestedBuddies] = useState([]);
 
     
-    const PAGE_SIZE = 12; //changed to 12 #lede
+    const PAGE_SIZE = 30; //changed to 30 #lede
     const START_POSITION_IN_CONFIG_URL = 16; // index location of the first digit of the start position in the config url
     
     // console.log('user',user)

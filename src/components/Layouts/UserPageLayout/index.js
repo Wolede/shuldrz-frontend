@@ -21,7 +21,7 @@ const UserPageLayout = ({username}) => {
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
 
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 30;
     const START_POSITION_IN_CONFIG_URL = 21; // index location of the first digit of the start position in the config url
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(

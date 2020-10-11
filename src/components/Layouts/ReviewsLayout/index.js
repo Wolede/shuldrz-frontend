@@ -14,7 +14,7 @@ const ReviewsLayout = () => {
     const classes = useStyles()
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
-    const PAGE_SIZE = 5;
+    const PAGE_SIZE = 30;
     const START_POSITION_IN_CONFIG_URL = 16; // index location of the first digit of the start position in the config url
 
     console.log('pag', useSWRPages);
