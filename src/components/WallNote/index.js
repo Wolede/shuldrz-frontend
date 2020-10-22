@@ -159,7 +159,7 @@ const WallNote = props => {
             navigator.share({
                 title: `${title}`,
                 text: `${title} -> ${truncateWithoutMarkup(note, 150)}`,
-                url: `https://shuldrz-frontend.now.sh/wall?note=${id}`,
+                url: `https://shuldrz.com/wall?note=${id}`,
             })
         } else {
             setOpenShareModal(true)
