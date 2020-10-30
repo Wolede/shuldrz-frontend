@@ -16,6 +16,7 @@ import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
 import { getGroupName } from '../../helpers';
+import Linkify from 'react-linkify';
 
 
 
@@ -283,7 +284,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -318,7 +329,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     {view === "groupChat" &&
                                                                         <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
                                                                     }
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                 </div>
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}
@@ -386,7 +407,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -421,7 +452,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     {view === "groupChat" &&
                                                                         <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
                                                                     }
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                 </div>
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}
