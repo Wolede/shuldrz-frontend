@@ -33,6 +33,19 @@ const JourneyLayout = () => {
     
     // console.log('user',user)
 
+    // request user permissions to display desktop notifications
+    useEffect(() => {
+        if (!("Notification" in window)) {
+            console.log("This browser does not support desktop notification");
+        } else {
+        Notification.requestPermission();
+        }
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/push-sw.js')
+        }
+    }, [])
+
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "journey",
