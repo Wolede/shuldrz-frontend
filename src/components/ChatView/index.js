@@ -129,10 +129,12 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
         ) {
             // let notification = new Notification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options);
             // notification.onclick = () => window.focus();
+            console.log('msg', chat?.messages[chat?.messages?.length - 1].message)
 
             navigator.serviceWorker.getRegistration().then((reg) => {
                 setMostRecentTimeStamp(chat?.messages[chat?.messages?.length - 1]?.timestamp)
-                reg.showNotification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options)
+                // reg.showNotification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options)
+                reg.showNotification(`You've got a tap on Shuldrz!`, options)
             })
         }
         
