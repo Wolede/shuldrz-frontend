@@ -26,10 +26,11 @@ const ProfileBox = ({userData, otherUser}) => {
                         <a style={{textDecoration:'none'}}>
                         <Avatar 
                             alt={userData.username} 
-                            src={userData.profileImage ? userData.profileImage.url : '/empty'} 
+                            src={userData.profileImage ? userData.profileImage.url : null} 
                             size="medium" 
                             marginBottom="1.5rem" 
-                        />
+                            userType={userData.userType}
+                        >{!userData.profileImage ? userData.username.substring(0,1) : null}</Avatar>
                         </a>
                     </Link>
 

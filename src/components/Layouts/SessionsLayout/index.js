@@ -593,6 +593,7 @@ const Sessions = (props) => {
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
                                         submitNewChat={submitNewChat}
+                                        updateSelectedChat={updateSelectedChat}
                                         deleteChat={deleteChat}
                                     />                                      
 

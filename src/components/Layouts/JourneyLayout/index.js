@@ -28,7 +28,7 @@ const JourneyLayout = () => {
     const [suggestedBuddies, setSuggestedBuddies] = useState([]);
 
     
-    const PAGE_SIZE = 12; //changed to 12 #lede
+    const PAGE_SIZE = 30; //changed to 30 #lede
     const START_POSITION_IN_CONFIG_URL = 16; // index location of the first digit of the start position in the config url
     
     // console.log('user',user)
@@ -294,9 +294,11 @@ const JourneyLayout = () => {
                 </Box>
             }
 
-            { isMoreData && !isLoadingMore &&
+            {/* { isMoreData && !isLoadingMore &&
                 <Skeleton variant="rect" height={150} animation="wave"/>
-            }
+            } */}
+
+            <div style={{ backgroundColor: 'transparent', width: '150px', height: '1px', margin: 0, padding: 0 }}></div>
 
         </div>
     )

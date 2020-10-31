@@ -26,7 +26,7 @@ const LeftSidebar = props => {
           icon: <Grid />
         },
         {
-          title: 'Buddies',
+          title: 'Humans',
           href: '/app/buddies',
           icon: <Users />
         },
@@ -57,7 +57,7 @@ const LeftSidebar = props => {
         icon: <Grid />
       },
       {
-        title: 'Buddies',
+        title: 'Humans',
         href: '/app/buddies',
         icon: <Users />
       },

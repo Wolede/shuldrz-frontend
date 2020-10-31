@@ -22,7 +22,7 @@ const WallLayout = ({isPublic}) => {
     // console.log('url', noteUrl);
 
     const [isMoreData, setIsMoreData] = useState(true);
-    const PAGE_SIZE = 8; //changed to 12 #lede
+    const PAGE_SIZE = 30; //changed to 30 #lede
     const START_POSITION_IN_CONFIG_URL = 19; // index location of the first digit of the start position in the config url
 
     const [requestUrl, setRequestUrl] = useState(`/wall-notes?_start=0&_limit=${PAGE_SIZE}&_sort=createdAt:desc`)
@@ -177,7 +177,7 @@ const WallLayout = ({isPublic}) => {
                 <>
                 <Box marginBottom="2rem" display="flex">
                     <Box className={classes.headerText}>
-                        <Typography variant="h3">Wall</Typography>
+                        <Typography variant="h3">Shuldrz Wall</Typography>
                     </Box>
                     <Box>
                         <Button variant="contained" color="primary" size="medium" onClick={handleOpen}>Add Note</Button>

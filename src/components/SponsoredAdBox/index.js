@@ -35,7 +35,7 @@ const SponsoredAdBox = props => {
                         />
                         <CardContent className={classes.content}>
                         <Typography variant="caption" color="secondary">
-                            { ad.name }
+                            <strong>AD:</strong> { ad.name }
                         </Typography>
                         </CardContent>
                     </CardActionArea>

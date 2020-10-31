@@ -1,17 +1,24 @@
-import Head from 'next/head'
 import MainLayout from 'components/Layouts/MainLayout'
 import TandC from '../components/Layouts/HomeLayout/TandC'
 import JoinBoxes from '../components/Layouts/HomeLayout/JoinBoxes'
 import { Box } from '@material-ui/core'
 import api from '../services/Api'
-
+import { NextSeo } from 'next-seo'
 
 const TermsAndConditions = ({tAndC}) => {
+  const SEO = {
+    title: 'Shuldrz | Terms and Conditions',
+    description: 'Read Terms and Conditions',
+
+    openGraph: {
+        title: 'Shuldrz | Terms and Conditions',
+        description: 'Read Terms and Conditions',
+    }
+  }
+
   return (
     <div>
-      <Head>
-        <title>Shuldrz | Terms and Conditions</title>
-      </Head>
+      <NextSeo {...SEO}/>
       <MainLayout withFooter>
         <Box id='hero-front' paddingTop='9.25rem'>
             <TandC terms={tAndC}/>

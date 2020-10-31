@@ -16,7 +16,7 @@ const firebase = require("firebase/app");
 
 
 
-const AddSessionsForm = ({onClose, submitNewChat}) => {
+const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
     const { user, loading } = useAuth();
     
     const classes = useStyles()
@@ -52,7 +52,7 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
     }
 
     const validationSchema = Yup.object({
-        buddies: Yup.array().required('Buddies to chat with is empty'),
+        buddies: Yup.array().required("You can't do this alone. Choose at least one human 😊"),
     })
 
 
@@ -122,6 +122,8 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                 docKey,
                 groupName
             })
+            //when a new group chat is created, make the index 0 chat (which is the newly created group chat) active
+            updateSelectedChat(0);
         } else {
             const selectedUser = buddies.find(usr => usr.id === usersDetails.find(usr => usr)?.userId)
             // console.log('motif', selectedUser)
@@ -164,11 +166,25 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                     <Form noValidate autoComplete="off">
                     
                         <Box>
-                            <Typography variant="h4" style={{ fontWeight: 600, marginBottom: '.5rem' }}>
-                                New Session
-                            </Typography>
+                            <Box display="flex" marginBottom=".5rem">
+                                <Typography variant="h4" style={{ fontWeight: 600, flexGrow: 1 }}>
+                                    New Session
+                                </Typography>
+                                <FormControl className={classes.formControl}>
+                                    <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    type="submit"
+                                    size="small"
+                                    disabled={isSubmitting}
+                                    loading={isSubmitting}
+                                    >
+                                        Continue
+                                    </Button>
+                                </FormControl>
+                            </Box>
                             <p>
-                                Select up to 4 users to chat with.
+                                Select up to 4 humans
                             </p>
                             
                             <div className={classes.fieldWrapper}>
@@ -204,9 +220,9 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                                             {...params} 
                                             name="buddies" 
                                             variant="outlined" 
-                                            label="Buddies" 
-                                            placeholder="Buddies to chat with"
-                                            error={errors.buddies && touched.buddies ? true : false}
+                                            label="Humans" 
+                                            placeholder="Add to a session"
+                                            // error={errors.buddies && touched.buddies ? true : false}
                                             helperText={ errors.buddies && touched.buddies ?
                                                 errors.buddies : null
                                             }
@@ -217,7 +233,7 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                         </Box>
 
                         <Box display='flex' justifyContent='flex-end'>
-                            <FormControl className={classes.formControl}>
+                            {/* <FormControl className={classes.formControl}>
                                 <Button 
                                 variant="contained" 
                                 color="primary" 
@@ -228,7 +244,7 @@ const AddSessionsForm = ({onClose, submitNewChat}) => {
                                 >
                                     Continue
                                 </Button>
-                            </FormControl>
+                            </FormControl> */}
                             
                             <FormControl className={classes.formControl}>
                                 <Box>

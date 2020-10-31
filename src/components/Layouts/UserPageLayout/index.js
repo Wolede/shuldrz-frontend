@@ -21,7 +21,7 @@ const UserPageLayout = ({username}) => {
     const { user, loading } = useAuth();
     const [isMoreData, setIsMoreData] = useState(true);
 
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 30;
     const START_POSITION_IN_CONFIG_URL = 21; // index location of the first digit of the start position in the config url
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
@@ -153,7 +153,7 @@ const UserPageLayout = ({username}) => {
         getUser() // get user data
     }, [username])
 
-    // console.log('fancy', isMoreData, isLoadingMore)
+    // console.log('fancy', isMoreData, isLoadingMore, pages)
 
     return (
         <div>
@@ -192,6 +192,8 @@ const UserPageLayout = ({username}) => {
             {/* { isMoreData && !isLoadingMore &&
                 <Skeleton variant="rect" height={150} animation="wave"/>
             } */}
+
+            <div style={{ backgroundColor: 'transparent', width: '150px', height: '1px', margin: 0, padding: 0 }}></div>
 
         </div>
     )

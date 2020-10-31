@@ -52,12 +52,12 @@ function ScrollTop(props) {
 
 const Header = (props) => {
     const { className, onSidebarOpen, isLight, ...rest } = props;
-    const classes = useStyles();
-
+    const classes = useStyles(props);
+    console.log(isLight);
     return (
         <>
         <HideOnScroll {...props}>
-        <AppBar color="transparent" className={classes.root} {...rest}>
+        <AppBar className={classes.root} {...rest}>
         <Container maxWidth="xl">
             <Toolbar disableGutters className={classes.toolBar}>
                 <div className={classes.title}>

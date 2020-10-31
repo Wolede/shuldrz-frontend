@@ -215,7 +215,10 @@ const SignupForm = ({volunteer}) => {
                         disabled={isSubmitting}
                         loading={isSubmitting}
                         >
-                            Signup
+                            { volunteer ? 
+                                'Sign up as a Buddy' :
+                                `Sign up`
+                            }
                         </Button>
                     </FormControl>
                     
@@ -236,13 +239,13 @@ const SignupForm = ({volunteer}) => {
                     { volunteer ? (
                         <Box marginTop='2rem'>
                             <Typography variant='body2'>
-                                Need help instead? <Link href="signup"><a className={classes.link}>Signup here</a></Link>
+                                Need help instead? <Link href="signup"><a className={classes.link}>Signup as a Bud</a></Link>
                             </Typography>
                         </Box>
                     ) : (
                         <Box marginTop='2rem'>
                             <Typography variant='body2'>
-                                Want to give help instead? <Link href="volunteer-signup"><a className={classes.link}>Signup here</a></Link> 
+                                Want to help others? <Link href="volunteer-signup"><a className={classes.link}>Signup as a Buddy</a></Link> 
                             </Typography>
                         </Box>
                     )}

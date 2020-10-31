@@ -15,7 +15,7 @@ import AddSessionsForm from '../Forms/AddSessionsForm'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl, callbacks } = props
 
     return (
         <MuiModal
@@ -24,6 +24,7 @@ const Modal = props => {
         open={openModal}
         onClose={handleClose}
         disableBackdropClick={disableBackdropClick}
+        className={classes.root}
         >
             <Container maxWidth={view === 'video' ? 'md' : 'sm'} style={{ outline: 0 }} >
                 <Box marginTop="8rem">
@@ -68,7 +69,7 @@ const Modal = props => {
                 { view === "addSessions" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddSessionsForm onClose={handleClose} submitNewChat={callback} />
+                            <AddSessionsForm onClose={handleClose} submitNewChat={callbacks.submitNewChat} updateSelectedChat={callbacks.updateSelectedChat} />
                         </Paper>
                     )
                 }

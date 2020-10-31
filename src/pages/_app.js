@@ -1,12 +1,17 @@
 // import App from 'next/app'
 import React from 'react';
 import 'swiper/swiper-bundle.css'
+import Router from 'next/router'
+import NProgress from 'nprogress'
+import 'styles/nprogress.css'
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { shuldrzTheme } from 'styles/theme'
 import { useStyles } from 'styles/global'
 import ContextWrapper from '../contexts/ContextWrapper';
 import { SWRConfig } from 'swr'
+import { DefaultSeo } from 'next-seo'
+import SEO from '../../next-seo.config'
 import axios from 'axios'
 const firebase = require("firebase/app");
 require("firebase/firestore");
@@ -31,6 +36,11 @@ try{
     }
 }
 
+//Binding Progress bar to router
+NProgress.configure({ showSpinner: false });
+Router.events.on('routeChangeStart', () => NProgress.start()); 
+Router.events.on('routeChangeComplete', () => NProgress.done()); 
+Router.events.on('routeChangeError', () => NProgress.done());
 
 
 
@@ -45,6 +55,7 @@ const MyApp = ({ Component, pageProps }) => {
     }, []);
     return (
         <>
+        <DefaultSeo {...SEO} />
         <ThemeProvider theme={shuldrzTheme}>
             <CssBaseline />
             <SWRConfig value={{ fetcher: (url) => axios(url).then(res => res.data) }}>
