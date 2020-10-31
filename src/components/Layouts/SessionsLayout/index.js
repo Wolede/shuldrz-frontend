@@ -168,7 +168,7 @@ const Sessions = (props) => {
                 const { data } = await api.get(`/users/${chatReceiverID}`)           
                 
                 // console.log('USER INFO', data)   
-                         
+            
                 setSelectedUser(data)
             } catch(error){
                 console.log(error)
@@ -216,7 +216,7 @@ const Sessions = (props) => {
         } else {
             docKey = chats.data[selectedChat].docKey
         }
- 
+
         firebase.firestore().collection('chats').doc(docKey)
         .update({
             messages: firebase.firestore.FieldValue.arrayUnion({

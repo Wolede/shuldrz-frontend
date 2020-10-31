@@ -17,12 +17,12 @@ const LoginForm = () => {
     const classes = useStyles()
     const { setUser } = useAuth()
     const [isSuccessful, setIsSuccessful] = useState()
-    
+
     const initialValues = {
         email: '',
         password: '',
     }
-    
+
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format!').required('Email is empty!'),
         password: Yup.string().required('Password is empty')
@@ -35,14 +35,14 @@ const LoginForm = () => {
                 password: values.password
             })
             const token = res.data.jwt
-            
-            if(token) {
+
+            if (token) {
                 console.log('got token');
                 Cookies.set('token', token, { expires: 60 })
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
                 const user = res.data
-                
+
                 setUser(user)
                 console.log("Got user", user)
                 Router.push('/app')
@@ -64,7 +64,7 @@ const LoginForm = () => {
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
-    
+
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -83,100 +83,100 @@ const LoginForm = () => {
     return (
         <div>
             <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
             >
-            {({values, errors, touched, getFieldProps, isSubmitting, submitCount}) => (
-                <Form noValidate autoComplete="off">
-                    {/* {console.log(submitCount)} */}
-                    <FormControl className={classes.formControl}>
-                        <TextField 
-                        name="email" 
-                        id="email" 
-                        label="Email Address"
-                        { ...getFieldProps('email')}
-                        variant="outlined"
-                        error={errors.email && touched.email ? true : false}
-                        helperText={ errors.email && touched.email ?
-                            errors.email : null
-                        }
-                        />
-                    </FormControl>
-                    
-                    <FormControl className={classes.formControl}>
-                        <TextField 
-                        name="password" 
-                        id="password" 
-                        type={showPassword ? 'text' : 'password'}
-                        label="Password"
-                        { ...getFieldProps('password')}
-                        variant="outlined"
-                        error={errors.password && touched.password ? true : false}
-                        helperText={ errors.password && touched.password ?
-                            errors.password : null
-                        }
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                    >
-                                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                        />
-                    </FormControl>
+                {({ values, errors, touched, getFieldProps, isSubmitting, submitCount }) => (
+                    <Form noValidate autoComplete="off">
+                        {/* {console.log(submitCount)} */}
+                        <FormControl className={classes.formControl}>
+                            <TextField
+                                name="email"
+                                id="email"
+                                label="Email Address"
+                                {...getFieldProps('email')}
+                                variant="outlined"
+                                error={errors.email && touched.email ? true : false}
+                                helperText={errors.email && touched.email ?
+                                    errors.email : null
+                                }
+                            />
+                        </FormControl>
+
+                        <FormControl className={classes.formControl}>
+                            <TextField
+                                name="password"
+                                id="password"
+                                type={showPassword ? 'text' : 'password'}
+                                label="Password"
+                                {...getFieldProps('password')}
+                                variant="outlined"
+                                error={errors.password && touched.password ? true : false}
+                                helperText={errors.password && touched.password ?
+                                    errors.password : null
+                                }
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                edge="end"
+                                            >
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                        </FormControl>
 
 
-                    <Box textAlign='left' marginBottom='1rem'>
-                        <Typography variant='caption' className={classes.forgotPassword} onClick={handleOpen}>Forgot Password?</Typography>
-                    </Box>
-
-
-                    <FormControl className={classes.formControl}>
-                        <Button 
-                        variant="contained" 
-                        color="primary" 
-                        type="submit"
-                        disabled={isSubmitting}
-                        loading={isSubmitting}
-                        >
-                            Login
-                        </Button>
-                    </FormControl>
-                    
-                    <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
-                        <FormHelperText 
-                            style={{ textAlign: 'center' }} 
-                            error={true}
-                        >
-                            {
-                                isSuccessful?.status === false ? 
-                                    isSuccessful.message ? 
-                                        isSuccessful.message
-                                    : 'an error occured' 
-                                : null
-                            }
-                        </FormHelperText>
-                    </FormControl>
-
-                    <Hidden mdUp>
-                        <Box marginTop='4rem'>
-                            <Typography variant='body2'>
-                                New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
-                            </Typography>
+                        <Box textAlign='left' marginBottom='1rem'>
+                            <Typography variant='caption' className={classes.forgotPassword} onClick={handleOpen}>Forgot Password?</Typography>
                         </Box>
-                    </Hidden>
-                    
-                    
-                </Form>
-            )}
+
+
+                        <FormControl className={classes.formControl}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={isSubmitting}
+                                loading={isSubmitting}
+                            >
+                                Login
+                        </Button>
+                        </FormControl>
+
+                        <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
+                            <FormHelperText
+                                style={{ textAlign: 'center' }}
+                                error={true}
+                            >
+                                {
+                                    isSuccessful?.status === false ?
+                                        isSuccessful.message ?
+                                            isSuccessful.message
+                                            : 'an error occured'
+                                        : null
+                                }
+                            </FormHelperText>
+                        </FormControl>
+
+                        <Hidden mdUp>
+                            <Box marginTop='4rem'>
+                                <Typography variant='body2'>
+                                    New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
+                                </Typography>
+                            </Box>
+                        </Hidden>
+
+
+                    </Form>
+                )}
             </Formik>
 
             {/* Load Custom Modal COmponent */}

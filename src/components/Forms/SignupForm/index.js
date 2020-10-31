@@ -51,18 +51,20 @@ const SignupForm = ({volunteer}) => {
             
             const token = res.data.jwt
 
+
             if(token) {
                 console.log('got token');
                 Cookies.set('token', token, { expires: 60 })
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
                 const user = res.data
+                
                 const userObj = {
                     username: user.username,
                     id: user.id,                   
                 };
+                
                 // sendUserDataToFirestore(user)
-                          
                 firebase.firestore().collection('users').doc(user.id).set(userObj)
                 .then(() => {
                     console.log('logged user')

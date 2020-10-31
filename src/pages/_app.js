@@ -8,7 +8,7 @@ import { useStyles } from 'styles/global'
 import ContextWrapper from '../contexts/ContextWrapper';
 import { SWRConfig } from 'swr'
 import axios from 'axios'
-const firebase = require("firebase");
+const firebase = require("firebase/app");
 require("firebase/firestore");
 require("@firebase/messaging")
 
@@ -36,7 +36,6 @@ try{
 
 const MyApp = ({ Component, pageProps }) => {
     const classes = useStyles();
-
     React.useEffect(() => {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector('#jss-server-side');
@@ -44,7 +43,6 @@ const MyApp = ({ Component, pageProps }) => {
             jssStyles.parentElement.removeChild(jssStyles);
         }
     }, []);
-
     return (
         <>
         <ThemeProvider theme={shuldrzTheme}>
