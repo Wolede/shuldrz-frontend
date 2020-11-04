@@ -131,7 +131,7 @@ const Sessions = (props) => {
     //     }
     // })
 
-   
+
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)         
