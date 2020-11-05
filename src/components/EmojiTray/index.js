@@ -6,12 +6,6 @@ import { Picker } from 'emoji-mart';
 
 const EmojiTray = ({onEmojiSelect, showTray, setShowTray}) => {
 
-    // useEffect(() => {
-    //     console.log('cli', closeTray)
-    //     if (closeTray) 
-    //         setShowTray(false);
-    // }, [closeTray])
-
     const onSelect = (emoji) => {
         onEmojiSelect(emoji);
     }
