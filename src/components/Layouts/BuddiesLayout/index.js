@@ -19,7 +19,7 @@ const BuddiesLayout = () => {
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "buddies",
         ({ offset, withSWR }) => {
-            console.log('off', offset)
+            // console.log('off', offset)
             const url = offset || `/users?_sort=createdAt:desc&_start=0&_limit=${PAGE_SIZE}`;
             const {data} = withSWR(useSWR( url, api.get));
 
@@ -43,7 +43,7 @@ const BuddiesLayout = () => {
             ))
         },
         SWR => {
-            console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
+            // console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
             if(SWR.data?.data?.length < 1) {
                 setIsMoreData(false);
             }

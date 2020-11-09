@@ -48,7 +48,6 @@ const ScheduleForm = ({ onClose, formProps: { volunteer } }) => {
             sessionUser: volunteer?.id
         }
 
-        console.log('v', values)
 
         try {
             const res = await api.post(`upcoming-sessions`, values)

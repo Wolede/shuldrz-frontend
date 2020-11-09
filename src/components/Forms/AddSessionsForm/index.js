@@ -113,7 +113,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
             return acc; 
         }, [])
 
-        console.log('jer', users, usersDetails);
+        // console.log('jer', users, usersDetails);
         
         
         const data = { users: [...users], usersDetails: [...usersDetails] }
@@ -135,7 +135,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
         data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username, hasDeletedChat: false})
         data.users.push(user.username)       
        
-        console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
+        // console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
 
         
       

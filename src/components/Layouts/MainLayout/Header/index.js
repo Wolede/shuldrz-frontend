@@ -53,7 +53,6 @@ function ScrollTop(props) {
 const Header = (props) => {
     const { className, onSidebarOpen, isLight, ...rest } = props;
     const classes = useStyles(props);
-    console.log(isLight);
     return (
         <>
         <HideOnScroll {...props}>

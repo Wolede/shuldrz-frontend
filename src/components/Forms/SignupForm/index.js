@@ -52,7 +52,7 @@ const SignupForm = ({volunteer}) => {
             const token = res.data.jwt
 
             if(token) {
-                console.log('got token');
+                // console.log('got token');
                 Cookies.set('token', token, { expires: 60 })
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
@@ -65,15 +65,15 @@ const SignupForm = ({volunteer}) => {
                           
                 firebase.firestore().collection('users').doc(user.id).set(userObj)
                 .then(() => {
-                    console.log('logged user')
+                    // console.log('logged user')
                 }, err => {
-                    console.log('user not stored:' + err)
+                    // console.log('user not stored:' + err)
                 }
                     
                 )
                 
                 setUser(user)
-                console.log("Got user", user)
+                // console.log("Got user", user)
                 Router.push('/app')
             }
         } catch (error) {
@@ -167,6 +167,7 @@ const SignupForm = ({volunteer}) => {
                         name="email" 
                         id="email" 
                         label="Email Address"
+                        type="email"
                         { ...getFieldProps('email')}
                         variant="outlined"
                         error={errors.email && touched.email ? true : false}

@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 
 const TandC = props => {
     const { terms } = props
-    console.log(terms);
+    // console.log(terms);
     const classes = useStyles()
     const theme = useTheme();
     const isDesktop= useMediaQuery(theme.breakpoints.up('xl'));

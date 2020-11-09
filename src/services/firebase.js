@@ -13,9 +13,9 @@ export const sendUserDataToFirestore = (user) => {
 
     firebase.firestore().collection('users').doc(user.email).set(userObj)
     .then(() => {
-        console.log('logged user')
+        // console.log('logged user')
     }, err => {
-        console.log('user not stored:' + err)
+        // console.log('user not stored:' + err)
     }
         
     )

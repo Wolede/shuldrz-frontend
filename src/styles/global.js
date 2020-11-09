@@ -5,9 +5,9 @@ const useStyles = makeStyles(theme => ({
         // MUI typography elements use REMs, so you can scale the global
         // font size by setting the font-size on the <html> element.
         html: {
-          fontSize: 12,
+          fontSize: 14,
           [theme.breakpoints.up("md")]: {
-            fontSize: 12
+            fontSize: 14
           },
           [theme.breakpoints.up("lg")]: {
             fontSize: 14

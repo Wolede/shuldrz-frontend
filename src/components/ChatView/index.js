@@ -71,7 +71,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
 
             return acc
         }, [])
-        console.log('FILTERED CHAT', data)
+        // console.log('FILTERED CHAT', data)
 
         return data
     }
@@ -81,7 +81,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     useEffect(() => {
         setGroupDisabled(false)
         const userDetail = chat?.usersDetails.find(_user => _user.username === user.username)?.isPresent
-        console.log('CHECK IF USER IS PRESENT', userDetail)
+        // console.log('CHECK IF USER IS PRESENT', userDetail)
 
         if(chat?.usersDetails.some(user => user.isAdmin && !user.isPresent) || !userDetail){
             setGroupDisabled(true)
