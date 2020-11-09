@@ -33,7 +33,7 @@ const RightSidebar = props => {
                             data.data : 
                     null
 
-    console.log(userData, 'user data in profile')
+    // console.log(userData, 'user data in profile')
 
 
     // on a user profile page, set selected user

@@ -30,7 +30,7 @@ const ResetPasswordForm = () => {
 
 
     const onSubmit = async (values) => {
-        console.log(initialValues.code, 'code')
+        // console.log(initialValues.code, 'code')
         try {
             const res = await api.post(`auth/reset-password`, {
                     code: initialValues.code,
@@ -79,7 +79,7 @@ const ResetPasswordForm = () => {
                         >
                         {({values, errors, touched, getFieldProps, setFieldValue, isSubmitting}) => (
                             <Form noValidate autoComplete="off">
-                                {console.log(values)}
+                                {/* {console.log(values)} */}
                                 <FormControl className={classes.formControl}>
                                     <TextField 
                                     name="password" 

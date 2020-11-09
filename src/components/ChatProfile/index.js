@@ -42,7 +42,7 @@ const ChatProfile = (props) => {
 
     const leaveGroup = async () => {
         // leave group functionality
-        console.log('group-left'); 
+        // console.log('group-left'); 
 
         const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
         let usersDetails = doc.data().usersDetails
@@ -59,7 +59,7 @@ const ChatProfile = (props) => {
             return acc;
         }, [])
         
-        console.log('NEW USERS DETAILS', newUsersDetails)
+        // console.log('NEW USERS DETAILS', newUsersDetails)
         return doc.ref.update({
             "usersDetails": firebase.firestore.FieldValue.arrayRemove({})
         })

@@ -27,10 +27,10 @@ const Sessions = (props) => {
     // request user permissions to display desktop notifications
     useEffect(() => {
         if (!("Notification" in window)) {
-            console.log("This browser does not support desktop notification");
-          } else {
-            Notification.requestPermission();
-          }
+            // console.log("This browser does not support desktop notification");
+        } else {
+        Notification.requestPermission();
+        }
         
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/push-sw.js')
@@ -92,7 +92,7 @@ const Sessions = (props) => {
 
         }
 
-        console.log('FIREBASE CHATS', chats)
+        // console.log('FIREBASE CHATS', chats)
 
     }, [user]);
 
@@ -108,11 +108,11 @@ const Sessions = (props) => {
 
         
         if( !selectedUser ){
-            console.log('war', selectedUser)
+            // console.log('war', selectedUser)
             setChatReceiverID(chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId)
         }
                 
-        console.log('present chat', chats)
+        // console.log('present chat', chats)
         if (selectedUser && !chats.loading) {                  
             submitNewChat(selectedUser)                        
         }
@@ -131,7 +131,7 @@ const Sessions = (props) => {
     //     }
     // })
 
-   
+
 
     const selectChat = (chatIndex) => {  
         updateSelectedChat(chatIndex)         
@@ -171,7 +171,7 @@ const Sessions = (props) => {
                          
                 setSelectedUser(data)
             } catch(error){
-                console.log(error)
+                // console.log(error)
             }                
         }
         
@@ -187,7 +187,7 @@ const Sessions = (props) => {
             const res= await api.get(`/reviews?names=${user?.username}%20left%20${selectedUser?.username}%20a%20review`)            
             setPrevReview(res.data[0])                             
         }catch(error) {
-            console.log(error)
+            // console.log(error)
         }        
     }
 
@@ -266,7 +266,7 @@ const Sessions = (props) => {
 
     const userClickedInputFn = () => {
         messageRead()
-        console.log('you clicked input')
+        // console.log('you clicked input')
     }
 
     const messageRead = () => {               
@@ -403,7 +403,7 @@ const Sessions = (props) => {
         }
 
         const userExist = await userExists();
-        console.log('userExists?', userExist)
+        // console.log('userExists?', userExist)
         if (userExist) {
             const chatExist = await chatExists();
 
@@ -420,12 +420,12 @@ const Sessions = (props) => {
             //sort to send all cha with groupName property to bottom - this is done to  make sure a singlechat that meets the find criterion is found first
             // if(chatExist && [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){    
             if(chatExist && [...chats.data].filter((chat) => !chat.groupName).find(chat => chat.usersDetails.some(_user => _user.userId === selectedUser.id))?.messages?.length > 1){    
-                console.log('a')          
+                // console.log('a')          
                 setChatExist(true);
                 goToChat(tempDocKey());
                 setSelectedUser(selectedUser);
             } else {
-                console.log('b')          
+                // console.log('b')          
                 newChatSubmit();
                 setSelectedUser(selectedUser);
             }          
@@ -457,7 +457,7 @@ const Sessions = (props) => {
             })
             
         } catch (error){
-            console.log(error)
+            // console.log(error)
         }          
     }
 
@@ -511,7 +511,7 @@ const Sessions = (props) => {
          });
     }
 
-    console.log('selectedUser', selectedUser, chats)
+    // console.log('selectedUser', selectedUser, chats)
 
     const deleteChat = async () => {
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId

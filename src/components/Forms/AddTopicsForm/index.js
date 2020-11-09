@@ -95,7 +95,7 @@ const AddTopicsForm = ({ onClose, getSuggestedBuddies }) => {
 
             getSuggestedBuddies(topicIds)
             
-            console.log('focus here', topicIds)
+            // console.log('focus here', topicIds)
             
             // console.log('letsee', res, profileCompletion);
 

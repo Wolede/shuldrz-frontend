@@ -21,7 +21,7 @@ const ForgotPasswordForm = props => {
 
 
     const onSubmit = async (values) => {
-        console.log('lol');
+        // console.log('lol');
         try {
             const res = await api.post(`auth/forgot-password`, {
                     email: values.email,

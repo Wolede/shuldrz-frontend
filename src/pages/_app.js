@@ -13,9 +13,12 @@ import { SWRConfig } from 'swr'
 import { DefaultSeo } from 'next-seo'
 import SEO from '../../next-seo.config'
 import axios from 'axios'
+import 'emoji-mart/css/emoji-mart.css';
+
 const firebase = require("firebase");
 require("firebase/firestore");
-require("@firebase/messaging")
+require("@firebase/messaging");
+
 
 try{
     firebase.initializeApp({
