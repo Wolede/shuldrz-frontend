@@ -16,6 +16,7 @@ import moment from 'moment'
 import MiniDrawer from 'components/MiniDrawer';
 import ChatProfile from '../ChatProfile';
 import { getGroupName } from '../../helpers';
+import Linkify from 'react-linkify';
 
 
 
@@ -108,16 +109,33 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
             body: chat?.messages[chat?.messages?.length - 1]?.message,
             icon: '/images/favicon.png',
         }
+
+        //if a message is received and the user still hasn't granted permission then
+        //ask again
+        if (("Notification" in window) && Notification.permission !== "granted" ) {
+            Notification.requestPermission();
+        }
+
         //conditions 1. Is the notification api supported 2. Has the user granted permission to display notifications? 3. Is the sender of the message different from the user receiving the notifications?
         // 4. is the user currently on shuldrz or somewhere else? 5. is the timestamp of the message about to be displayed different from the timestamp of the most recently displayed message. 
-
-        if (("Notification" in window) && Notification.permission === "granted" && chat?.messages[chat?.messages?.length - 1]?.sender !== user.username && !document.hasFocus() && chat?.messages[chat?.messages?.length - 1]?.timestamp !== mostRecentTimestamp && ('serviceWorker' in navigator) ) {
+        //6. Is the serviceWorker api supported 7. Is the new object a valid message to be displayed
+        if (
+            ("Notification" in window) && 
+            Notification.permission === "granted" && 
+            chat?.messages[chat?.messages?.length - 1]?.sender !== user.username && 
+            !document.hasFocus() && 
+            chat?.messages[chat?.messages?.length - 1]?.timestamp !== mostRecentTimestamp && 
+            ('serviceWorker' in navigator) &&
+            chat?.messages[chat?.messages?.length - 1].message
+        ) {
             // let notification = new Notification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options);
             // notification.onclick = () => window.focus();
+            console.log('msg', chat?.messages[chat?.messages?.length - 1].message)
 
             navigator.serviceWorker.getRegistration().then((reg) => {
                 setMostRecentTimeStamp(chat?.messages[chat?.messages?.length - 1]?.timestamp)
-                reg.showNotification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options)
+                // reg.showNotification(`${chat?.messages[chat?.messages?.length - 1]?.sender}`, options)
+                reg.showNotification(`You've got a tap on Shuldrz!`, options)
             })
         }
         
@@ -207,7 +225,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                             size="tiny" variant='rounded'
                                         >
                                             {view === "groupChat" && <GroupIcon/>}
-                                            {!chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image && view === "singleChat" ? chat.users.filter(_user => _user !== user.username)[0].substring(0,1) : null}
+                                            {!chat.usersDetails.filter(_user => _user.userId !== user.id)[0].image && view === "singleChat" ? chat.users.filter(_user => _user !== user.username)[0]?.substring(0,1) : null}
                                         </Avatar>
                                     }
                                     onClick={handleRightSidebarOpen}
@@ -266,7 +284,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -301,7 +329,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     {view === "groupChat" &&
                                                                         <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
                                                                     }
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                 </div>
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}
@@ -369,7 +407,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -404,7 +452,17 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     {view === "groupChat" &&
                                                                         <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
                                                                     }
-                                                                    <Typography variant="body1" className={classes.messageBox}>{msg.message}</Typography>
+                                                                    <Typography variant="body1" className={classes.messageBox}>
+                                                                        <Linkify
+                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                <a target="blank" href={decoratedHref} key={key}>
+                                                                                    {decoratedText}
+                                                                                </a>
+                                                                            )}
+                                                                        >
+                                                                            {msg.message}
+                                                                        </Linkify>
+                                                                    </Typography>
                                                                 </div>
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}
