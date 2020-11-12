@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
                 minWidth: '25ch',
                 margin: theme.spacing(0,2,4,0),
             }
-
         }
     },
     grouping: {

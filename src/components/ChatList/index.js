@@ -18,7 +18,7 @@ import { getGroupName } from '../../helpers'
 
 
 
-const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, view, submitNewChat, updateSelectedChat, deleteChat }) => {
+const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, closeChatList, selectedUser, chatExist, submitNewChat, updateSelectedChat, deleteChat }) => {
 
 
     //this ensures that a user is always selected to chat with
@@ -38,7 +38,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
 
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = React.useState(null);
-    
+    let view
 
     // open add sessions modal
     const [openModal, setOpenModal] = useState(false);
@@ -67,7 +67,6 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
     const selectChat = (index) => selectChatFn(index);
 
     
-
     return (
         <>
         <Box margin="1rem 1rem 1rem 1rem" display="flex" justifyContent="space-between" alignItems="center">
@@ -80,8 +79,9 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
         </Box>
         { chats.length > 0 && chats.some(chat => chat.messages.length > 1 || chat.messages[0]?.sender == user.username)  ? (
             chats.map((chat, i) => (
-                <>
+                <>                    
                     {
+                        
                         // chat.receiverHasRead === false && !userIsSender(chat) ?
                         // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
                         chat.messages[0].sender === user.username && !chat.usersDetails.find(_user => _user.userId === user.id).hasDeletedChat ? (
@@ -127,9 +127,18 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                     >
 
                                     <Typography className={classes.h4} variant="h4">
-                                    { chat.groupName 
-                                    ?`${getGroupName('chatList', chat.usersDetails, user).name}
-                                    ${getGroupName('chatList', chat.usersDetails, user).more}` :chat.users.filter(_user => _user !== user.username).find(user => user)
+
+                                    { chat.groupName &&
+                                        chat.groupName.updated 
+                                        ? chat.groupName.title 
+                                        :
+                                        `${getGroupName('chatList', chat.usersDetails, user).name}
+                                        ${getGroupName('chatList', chat.usersDetails, user).more}`
+                                    }
+                                    { !chat.groupName ?
+                                        chat.users.filter(_user => _user !== user.username).find(user => user)
+                                        :
+                                        null
                                     }
                                     </Typography>
                                         {

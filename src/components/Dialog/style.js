@@ -11,6 +11,19 @@ const useStyles = makeStyles(theme => ({
             boxShadow: 'none',
             borderRadius: '0'
         }
+    },
+
+    img: {
+        height: `100%`,
+        width: `100%`,
+        borderRadius: '5px'
+    },
+    
+    icon: {
+        '&:hover':{
+            cursor: `pointer`,
+            color: theme.palette.error.main
+        }
     }
 }));
 

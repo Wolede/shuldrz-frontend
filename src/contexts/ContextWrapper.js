@@ -3,6 +3,7 @@ import SessionContextProvider from './SessionContext'
 import JournalContextProvider from './JournalContext'
 import SelectedUserContextProvider from './SelectedUserContext'
 import ChatContextProvider from './ChatContext'
+import GroupNameContextProvider  from './groupNameContext'
 
 const ContextWrapper = ({ children }) => {
     return (
@@ -11,7 +12,9 @@ const ContextWrapper = ({ children }) => {
                 <JournalContextProvider>
                     <SelectedUserContextProvider>
                         <ChatContextProvider>
-                            {children}
+                            <GroupNameContextProvider>
+                                {children}  
+                            </GroupNameContextProvider>                            
                         </ChatContextProvider>                        
                     </SelectedUserContextProvider>
                 </JournalContextProvider>

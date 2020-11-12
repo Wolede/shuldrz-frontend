@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
-import { Dialog as MuiDialog, DialogActions, DialogContent, DialogContentText, Container, Typography, Button as MuiButton, Box } from '@material-ui/core'
+import { Dialog as MuiDialog, DialogActions, DialogContent, DialogContentText, Container, Typography, Button as MuiButton, Box, Avatar, TextField } from '@material-ui/core'
 import Paper from 'components/Paper'
 import { DropzoneArea } from 'material-ui-dropzone';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 
 const Dialog = (props) => {
@@ -102,6 +103,44 @@ const Dialog = (props) => {
                             </>
                         )
                     }
+
+
+                    {
+                        props.view === "viewImage" &&  (
+                            <>
+                                <CancelIcon className={classes.icon} fontSize="large" onClick={props.handleClose}/>
+                                <Avatar className={classes.img} alt="image received" src={props.image} size="huge"/>
+                            </>
+                        )
+                    }
+
+                    {
+                        props.view === "editGroup" &&  (
+                            <>
+                                <Typography variant="h4" align="left">
+                                    Group name
+                                </Typography>
+                                <Box display="flex" flexDirection="column" width="440px" marginTop="1.5rem">
+                                    <TextField
+                                        value={props.value}
+                                        onChange={props.handleChange}
+                                        placeholder="Type a group name"
+                                    />
+
+                                    <DialogActions>
+                                        <MuiButton onClick={props.save} color="primary">
+                                            Save
+                                        </MuiButton>
+                                        <MuiButton onClick={props.groupNameDialogClose} style={{color: "#FD2D55"}}>
+                                        Cancel
+                                        </MuiButton>
+                                    </DialogActions>
+                                </Box>   
+                                
+                            </>
+                        )
+                    }
+
 
 
                     </Paper>    

@@ -20,7 +20,6 @@ const UploadForm = ({ user }) => {
 
     
     // const [file, setFile] = useState();
-
     
     
     const [openDialog, setOpenDialog] = useState(false);
@@ -102,9 +101,10 @@ const UploadForm = ({ user }) => {
         data.append('ref', 'user')
         data.append("source", "users-permissions")
         data.append('field', 'profileImage')
-
+        
         
         try {
+            
             const uploadRes = await api.post(`upload`, data)
 
             trigger(`/users/${user?.id}`)

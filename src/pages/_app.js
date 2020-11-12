@@ -15,6 +15,7 @@ import SEO from '../../next-seo.config'
 import axios from 'axios'
 const firebase = require("firebase/app");
 require("firebase/firestore");
+require("firebase/storage");
 require("@firebase/messaging")
 
 try{

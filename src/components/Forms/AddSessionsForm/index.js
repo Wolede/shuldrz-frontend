@@ -21,8 +21,8 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
     
     const classes = useStyles()
 
-    const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-    const checkedIcon = <CheckBoxIcon fontSize="small" />;
+    const icon = <CheckBoxOutlineBlankIcon fontSize="small"/>;
+    const checkedIcon = <CheckBoxIcon fontSize="small"/>;
 
 
     const [isSuccessful, setIsSuccessful] = useState()
@@ -59,9 +59,12 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
     const onSubmit = async (values) => {
         
         const users = values.buddies;
+        console.log('VALUES.BUDDIES', users)
         
         const usersDetails = values.buddies.reduce((acc, curr) => {
+            
             const buddiesObject = buddies.find(bud => bud.username === curr);
+            console.log('BUDDIES', buddies, 'CURRENT', curr)
             if (buddiesObject) {
                 acc.push({ 
                     userId: buddiesObject.id, 
@@ -82,7 +85,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
 
         
         
-        // Add isAdmin & isPresent property to the userDetails object
+    // Add isAdmin & isPresent property to the userDetails object
     //    data.usersDetails.map(_user => {
     //         let detail = _user
     //         detail.image === undefined ? null : detail.image
@@ -91,16 +94,12 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
     //         detail.username = _user.username                     
     //         return detail
     //     })
-
-        //Pushing the admin details to the usersDetails array
+        //Pushing the admin details to the usersDetails array 
         const userImage = user.profileImage ? user.profileImage.url : null
         data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username, hasDeletedChat: false})
-        data.users.push(user.username)       
-       
+        data.users.push(user.username)
         console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
-
         
-      
         if (data.usersDetails.length > 2 ) {
             //concatenate userName in the users array to create groupName
             let groupName = users.join(', ').toString()
@@ -151,8 +150,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
 
         //close modal
         onClose()
-    }
-  
+    }  
 
     return (
         <>
@@ -226,7 +224,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
                                             helperText={ errors.buddies && touched.buddies ?
                                                 errors.buddies : null
                                             }
-                                       />
+                                        />
                                     )}
                                 />
                             </div>
@@ -275,8 +273,8 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
                         </Box>
 
                     </Form>
-            )}
-            </Formik>
+                )}
+                </Formik>
             </Box>
 
         </>

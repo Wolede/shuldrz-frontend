@@ -55,3 +55,9 @@ export const getGroupName = (mode, usersDetails, user) => {
         more
     }
 }
+
+
+// export const checkIfGroupNameChanged = (initialName, groupName) => {
+//     console.log('INITIAL NAME', initialName, 'GROUP NAME', groupName)
+//     return initialName == groupName ? false : true;
+// }

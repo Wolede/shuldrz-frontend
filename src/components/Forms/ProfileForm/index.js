@@ -150,7 +150,7 @@ const ProfileForm = ({ user }) => {
             }
             return acc; 
         }, [])
-
+        
         values = {
             ...values,
             topics: newTopics
