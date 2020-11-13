@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import api from 'services/Api'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, TextField, Checkbox, Typography, Box, Chip } from '@material-ui/core'
+import { FormControl, FormHelperText, TextField, Checkbox, InputAdornment, Typography, Box, Chip } from '@material-ui/core'
 import {Autocomplete} from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CloseIcon from '@material-ui/icons/Close';
+import LoopIcon from '@material-ui/icons/Loop';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
@@ -30,6 +31,8 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
     const [buddies, setBuddies] = useState([]);
     //allBuddies holds a collective of all the buddies fetched in the component lifecycle
     const [allBuddies, setAllBuddies] = useState([]);
+
+    const [searchLoading, setSearchLoading] = useState(false);
     // const [data, setData] = useState({})
     // const [ , setSelectedUser ] = useContext(SelectedUserContext)
 
@@ -53,17 +56,20 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
         try {
             let resBuddies;
             if(query.trim()) {
+                setSearchLoading(true);
                 //using trim because usernames can't have spaces
                 resBuddies = await api.get(`/users?username_contains=${query.trim()}`)
                 const buddiesMinusUser = resBuddies.data.filter(usr => usr.id !== user?.id);
                 setBuddies(buddiesMinusUser);         
                 // console.log('budsssSe', resBuddies.data.filter(usr => usr.id !== user?.id))
                 setAllBuddies([...allBuddies, ...buddiesMinusUser])
+                setSearchLoading(false);
             } 
 
         } catch (error) {
             // console.log('failed')
             setBuddies([])
+            setSearchLoading(false);
         }
     }
 
@@ -253,20 +259,34 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
                                             </React.Fragment>
                                         )
                                     }}
-                                    renderInput={(params) => (
-                                        <TextField 
-                                            {...params} 
-                                            name="buddies" 
-                                            variant="outlined" 
-                                            label="Humans" 
-                                            placeholder="Add to a session"
-                                            // error={errors.buddies && touched.buddies ? true : false}
-                                            helperText={ errors.buddies && touched.buddies ?
-                                                errors.buddies : null
-                                            }
-                                            onChange={handleChange}
-                                       />
-                                    )}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField 
+                                                {...params} 
+                                                name="buddies" 
+                                                variant="outlined" 
+                                                label="Humans" 
+                                                placeholder="Add to a session"
+                                                // error={errors.buddies && touched.buddies ? true : false}
+                                                helperText={ errors.buddies && touched.buddies ?
+                                                    errors.buddies : null
+                                                }
+                                                onChange={handleChange}
+                                                InputProps={
+                                                    (searchLoading) 
+                                                        ? {
+                                                                className: params.InputProps.className,
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end">
+                                                                        <LoopIcon className={classes.loader} />
+                                                                    </InputAdornment>
+                                                                ),
+                                                            }
+                                                        : { ...params.InputProps }
+                                                }
+                                            />
+                                        )
+                                    }}
                                 />
                             </div>
                         </Box>

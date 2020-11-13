@@ -33,7 +33,18 @@ const useStyles = makeStyles(theme => ({
         '& [type=number]' : {
             '-moz-appearance': 'textfield'
         },
-    }
+    },
+    loader: {
+        animation: `$spin 1s ${theme.transitions.easing.sharp} infinite`,
+    },
+    '@keyframes spin': {
+        '0%': {
+            transform: 'rotate(0)',
+        },
+        '100%': {  
+            transform: 'rotate(359deg)'
+        },
+    },
 }))
 
 export { useStyles }
