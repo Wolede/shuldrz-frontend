@@ -15,7 +15,7 @@ import useAuth from 'contexts/Auth'
 import { trigger } from 'swr'
 
 
-const JournalBox = ( { journal, otherUser, triggerUrl } ) => {
+const JournalBox = ( { journal, otherUser, triggerUrl, pageLimit } ) => {
     const classes = useStyles()
     const { user } = useAuth();
 
@@ -102,6 +102,8 @@ const JournalBox = ( { journal, otherUser, triggerUrl } ) => {
                             anchorEl={anchorEl}
                             handleClick={handleClick}
                             handleClose={handleClose}
+                            journal={journal}
+                            pageLimit={pageLimit}
                             view="journalBox"
                         />
                     </div>
@@ -122,7 +124,8 @@ const JournalBox = ( { journal, otherUser, triggerUrl } ) => {
 
 JournalBox.propTypes = {
     journal: PropTypes.object,
-    otherUser: PropTypes.bool
+    otherUser: PropTypes.bool,
+    pageLimit: PropTypes.number
 }
 
 export default JournalBox

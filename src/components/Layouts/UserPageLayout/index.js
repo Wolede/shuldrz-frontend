@@ -71,7 +71,7 @@ const UserPageLayout = ({username}) => {
             })
         },
         SWR => {
-            console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
+            // console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
             if(SWR.data.data.length < 1 && user && !SWR.data.config.url.includes('undefined')) {
                 setIsMoreData(false);
             }
@@ -128,7 +128,7 @@ const UserPageLayout = ({username}) => {
         try { 
             const { data } = await api.get(`users/?username=${username}`)
             setUserData(data[0])
-            console.log(data, 'user data p');
+            // console.log(data, 'user data p');
         } catch(error) {
 
         }

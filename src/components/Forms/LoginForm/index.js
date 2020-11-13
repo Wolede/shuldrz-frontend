@@ -95,6 +95,7 @@ const LoginForm = () => {
                         name="email" 
                         id="email" 
                         label="Email Address"
+                        type="email"
                         { ...getFieldProps('email')}
                         variant="outlined"
                         error={errors.email && touched.email ? true : false}

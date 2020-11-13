@@ -61,7 +61,6 @@ const WallNote = props => {
     });
 
     const like = async () => {
-        console.log('like');
         setLikes({...likes, loading: true})
         try {
             const res = await api.put(`wall-notes/${id}`, {
@@ -80,7 +79,6 @@ const WallNote = props => {
     }
 
     const unlike = async () => {
-        console.log('unlike');
         setLikes({...likes, loading: true})
         const newUsersLiked = usersLiked.filter(item => item.id !== user?.id)
         
@@ -130,15 +128,18 @@ const WallNote = props => {
         } catch (error){}
     }
 
+
     //Truncate functions
     const truncate = (string, maxLength) => {
         if (string.length > maxLength) {
             return (
                 <>
                 {string.substring(0, maxLength)}...
-                <Typography variant='body2' className={classes.link} gutterBottom onClick={handleOpen}>
-                    Read More
-                </Typography>
+                <Box marginTop=".5rem">
+                    <Typography variant='body2' className={classes.link} gutterBottom onClick={handleOpen}>
+                        Read More
+                    </Typography>
+                </Box>
                 </>
             )
         } else {
@@ -207,6 +208,7 @@ const WallNote = props => {
                                 className={classes.iconButton} 
                                 id={id} 
                                 deleteNote={deleteNote}
+                                note={props}
                                 anchorEl={anchorEl}
                                 handleClick={handleMenuClick}
                                 handleClose={handleMenuClose}
