@@ -53,7 +53,7 @@ const ProfileForm = ({ user }) => {
                 topics: resTopics.data
             })
 
-            console.log(user);
+            // console.log(user);
             
 
         } catch (error) {
@@ -113,14 +113,14 @@ const ProfileForm = ({ user }) => {
 
 
 
-    console.log('FETCHED USERNAME', user.username)
+    // console.log('FETCHED USERNAME', user.username)
 
     /**Update username in firebase on update */
     const updateFirebaseData = async (newUsername) => {
         const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
-        console.log('USER', user.username)
-        console.log('USER', user.id)
-        console.log('NEW USERNAME', newUsername)
+        // console.log('USER', user.username)
+        // console.log('USER', user.id)
+        // console.log('NEW USERNAME', newUsername)
 
         snapshot.forEach(doc => {         
             const selectedUser = doc.data().users.filter(_user => _user !== user.id)[0]

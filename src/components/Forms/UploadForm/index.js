@@ -94,7 +94,7 @@ const UploadForm = ({ user }) => {
     const uploadImage = async (file) => {
         setIsUploading(true)
 
-        console.log(file[0]);
+        // console.log(file[0]);
         let data = new FormData()
         data.append('files', file[0])
         data.append('refId', user.id)

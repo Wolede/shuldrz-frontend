@@ -17,6 +17,7 @@ const firebase = require("firebase/app");
 require("firebase/firestore");
 require("firebase/storage");
 require("@firebase/messaging")
+import 'emoji-mart/css/emoji-mart.css';
 
 try{
     firebase.initializeApp({

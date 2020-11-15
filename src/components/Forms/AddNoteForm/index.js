@@ -15,13 +15,14 @@ const AddNoteForm = props => {
     const classes = useStyles()
     const { user } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
-    
+    const { prevNote } = props
+
     const initialValues = {
-        dedication: false,
-        title: '',
-        note: '',
-        color: '#3F316B',
-        link: '',
+        dedication: prevNote ? prevNote.dedication : false,
+        title: prevNote ? prevNote.title : '',
+        note: prevNote ? prevNote.note : '',
+        color: prevNote ? prevNote.color : '#3F316B',
+        link: prevNote ? prevNote.link : '',
     }
     const validationSchema = Yup.object({
         dedication: Yup.bool(),
@@ -37,22 +38,31 @@ const AddNoteForm = props => {
 
         let newTitle = values.dedication ? `Dedicated to ${values.title}` : values.title
 
-        try {
-            const res = await api.post(`wall-notes`, {
-                dedication: values.dedication,
+        const req = prevNote ? api.put(`wall-notes/${prevNote.id}`, {
+            dedication: values.dedication,
                 title: newTitle,
                 note: values.note,
                 color: values.color,
                 link: values.link,
                 user: user.id
-            })
+        }) : api.post(`wall-notes`, {
+            dedication: values.dedication,
+            title: newTitle,
+            note: values.note,
+            color: values.color,
+            link: values.link,
+            user: user.id
+        })
+
+        try {
+            const res = await req
             
-            console.log('let see', res);
+            // console.log('let see', res);
             trigger(props.triggerUrl, api.get)
             props.onClose()
             
         } catch (error) {
-            console.log(error, 'error')
+            // console.log(error, 'error')
             setIsSuccessful(false)
         }
 

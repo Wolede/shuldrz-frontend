@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Router from 'next/router'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, InputAdornment, IconButton, TextField, Box, Typography, Hidden } from '@material-ui/core'
+import { FormControl, FormHelperText, FormControlLabel, Checkbox, InputAdornment, IconButton, TextField, Box, Typography, Hidden } from '@material-ui/core'
 import { useStyles } from './style'
 import Button from 'components/Button'
 import { Visibility, VisibilityOff } from '@material-ui/icons';
@@ -26,6 +26,8 @@ const SignupForm = ({volunteer}) => {
         email: '',
         password: '',
         userType: volunteer ? 'Volunteer' : 'Guest', // assigning user type
+        age: null,
+        agree: null,
     }
     
     const validationSchema = Yup.object({
@@ -34,7 +36,9 @@ const SignupForm = ({volunteer}) => {
         username: Yup.string().min(4, "Can't be less than 4 characters").max(12, 'Maximum of 12 characters').required('Username is empty'),
         // occupation: Yup.string().required('Occupation is empty'),
         email: Yup.string().email('Invalid email format!').required('Email is empty!'),
-        password: Yup.string().required('Password is empty').matches(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@[\]\^_`\{\|}~])[a-zA-Z0-9 !"#\$%&'\(\)\*\+,-\.\/:;<=>\?@[\]\^_`\{\|}~]{6,}$/, 'Minimum of 6 characters and at least one lowercase letter, one uppercase letter, one number and one special character')
+        password: Yup.string().required('Password is empty').matches(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!"#\$%&'\(\)\*\+,-\.\/:;<=>\?@[\]\^_`\{\|}~])[a-zA-Z0-9 !"#\$%&'\(\)\*\+,-\.\/:;<=>\?@[\]\^_`\{\|}~]{6,}$/, 'Minimum of 6 characters and at least one lowercase letter, one uppercase letter, one number and one special character'),
+        age: Yup.bool().nullable().required('You have to be 16 or older'),
+        agree: Yup.bool().nullable().required('You have to agree to our terms and conditions'),
     })
 
     const onSubmit = async (values) => {
@@ -53,7 +57,7 @@ const SignupForm = ({volunteer}) => {
 
 
             if(token) {
-                console.log('got token');
+                // console.log('got token');
                 Cookies.set('token', token, { expires: 60 })
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
@@ -67,15 +71,15 @@ const SignupForm = ({volunteer}) => {
                 // sendUserDataToFirestore(user)
                 firebase.firestore().collection('users').doc(user.id).set(userObj)
                 .then(() => {
-                    console.log('logged user')
+                    // console.log('logged user')
                 }, err => {
-                    console.log('user not stored:' + err)
+                    // console.log('user not stored:' + err)
                 }
                     
                 )
                 
                 setUser(user)
-                console.log("Got user", user)
+                // console.log("Got user", user)
                 Router.push('/app')
             }
         } catch (error) {
@@ -169,6 +173,7 @@ const SignupForm = ({volunteer}) => {
                         name="email" 
                         id="email" 
                         label="Email Address"
+                        type="email"
                         { ...getFieldProps('email')}
                         variant="outlined"
                         error={errors.email && touched.email ? true : false}
@@ -207,6 +212,24 @@ const SignupForm = ({volunteer}) => {
                         />
                     </FormControl>
                     
+                    <Box marginLeft="1rem" marginBottom="1rem">
+                        <FormControl>
+                            <FormControlLabel
+                                control={<Checkbox { ...getFieldProps('age')} name="age" />}
+                                label="I am 16 years or older"
+                            />
+                            <FormHelperText error={errors.age && touched.age ? true : false}> {errors.age && touched.age ? errors.age : null} </FormHelperText>
+                        </FormControl>
+
+                        <FormControl>
+                            <FormControlLabel
+                                control={<Checkbox { ...getFieldProps('agree')} name="agree" />}
+                                label={ <span>I agree to the <Link href="/terms-and-conditions"><a  target="_blank" className={classes.link}>Terms & Conditions</a></Link></span>}
+                            />
+                            <FormHelperText error={errors.agree && touched.agree ? true : false}> {errors.agree && touched.agree ? errors.agree : null} </FormHelperText>
+                        </FormControl>
+                    </Box>
+
                     <FormControl className={classes.formControl}>
                         <Button 
                         variant="contained" 

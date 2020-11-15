@@ -33,6 +33,19 @@ const JourneyLayout = () => {
     
     // console.log('user',user)
 
+    // request user permissions to display desktop notifications
+    useEffect(() => {
+        if (!("Notification" in window)) {
+            // console.log("This browser does not support desktop notification");
+        } else {
+        Notification.requestPermission();
+        }
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/push-sw.js')
+        }
+    }, [])
+
 
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "journey",
@@ -75,7 +88,7 @@ const JourneyLayout = () => {
                             <Typography variant="body2" style={{ fontWeight: 600 }}>{moment(val.createdAt).calendar()}</Typography>
                         </Box>
                         
-                        <JournalBox journal={val} triggerUrl={url} />
+                        <JournalBox journal={val} triggerUrl={url} pageLimit={PAGE_SIZE}/>
                         
                         </>
                     )}
@@ -197,7 +210,7 @@ const JourneyLayout = () => {
             // console.log(suggestedBuds)
 
         } catch (e) {
-            console.log(e)
+            // console.log(e)
         }
     }
 
@@ -209,7 +222,7 @@ const JourneyLayout = () => {
             })  
     }
 
-    console.log('things', user, chats, suggestedBuddies )
+    // console.log('things', user, chats, suggestedBuddies )
     return (
         <div>
             { (user && getProfileCompletion(user) !== '100%' && showProfileBox) &&

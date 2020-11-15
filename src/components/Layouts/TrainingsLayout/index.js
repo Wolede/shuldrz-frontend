@@ -18,7 +18,6 @@ const TrainingsLayout = () => {
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "trainings",
         ({ offset, withSWR }) => {
-            console.log('off', offset)
             const url = offset || `/trainings?_start=0&_limit=${PAGE_SIZE}`;
             const {data} = withSWR(useSWR( url, api.get));
 

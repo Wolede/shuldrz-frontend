@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/Api'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { FormControl, FormHelperText, TextField, Checkbox, Typography, Box, Chip } from '@material-ui/core'
+import { FormControl, FormHelperText, TextField, Checkbox, InputAdornment, Typography, Box, Chip } from '@material-ui/core'
 import {Autocomplete} from '@material-ui/lab';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CloseIcon from '@material-ui/icons/Close';
+import LoopIcon from '@material-ui/icons/Loop';
 import Button from 'components/Button'
 import { useStyles } from './style'
 import useAuth from 'contexts/Auth'
+import debounce from 'lodash/debounce';
 // import { SelectedUserContext } from 'contexts/SelectedUserContext';
 const firebase = require("firebase/app");
 
@@ -27,25 +29,67 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
 
     const [isSuccessful, setIsSuccessful] = useState()
     const [buddies, setBuddies] = useState([]);
+    //allBuddies holds a collective of all the buddies fetched in the component lifecycle
+    const [allBuddies, setAllBuddies] = useState([]);
+
+    const [searchLoading, setSearchLoading] = useState(false);
     // const [data, setData] = useState({})
     // const [ , setSelectedUser ] = useContext(SelectedUserContext)
 
-    const getFormOptions = async () => {
-        try {
-            const resBuddies = await api.get(`/users`)
-            
-            setBuddies(resBuddies.data.filter(usr => usr.id !== user?.id));         
+    // const PAGE_LIMIT = 5
 
-            console.log('budsss', resBuddies.data.filter(usr => usr.id !== user?.id))
+    // const getFormOptions = async () => {
+    //     try {
+    //         const resBuddies = await api.get(`/users?_limit=${PAGE_LIMIT}`)
+            
+    //         setBuddies([]);         
+    //         // setBuddies(resBuddies.data.filter(usr => usr.id !== user?.id));         
+
+    //         console.log('budsss', resBuddies.data.filter(usr => usr.id !== user?.id))
+
+    //     } catch (error) {
+    //         setBuddies(null)
+    //     }
+    // } 
+
+    const getSearchedUsers = async (query) => {
+        try {
+            let resBuddies;
+            if(query.trim()) {
+                setSearchLoading(true);
+                //using trim because usernames can't have spaces
+                resBuddies = await api.get(`/users?username_contains=${query.trim()}`)
+                const buddiesMinusUser = resBuddies.data.filter(usr => usr.id !== user?.id);
+                setBuddies(buddiesMinusUser);         
+                // console.log('budsssSe', resBuddies.data.filter(usr => usr.id !== user?.id))
+                setAllBuddies([...allBuddies, ...buddiesMinusUser])
+                setSearchLoading(false);
+            } 
 
         } catch (error) {
-            setBuddies(null)
+            // console.log('failed')
+            setBuddies([])
+            setSearchLoading(false);
         }
-    } 
+    }
 
-    useEffect(() => {
-        user ? getFormOptions() : null;
-    }, [loading])
+    const debouncedSearch = useCallback(
+        debounce(value => getSearchedUsers(value), 1000)
+    );
+
+    const handleChange = (e) => {
+        const {value} = e.target; 
+        debouncedSearch(value);
+    }
+
+    // const handleBlur = () => {
+    //     setBuddies([]);
+    // }
+
+
+    // useEffect(() => {
+    //     user ? getFormOptions() : null;
+    // }, [loading])
 
     const fetchedValues = {
         buddies: [],
@@ -62,9 +106,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
         console.log('VALUES.BUDDIES', users)
         
         const usersDetails = values.buddies.reduce((acc, curr) => {
-            
-            const buddiesObject = buddies.find(bud => bud.username === curr);
-            console.log('BUDDIES', buddies, 'CURRENT', curr)
+            const buddiesObject = allBuddies.find(bud => bud.username === curr);
             if (buddiesObject) {
                 acc.push({ 
                     userId: buddiesObject.id, 
@@ -78,27 +120,30 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
             return acc; 
         }, [])
 
-        console.log('jer', users, usersDetails);
+        // console.log('jer', users, usersDetails);
         
         
         const data = { users: [...users], usersDetails: [...usersDetails] }
 
         
         
-    // Add isAdmin & isPresent property to the userDetails object
-    //    data.usersDetails.map(_user => {
-    //         let detail = _user
-    //         detail.image === undefined ? null : detail.image
-    //         detail.isAdmin = false
-    //         detail.isPresent = true   
-    //         detail.username = _user.username                     
-    //         return detail
-    //     })
-        //Pushing the admin details to the usersDetails array 
+        // Add isAdmin & isPresent property to the userDetails object
+        //    data.usersDetails.map(_user => {
+        //         let detail = _user
+        //         detail.image === undefined ? null : detail.image
+        //         detail.isAdmin = false
+        //         detail.isPresent = true   
+        //         detail.username = _user.username                     
+        //         return detail
+        //     })
+
+        //Pushing the admin details to the usersDetails array
         const userImage = user.profileImage ? user.profileImage.url : null
         data.usersDetails.push({userId: user.id, image: userImage, isAdmin: true, isPresent: true, username: user.username, hasDeletedChat: false})
-        data.users.push(user.username)
-        console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
+        data.users.push(user.username)       
+       
+        // console.log('USER DETAILS', data.usersDetails, data.usersDetails.map(det => det.userId))
+
         
         if (data.usersDetails.length > 2 ) {
             //concatenate userName in the users array to create groupName
@@ -195,6 +240,7 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
                                     disableCloseOnSelect
                                     getOptionLabel={(option) => option}
                                     value={values.buddies}
+                                    // onBlur={handleBlur}
                                     onChange={(event, newValue) => {
                                         //first condition allows for selection to not exceed 3
                                         //second condition allows you to deselect some selections even after selection has reached 3
@@ -213,19 +259,34 @@ const AddSessionsForm = ({onClose, submitNewChat, updateSelectedChat}) => {
                                             </React.Fragment>
                                         )
                                     }}
-                                    renderInput={(params) => (
-                                        <TextField 
-                                            {...params} 
-                                            name="buddies" 
-                                            variant="outlined" 
-                                            label="Humans" 
-                                            placeholder="Add to a session"
-                                            // error={errors.buddies && touched.buddies ? true : false}
-                                            helperText={ errors.buddies && touched.buddies ?
-                                                errors.buddies : null
-                                            }
-                                        />
-                                    )}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField 
+                                                {...params} 
+                                                name="buddies" 
+                                                variant="outlined" 
+                                                label="Humans" 
+                                                placeholder="Add to a session"
+                                                // error={errors.buddies && touched.buddies ? true : false}
+                                                helperText={ errors.buddies && touched.buddies ?
+                                                    errors.buddies : null
+                                                }
+                                                onChange={handleChange}
+                                                InputProps={
+                                                    (searchLoading) 
+                                                        ? {
+                                                                className: params.InputProps.className,
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end">
+                                                                        <LoopIcon className={classes.loader} />
+                                                                    </InputAdornment>
+                                                                ),
+                                                            }
+                                                        : { ...params.InputProps }
+                                                }
+                                            />
+                                        )
+                                    }}
                                 />
                             </div>
                         </Box>

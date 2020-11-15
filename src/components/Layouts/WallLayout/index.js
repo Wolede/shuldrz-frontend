@@ -34,7 +34,7 @@ const WallLayout = ({isPublic}) => {
     const {pages, isLoadingMore, loadMore, isReachingEnd, isEmpty} = useSWRPages(
         "wall",
         ({ offset, withSWR }) => {
-            console.log('off', offset, requestUrl, wallUser)
+            // console.log('off', offset, requestUrl, wallUser)
 
             const url = offset || requestUrl;
 
@@ -75,14 +75,14 @@ const WallLayout = ({isPublic}) => {
             )
         },
         SWR => {
-            console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
+            // console.log('dat2', SWR.data, SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7), parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7)))
             if(SWR.data.data.length < 1 && user && !SWR.data.config.url.includes('undefined')) {
                 setIsMoreData(false);
             } else {
                 setIsMoreData(true)
             }
             const previousStart = parseInt(SWR.data.config.url.substr(START_POSITION_IN_CONFIG_URL, 7))
-            console.log('prev', previousStart)
+            // console.log('prev', previousStart)
             return requestUrl.includes('user') 
                 ? `/wall-notes?_start=${previousStart + PAGE_SIZE}&_limit=${PAGE_SIZE}&user=${wallUser}&_sort=createdAt:desc`
                 : `/wall-notes?_start=${previousStart + PAGE_SIZE}&_limit=${PAGE_SIZE}&_sort=createdAt:desc`
@@ -156,7 +156,7 @@ const WallLayout = ({isPublic}) => {
             setRequestUrl(`/wall-notes?_start=0&_limit=${PAGE_SIZE}&_sort=createdAt:desc`)
             setWallUser(null);
         }
-        console.log('walluser', event.target.name)
+        // console.log('walluser', event.target.name)
     }
 
     // open write note
