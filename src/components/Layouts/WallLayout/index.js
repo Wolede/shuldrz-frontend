@@ -39,7 +39,7 @@ const WallLayout = ({isPublic}) => {
             const url = offset || requestUrl;
 
             const {data} = withSWR(useSWR(url, api.get, {revalidateOnFocus: true}));
-
+            
             if (!data) return null;
             // console.log('dat',data)
             return (

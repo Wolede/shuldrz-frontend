@@ -10,6 +10,7 @@ import Modal from 'components/Modal'
 import Button from 'components/Button'
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import CommentIcon from '@material-ui/icons/Comment';
 import BoxMenu from 'components/BoxMenu'
 import { trigger } from 'swr'
 import useAuth from 'contexts/Auth'
@@ -29,6 +30,7 @@ const WallNote = props => {
         date,
         color,
         dedication,
+        noteComments,
         urlQuery,
         modalIsOpen,
         isPublic,
@@ -39,6 +41,7 @@ const WallNote = props => {
 
     const [openModal, setOpenModal] = useState(urlQuery === id);
     const [openShareModal, setOpenShareModal] = useState(false);
+    const [openCommentsModal, setOpenCommentsModal] = useState(false);
 
     
     const handleOpen = () => {
@@ -51,6 +54,14 @@ const WallNote = props => {
 
     const handleClose = () => {
         setOpenModal(false);
+    };
+
+    const handleCommentsOpen = () => {
+        setOpenCommentsModal(true)
+    };
+
+    const handleCommentsClose = () => {
+        setOpenCommentsModal(false);
     };
 
     // Like/Heart functions
@@ -268,6 +279,18 @@ const WallNote = props => {
                 )}
 
                 <Button variant='outlined' size="small" onClick={webShare}>Share</Button>
+                    <Button 
+                    variant='contained' 
+                    size="small" 
+                    color="paper" 
+                    startIcon={
+                        <CommentIcon/>
+                    }
+                    disabled={isPublic}
+                    onClick={handleCommentsOpen}
+                >
+                    Comments
+                </Button>
             </Box>
             <Box marginTop=".5rem">
                 <Typography variant='caption'>
@@ -312,6 +335,14 @@ const WallNote = props => {
                     <Modal handleClose={handleCloseShareModal} openModal={openShareModal} view='share' embedUrl={null} viewNote={{
                         id, title, note, userData
                     }}
+                    />
+                )
+            }
+
+            {/* Load Comments Modal COmponent */}
+            {openCommentsModal === true &&
+                (
+                    <Modal handleClose={handleCommentsClose} openModal={openCommentsModal} view='noteComments' note={{ id, userData }} comments={noteComments}
                     />
                 )
             }

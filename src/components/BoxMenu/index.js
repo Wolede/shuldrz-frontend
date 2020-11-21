@@ -28,7 +28,15 @@ const BoxMenu = (props) => {
      setOpenModalWriteNote(false);
  };
     
+const isOverADay = (noteDate) => {
+    let now = new Date()
+    const oneDay = 60 * 60 * 24 * 1000
 
+    let compare = (now - new Date(noteDate)) > oneDay
+
+    // console.log(now, oneDay, new Date(noteDate), compare);
+    return compare
+}
 
     return (
         <>
@@ -59,7 +67,11 @@ const BoxMenu = (props) => {
             )}
 
             {props.view === "wallNote" && (
-            <>
+                <>
+                {
+                    
+                    isOverADay(props.note.date)
+                }
                 <IconButton
                 aria-label="more"
                 aria-controls="long-menu"
@@ -76,8 +88,8 @@ const BoxMenu = (props) => {
                 keepMounted
                 open={Boolean(props.anchorEl)}
                 onClose={props.handleClose}
-                >
-                    <MenuItem onClick={handleOpenWriteNote}>Edit</MenuItem>
+                >   
+                    {!isOverADay(props.note.date) && <MenuItem onClick={handleOpenWriteNote}>Edit</MenuItem>}
                     <MenuItem onClick={props.deleteNote}>Delete</MenuItem>
                 </Menu>
             </>

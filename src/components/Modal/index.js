@@ -10,6 +10,7 @@ import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
 import WallNote from '../WallNote'
+import NoteComments from '../NoteComments'
 import Share from '../Share'
 import AddSessionsForm from '../Forms/AddSessionsForm'
 
@@ -116,6 +117,13 @@ const Modal = props => {
                         </div>
                     )
                 }
+                { view === "noteComments" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <NoteComments note={props.note} comments={props.comments} />
+                        </Paper>
+                    )
+                }
                 </Box>
             </Container>
         </MuiModal>
@@ -132,6 +140,8 @@ Modal.propTypes = {
     viewNote: PropTypes.object,
     prevNote: PropTypes.object,
     prevJournal: PropTypes.object,
+    note: PropTypes.object,
+    comments: PropTypes.array,
 }
 
 export default Modal
