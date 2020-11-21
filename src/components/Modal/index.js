@@ -39,7 +39,7 @@ const Modal = props => {
                 { view === "writeJournal" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddJournalForm onClose={handleClose} pageLimit={pageLimit} />
+                            <AddJournalForm onClose={handleClose} pageLimit={pageLimit} prevJournal={props.prevJournal} />
                         </Paper>
                     )
                 }
@@ -90,7 +90,7 @@ const Modal = props => {
                 { view === "writeNote" &&
                     (
                         <Paper padding="1.5rem">
-                            <AddNoteForm onClose={handleClose} triggerUrl={triggerUrl}/>
+                            <AddNoteForm onClose={handleClose} triggerUrl={triggerUrl} prevNote={props.prevNote}/>
                         </Paper>
                     )
                 }
@@ -130,6 +130,8 @@ Modal.propTypes = {
     embedUrl: PropTypes.string,
     user: PropTypes.object,
     viewNote: PropTypes.object,
+    prevNote: PropTypes.object,
+    prevJournal: PropTypes.object,
 }
 
 export default Modal

@@ -20,7 +20,8 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'left',
     },
     link: {
-        cursor: 'pointer'
+        cursor: 'pointer',
+        textDecoration: 'underline'
     },
     buttons: {
         '& button': {

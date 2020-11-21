@@ -14,12 +14,11 @@ const AddJournalForm = props => {
     const classes = useStyles()
     const { user } = useAuth();
     const [isSuccessful, setIsSuccessful] = useState()
-
+    const { prevJournal } = props
     // const [ journal ] = useContext(JournalContext)
-    
     const initialValues = {
-        snippetNote: '',
-        isVisible: false
+        snippetNote: prevJournal ? prevJournal.notes : '',
+        isVisible: prevJournal ? prevJournal.isVisible : true
     }
     const validationSchema = Yup.object({
         snippetNote: Yup.string().max(1000, "You've hit the 1000 character limit. Add another entry").required('Come on! Get it off your chest'),
@@ -29,19 +28,26 @@ const AddJournalForm = props => {
 
 
     const onSubmit = async (values) => {
+
+        const req = prevJournal ? api.put(`journals/${prevJournal.id}`, {
+            notes: values.snippetNote,
+            isVisible: values.isVisible,
+            user: user.id
+        }) : api.post(`journals`, {
+            notes: values.snippetNote,
+            isVisible: values.isVisible,
+            user: user.id
+        })
+
         try {
-            const res = await api.post(`journals`, {
-                    notes: values.snippetNote,
-                    isVisible: values.isVisible,
-                    user: user.id
-            })
+            const res = await req
             
             // console.log('let see', res);
             trigger(`/journey?_start=0&_limit=${props.pageLimit}&user.id=${user?.id}&userType=${user?.userType}&_sort=createdAt:desc`, api.get)
             props.onClose()
             
         } catch (error) {
-            console.log(error, 'error')
+            // console.log(error, 'error')
             setIsSuccessful(false)
         }
 

@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
         html: {
           fontSize: 12,
           [theme.breakpoints.up("md")]: {
-            fontSize: 12
+            fontSize: 14
           },
           [theme.breakpoints.up("lg")]: {
             fontSize: 14
