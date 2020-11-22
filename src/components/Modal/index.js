@@ -10,6 +10,7 @@ import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ScheduleForm from '../Forms/ScheduleForm'
 import WallNote from '../WallNote'
+import NoteComments from '../NoteComments'
 import Share from '../Share'
 import AddSessionsForm from '../Forms/AddSessionsForm'
 
@@ -106,6 +107,7 @@ const Modal = props => {
                                 color={viewNote.color}
                                 link={viewNote.link}
                                 usersLiked={viewNote.usersLiked}
+                                noteComments={viewNote.noteComments}
                                 date={viewNote.date}
                                 dedication={viewNote.dedication}
                                 userData={viewNote.userData}
@@ -114,6 +116,11 @@ const Modal = props => {
                                 triggerUrl={viewNote.triggerUrl}
                             />
                         </div>
+                    )
+                }
+                { view === "noteComments" &&
+                    (
+                        <NoteComments note={props.note} comments={props.comments} triggerUrl={props.triggerUrl} />
                     )
                 }
                 </Box>
@@ -132,6 +139,8 @@ Modal.propTypes = {
     viewNote: PropTypes.object,
     prevNote: PropTypes.object,
     prevJournal: PropTypes.object,
+    note: PropTypes.object,
+    comments: PropTypes.array,
 }
 
 export default Modal

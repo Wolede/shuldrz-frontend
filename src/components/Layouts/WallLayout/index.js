@@ -39,7 +39,7 @@ const WallLayout = ({isPublic}) => {
             const url = offset || requestUrl;
 
             const {data} = withSWR(useSWR(url, api.get, {revalidateOnFocus: true}));
-
+            
             if (!data) return null;
             // console.log('dat',data)
             return (
@@ -63,6 +63,7 @@ const WallLayout = ({isPublic}) => {
                                 usersLiked={note.usersLiked}
                                 date={moment(note.createdAt).calendar()}
                                 dedication={note.dedication}
+                                noteComments={note.note_comments}
                                 userData={note.user}
                                 urlQuery={noteUrl}
                                 isPublic={isPublic}
