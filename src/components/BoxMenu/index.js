@@ -68,10 +68,6 @@ const isOverADay = (noteDate) => {
 
             {props.view === "wallNote" && (
                 <>
-                {
-                    
-                    isOverADay(props.note.date)
-                }
                 <IconButton
                 aria-label="more"
                 aria-controls="long-menu"
@@ -91,6 +87,30 @@ const isOverADay = (noteDate) => {
                 >   
                     {!isOverADay(props.note.date) && <MenuItem onClick={handleOpenWriteNote}>Edit</MenuItem>}
                     <MenuItem onClick={props.deleteNote}>Delete</MenuItem>
+                </Menu>
+            </>
+            )}
+
+            {props.view === "noteComment" && (
+                <>
+                <IconButton
+                aria-label="more"
+                aria-controls="long-menu"
+                aria-haspopup="true"
+                onClick={props.handleClick}
+                color='secondary'
+                >
+                    <KeyboardArrowDownIcon />
+                </IconButton>
+
+                <Menu
+                id="simple-menu"
+                anchorEl={props.anchorEl}
+                keepMounted
+                open={Boolean(props.anchorEl)}
+                onClose={props.handleClose}
+                >   
+                    <MenuItem onClick={props.deleteComment}>Delete</MenuItem>
                 </Menu>
             </>
             )}
