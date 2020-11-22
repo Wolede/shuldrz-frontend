@@ -319,6 +319,7 @@ const WallNote = props => {
                         userData,
                         link,
                         usersLiked,
+                        noteComments,
                         color,
                         date,
                         dedication,
@@ -342,7 +343,7 @@ const WallNote = props => {
             {/* Load Comments Modal COmponent */}
             {openCommentsModal === true &&
                 (
-                    <Modal handleClose={handleCommentsClose} openModal={openCommentsModal} view='noteComments' note={{ id, userData }} comments={noteComments}
+                    <Modal handleClose={handleCommentsClose} openModal={openCommentsModal} view='noteComments' note={{ id, userData }} comments={noteComments} triggerUrl={triggerUrl}
                     />
                 )
             }

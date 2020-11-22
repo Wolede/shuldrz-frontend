@@ -107,6 +107,7 @@ const Modal = props => {
                                 color={viewNote.color}
                                 link={viewNote.link}
                                 usersLiked={viewNote.usersLiked}
+                                noteComments={viewNote.noteComments}
                                 date={viewNote.date}
                                 dedication={viewNote.dedication}
                                 userData={viewNote.userData}
@@ -119,9 +120,7 @@ const Modal = props => {
                 }
                 { view === "noteComments" &&
                     (
-                        <Paper padding="1.5rem">
-                            <NoteComments note={props.note} comments={props.comments} />
-                        </Paper>
+                        <NoteComments note={props.note} comments={props.comments} triggerUrl={props.triggerUrl} />
                     )
                 }
                 </Box>

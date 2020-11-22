@@ -63,6 +63,7 @@ const WallLayout = ({isPublic}) => {
                                 usersLiked={note.usersLiked}
                                 date={moment(note.createdAt).calendar()}
                                 dedication={note.dedication}
+                                noteComments={note.note_comments}
                                 userData={note.user}
                                 urlQuery={noteUrl}
                                 isPublic={isPublic}
