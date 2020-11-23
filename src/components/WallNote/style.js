@@ -26,15 +26,13 @@ const useStyles = makeStyles(theme => ({
     buttons: {
         '& button': {
             margin: '1.5rem .5rem 0 0',
-            '&:last-child': {
-                width: '100%',
-                margin: '1rem 0 .5rem 0'
-            },
-        }
+        },
     },
     commentButton: {
-        width: '100%',
-        margin: '.5rem 0'
+        '& button' : {
+            width: '100%',
+            margin: '1rem 0 .5rem 0'
+        }
     },
     iconButtons: {
         position: 'absolute',
