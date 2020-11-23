@@ -7,9 +7,11 @@ import BoxMenu from 'components/BoxMenu'
 import { useStyles } from './style'
 import api from 'services/Api'
 import { trigger } from 'swr'
+import useAuth from 'contexts/Auth'
 
 const NoteComment = ({comment, triggerUrl}) => {
     const classes = useStyles()
+    const { user } = useAuth();
 
     // Menu Functions
     const [anchorEl, setAnchorEl] = useState(null);
@@ -66,6 +68,7 @@ const NoteComment = ({comment, triggerUrl}) => {
                 </Box>
             </Box>
             <Box display="flex" justifyContent="flex-end">
+                {comment.user.id === user?.id && (
                     <div className={classes.iconButtons}>
                         <BoxMenu
                             className={classes.iconButton} 
@@ -78,6 +81,7 @@ const NoteComment = ({comment, triggerUrl}) => {
                             view="noteComment"
                         />
                     </div>
+                )}
             </Box>
         </Box>
     )
