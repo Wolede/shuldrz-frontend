@@ -279,18 +279,20 @@ const WallNote = props => {
                 )}
 
                 <Button variant='outlined' size="small" onClick={webShare}>Share</Button>
+                <div className={classes.commentButton}>
                     <Button 
-                    variant='contained' 
-                    size="small" 
-                    color="paper" 
-                    startIcon={
-                        <CommentIcon/>
-                    }
-                    disabled={isPublic}
-                    onClick={handleCommentsOpen}
-                >
-                    Comments
-                </Button>
+                        variant='contained' 
+                        size="small" 
+                        color="paper" 
+                        startIcon={
+                            <CommentIcon/>
+                        }
+                        disabled={isPublic}
+                        onClick={handleCommentsOpen}
+                    >
+                        Comments
+                    </Button>
+                </div>
             </Box>
             <Box marginTop=".5rem">
                 <Typography variant='caption'>
