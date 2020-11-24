@@ -104,6 +104,27 @@ const Dialog = (props) => {
                         )
                     }
 
+                    { props.view === "removeBud" &&
+                        (
+                            <>
+                                <Typography variant="h4" align="left" gutterBottom>                                    
+                                    Are you sure you want to remove this person?                               
+                                </Typography>
+                                <Typography variant="body1" align="left" gutterBottom>
+                                    If you remove them, they won't be part of the group anymore.                                  
+                                </Typography>
+                                <DialogActions>
+                                    <MuiButton onClick={props.onClose} color="primary">
+                                        No, go back
+                                    </MuiButton>
+                                    <MuiButton onClick={props.onSave} style={{color: "#FD2D55"}}>
+                                        Yes, remove
+                                    </MuiButton>
+                                </DialogActions>
+                            </>
+                        )
+                    }
+
 
                     {
                         props.view === "viewImage" &&  (

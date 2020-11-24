@@ -5,6 +5,7 @@ import React from 'react'
 import AddJournalForm from '../Forms/AddJournalForm'
 import AddNoteForm from '../Forms/AddNoteForm'
 import AddSessionsForm from '../Forms/AddSessionsForm'
+import UpdateSessionsForm from '../Forms/UpdateSessionsForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
 import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
 import ReviewForm from '../Forms/ReviewForm'
@@ -15,7 +16,9 @@ import { useStyles } from './style'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl, callbacks } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl, callbacks, people, chat } = props
+
+    console.log('PEOPLE', people)
 
     return (
         <MuiModal
@@ -73,6 +76,16 @@ const Modal = props => {
                         </Paper>
                     )
                 }
+
+                
+                { view === "updateSession" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <UpdateSessionsForm onClose={handleClose}  people={people} chat={chat}/>
+                        </Paper>
+                    )
+                }
+
                 { view === "schedule" &&
                     (
                         <Paper padding="1.5rem">

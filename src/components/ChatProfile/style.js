@@ -8,11 +8,35 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         left: '0',
         zIndex: '10',
+
+        // '& $MuiChip-root': {
+        //     cursor:"pointer"
+        // }
     },
+    // overrides: {
+    //     MuiChip: {
+    //       clickableColorSecondary: {
+    //         "&:hover, &:focus": {
+    //           backgroundColor: "red"
+    //         },
+    //         // "&:active": {
+    //         //   backgroundColor: "green"
+    //         // }
+    //       }
+    //     }
+    //   },
     icon: {
         marginLeft: '40px',
         cursor: 'pointer'
-    }    
+    },
+    'chip': {
+        // display: 'inline-block',
+        cursor: 'pointer',
+        // zIndex: '100'
+        // '&:hover': {
+        //     cursor: 'pointer'
+        // }
+    }
 
 }))
 

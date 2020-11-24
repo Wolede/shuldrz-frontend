@@ -26,10 +26,13 @@ const ChatProfile = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [groupNameDialogOpen, setGroupNameDialog] = useState(false);
+    const [sessionModal, setSessionModal] = useState(false)
+    const [removeBudDialog, setRemoveBudDialog] = useState(false)
     const [groupName, setGroupName] = useState('')
+    const [removeUser, setRemoveUser] = useState('')
     
     
-    console.log('GROUP NAME', groupName)
+    
 
     const handleChange = (e) => {
         
@@ -60,6 +63,44 @@ const ChatProfile = (props) => {
     const handleDialogClose = () => {
         setOpenDialog(false)
     }   
+
+    const openRemoveDialog = (username) => {
+        setRemoveBudDialog(true)
+        setRemoveUser(username)        
+    }
+
+    const closeRemoveDialog = () => {
+        setRemoveBudDialog(false)
+    }
+
+    const removeBudEventHandler = async () => {
+        const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
+        let usersDetails = doc.data().usersDetails
+        
+        const newUsersDetails = usersDetails.reduce((acc, curr) => {
+
+            if (curr.username === removeUser) {
+                curr = {
+                    ...curr,
+                    isPresent: false
+                }
+            }
+            acc.push(curr)
+            return acc;
+        }, [])
+
+        return doc.ref.update({
+            "usersDetails": firebase.firestore.FieldValue.arrayRemove({})
+        })
+        .then(() => {
+            doc.ref.update({
+                usersDetails: newUsersDetails
+            })                  
+            setRemoveBudDialog(false)
+            setRemoveUser('')          
+        })
+        
+    }
 
     const leaveGroup = async () => {
         // leave group functionality
@@ -100,6 +141,7 @@ const ChatProfile = (props) => {
                 })
             })
     }
+        
 
     const saveGroupName = async () => {
         const doc = await firebase.firestore().collection('chats').doc(chat.docKey).get()
@@ -118,6 +160,14 @@ const ChatProfile = (props) => {
         });
     }
 
+    const openSessionModal = () => {
+        setSessionModal(true)
+    }
+
+    const closeSessionModal = () => {
+        setSessionModal(false)
+    }
+
     useEffect(() => {  
         
         view === "groupChat" && chat.groupName.updated ? 
@@ -132,6 +182,26 @@ const ChatProfile = (props) => {
         
     // }, [groupName])
 
+    const getActivePeople = () => {
+        console.log('ACTIVE PEOPLE', chat?.usersDetails.filter(det => det.isPresent))
+        let people = chat?.usersDetails.filter(det => det.isPresent)
+
+        const users = people.reduce((acc, curr) => {            
+            if (curr.username !== user.username) {
+                acc.push({
+                    userId: curr.userId, 
+                    username: curr.username, 
+                    image: curr?.image ? curr?.image : null,
+                    isAdmin: curr.isAdmin,
+                    isPresent: curr.isPresent,
+                    hasDeletedChat: curr.hasDeletedChat              
+                });
+            }
+            return acc; 
+        }, [])
+
+        return users
+    }
     
 
     return (
@@ -210,6 +280,22 @@ const ChatProfile = (props) => {
                             }
                             
                         </Box>
+                            {
+                                chat?.usersDetails?.find(det => det.isAdmin)?.userId === user._id  ?
+                                <Box>
+                                    <Button 
+                                    variant="contained" 
+                                    size="small" 
+                                    color="primary" 
+                                    marginTop='1.5rem' 
+                                    disabled={chat?.usersDetails?.filter(det => det.isPresent).length >= 5}
+                                    onClick={openSessionModal}>
+                                    Add people
+                                    </Button>
+                                </Box>
+                                : null
+                            }
+                        
                         {/* Button to edit Title */}
                         {/* <Button variant="contained" size="tiny" color='secondary-light'>Edit Title</Button> */}
                         <Box margin="2rem 0 2rem 0">
@@ -228,10 +314,18 @@ const ChatProfile = (props) => {
                                                 >{!image ? username.substring(0, 1) : null}</Avatar>
                                             </Box>
                                             <Typography variant="subtitle1">{username}</Typography>
-
+                                            
                                             {/* Chip is for only admin  */}
-                                            {isAdmin &&
+                                            {isAdmin  ?
                                                 <Chip label="admin" color="primary" size="small" margin="0 0 0 auto" />
+                                                : 
+                                                <Box onClick={() => openRemoveDialog(username)} margin="0 0 0 auto" >
+                                                    <Chip 
+                                                    label="remove" 
+                                                    color="error" 
+                                                    size="small" 
+                                                    />
+                                                </Box>
                                             }
                                         </Box>
                                     </Paper>
@@ -281,6 +375,27 @@ const ChatProfile = (props) => {
                         handleChange={handleChange}
                         isAdmin={chat?.usersDetails?.find(det => det.isAdmin)?.userId === user._id} // if user is an admin of the group
                     />
+                )
+            }
+
+            {/* Load Custom Dialog COmponent */}
+            {removeBudDialog === true &&
+                (
+                    <Dialog
+                        onClose={closeRemoveDialog}
+                        openDialog={removeBudDialog}
+                        disableEscape={false}
+                        view="removeBud"
+                        bud={removeUser}
+                        onSave={removeBudEventHandler}                        
+                    />
+                )
+            }
+
+            {/* Load Custom Modal COmponent */}
+            {sessionModal === true &&
+                (
+                    <Modal handleClose={closeSessionModal} openModal={sessionModal} view='updateSession'  people={getActivePeople()} chat={chat}/>
                 )
             }
         </div>

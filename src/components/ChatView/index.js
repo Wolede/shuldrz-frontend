@@ -305,7 +305,7 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                         <Box onClick={handleDialogOpen} className={classes.img}>                                                                                
                                                                             <Avatar alt="Remy Sharp" src={msg.message}/>
                                                                         </Box>
-                                                                        )                                                                             
+                                                                        )                                                                            
                                                                         :
                                                                         <Typography variant="body1" className={classes.messageBox}>
                                                                             <Linkify
@@ -353,17 +353,25 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     {view === "groupChat" &&
                                                                         <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
                                                                     }
-                                                                    <Typography variant="body1" className={classes.messageBox}>
-                                                                        <Linkify
-                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
-                                                                                <a target="blank" href={decoratedHref} key={key}>
-                                                                                    {decoratedText}
-                                                                                </a>
-                                                                            )}
-                                                                        >
-                                                                            {msg.message}
-                                                                        </Linkify>
-                                                                    </Typography>
+                                                                    {msg.message.split('%2F').includes('images') ?   (
+                                                                        setImage(msg.message) && 
+                                                                        <Box onClick={handleDialogOpen} className={classes.img}>                                                                                
+                                                                            <Avatar alt="Remy Sharp" src={msg.message}/>
+                                                                        </Box>
+                                                                        )                                                                            
+                                                                        :
+                                                                        <Typography variant="body1" className={classes.messageBox}>
+                                                                            <Linkify
+                                                                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                    <a target="blank" href={decoratedHref} key={key}>
+                                                                                        {decoratedText}
+                                                                                    </a>
+                                                                                )}
+                                                                            >
+                                                                                {msg.message}
+                                                                            </Linkify>
+                                                                        </Typography>
+                                                                    }
                                                                 </div>
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}

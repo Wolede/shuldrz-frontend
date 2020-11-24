@@ -14,6 +14,7 @@ import Button from 'components/Button'
 import ChatIcon from '@material-ui/icons/Chat';
 import { useStyles } from './styles'
 import { getGroupName } from '../../helpers'
+import Linkify from 'react-linkify';
 
 
 
@@ -84,7 +85,7 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                         
                         // chat.receiverHasRead === false && !userIsSender(chat) ?
                         // <Notification position='relative' top='30px' left='30px' zIndex='100'></Notification>  : null
-                        chat.messages[0].sender === user.username && !chat.usersDetails.find(_user => _user.userId === user.id).hasDeletedChat ? (
+                        chat.messages[0].sender === user.username && !chat?.usersDetails.find(_user => _user.userId === user.id)?.hasDeletedChat ? (
 
                             <div onClick={closeChatList}>
 
@@ -151,9 +152,17 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         
                                         {
                                             chat.messages[chat.messages.length - 1].message && chat.messages[chat.messages.length - 1].isDeleted === false && (
+                                                
                                                 <Typography variant="body2">
-                                                {
-                                                    chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'}
+                                                    <Linkify
+                                                        componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                            <a target="blank" href={decoratedHref} key={key}>
+                                                                {decoratedText}
+                                                            </a>
+                                                        )}
+                                                    >
+                                                        {chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'}
+                                                    </Linkify>
                                                 </Typography>
                                             )
                                         }
@@ -269,10 +278,18 @@ const ChatList = ({ chats, selectedChat, user, selectedChatIndex, selectChatFn, 
                                         {
                                             chat.messages[chat.messages.length - 1].message && chat.messages[chat.messages.length - 1].isDeleted === false && (
                                                 <Typography variant="body2">
-                                                {
-                                                    chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'}
+                                                    <Linkify
+                                                        componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                            <a target="blank" href={decoratedHref} key={key}>
+                                                                {decoratedText}
+                                                            </a>
+                                                        )}
+                                                    >
+                                                        {chat.messages[chat.messages.length - 1].message.substring(0, 30) + '...'}
+                                                    </Linkify>
                                                 </Typography>
                                             )
+                                            
                                         }
 
 

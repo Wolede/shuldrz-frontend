@@ -52,24 +52,38 @@ const UploadForm = ({ user }) => {
 
             const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
         
-        snapshot.forEach(doc => {         
-            const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
+            snapshot.forEach(doc => {   
+            const usersDetails =  doc.data().usersDetails  
+            // const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
             const deleteImageResponse = res.status 
             
             if(deleteImageResponse === 200){
-                const usersDetails =[
-                    {
-                        userId: user.id,
-                        image: null
-                    }, 
-                    {
-                        userId: selectedUser.userId,
-                        image: selectedUser.image
+                
+                const newUsersDetails = usersDetails.reduce((acc, curr) => {
+
+                    if (curr.username === user.username) {
+                        curr = {
+                            ...curr,
+                            image: null
+                        }
                     }
-                ]
+                    acc.push(curr)
+                    return acc;
+                }, [])
+                
+                // const usersDetails =[
+                //     {
+                //         userId: user.id,
+                //         image: null
+                //     }, 
+                //     {
+                //         userId: selectedUser.userId,
+                //         image: selectedUser.image
+                //     }
+                // ]
 
                 doc.ref.update({
-                    usersDetails : [...usersDetails]
+                    usersDetails : [...newUsersDetails]
                 })
             }   
             
@@ -113,24 +127,38 @@ const UploadForm = ({ user }) => {
             const snapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', user.username).get()
 
             snapshot.forEach(doc => {         
-            const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
+            const usersDetails =  doc.data().usersDetails
+            // const selectedUser = doc.data().usersDetails.filter(_user => _user.userId !== user.id)[0]
             const uploadedImage = uploadRes.data[0].url
+
             
-            const usersDetails =[
-                {
-                    userId: user.id,
-                    image: uploadedImage
-                }, 
-                {
-                    userId: selectedUser.userId,
-                    image: selectedUser.image
+            const newUsersDetails = usersDetails.reduce((acc, curr) => {
+
+                if (curr.username === user.username) {
+                    curr = {
+                        ...curr,
+                        image: uploadedImage
+                    }
                 }
-            ]
+                acc.push(curr)
+                return acc;
+            }, [])
+            
+            // const usersDetails =[
+            //     {
+            //         userId: user.id,
+            //         image: uploadedImage
+            //     }, 
+            //     {
+            //         userId: selectedUser.userId,
+            //         image: selectedUser.image
+            //     }
+            // ]
 
 
             
             doc.ref.update({
-                usersDetails : [...usersDetails]
+                usersDetails : [...newUsersDetails]
             })
         })
 
