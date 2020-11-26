@@ -15,10 +15,10 @@ import SEO from '../../next-seo.config'
 import axios from 'axios'
 import 'emoji-mart/css/emoji-mart.css';
 
-const firebase = require("firebase");
+const firebase = require("firebase/app");
 require("firebase/firestore");
-require("@firebase/messaging");
-
+require("firebase/storage");
+require("@firebase/messaging")
 
 try{
     firebase.initializeApp({
@@ -49,7 +49,6 @@ Router.events.on('routeChangeError', () => NProgress.done());
 
 const MyApp = ({ Component, pageProps }) => {
     const classes = useStyles();
-
     React.useEffect(() => {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector('#jss-server-side');
@@ -57,7 +56,6 @@ const MyApp = ({ Component, pageProps }) => {
             jssStyles.parentElement.removeChild(jssStyles);
         }
     }, []);
-
     return (
         <>
         <DefaultSeo {...SEO} />

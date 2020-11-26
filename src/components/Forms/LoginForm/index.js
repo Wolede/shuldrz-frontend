@@ -17,12 +17,12 @@ const LoginForm = () => {
     const classes = useStyles()
     const { setUser } = useAuth()
     const [isSuccessful, setIsSuccessful] = useState()
-    
+
     const initialValues = {
         email: '',
         password: '',
     }
-    
+
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email format!').required('Email is empty!'),
         password: Yup.string().required('Password is empty')
@@ -35,14 +35,14 @@ const LoginForm = () => {
                 password: values.password
             })
             const token = res.data.jwt
-            
-            if(token) {
+
+            if (token) {
                 console.log('got token');
                 Cookies.set('token', token, { expires: 60 })
                 api.defaults.headers.Authorization = `Bearer ${token}`
                 const res = await api.get('users/me')
                 const user = res.data
-                
+
                 setUser(user)
                 console.log("Got user", user)
                 Router.push('/app')
@@ -64,7 +64,7 @@ const LoginForm = () => {
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
-    
+
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -83,9 +83,9 @@ const LoginForm = () => {
     return (
         <div>
             <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
             >
             {({values, errors, touched, getFieldProps, isSubmitting, submitCount}) => (
                 <Form noValidate autoComplete="off">
@@ -173,11 +173,46 @@ const LoginForm = () => {
                                 New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
                             </Typography>
                         </Box>
+
+
+                        <FormControl className={classes.formControl}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={isSubmitting}
+                                loading={isSubmitting}
+                            >
+                                Login
+                        </Button>
+                        </FormControl>
+
+                        <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
+                            <FormHelperText
+                                style={{ textAlign: 'center' }}
+                                error={true}
+                            >
+                                {
+                                    isSuccessful?.status === false ?
+                                        isSuccessful.message ?
+                                            isSuccessful.message
+                                            : 'an error occured'
+                                        : null
+                                }
+                            </FormHelperText>
+                        </FormControl>
+
+                        <Hidden mdUp>
+                            <Box marginTop='4rem'>
+                                <Typography variant='body2'>
+                                    New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
+                                </Typography>
+                            </Box>
+                        </Hidden>
                     </Hidden>
-                    
-                    
-                </Form>
-            )}
+
+                    </Form>
+                )}
             </Formik>
 
             {/* Load Custom Modal COmponent */}

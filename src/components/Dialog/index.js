@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useStyles } from './style'
-import { Dialog as MuiDialog, DialogActions, DialogContent, DialogContentText, Container, Typography, Button as MuiButton, Box } from '@material-ui/core'
+import { Dialog as MuiDialog, DialogActions, DialogContent, DialogContentText, Container, Typography, Button as MuiButton, Box, Avatar, TextField } from '@material-ui/core'
 import Paper from 'components/Paper'
 import { DropzoneArea } from 'material-ui-dropzone';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 
 const Dialog = (props) => {
@@ -102,6 +103,65 @@ const Dialog = (props) => {
                             </>
                         )
                     }
+
+                    { props.view === "removeBud" &&
+                        (
+                            <>
+                                <Typography variant="h4" align="left" gutterBottom>                                    
+                                    Are you sure you want to remove this person?                               
+                                </Typography>
+                                <Typography variant="body1" align="left" gutterBottom>
+                                    If you remove them, they won't be part of the group anymore.                                  
+                                </Typography>
+                                <DialogActions>
+                                    <MuiButton onClick={props.onClose} color="primary">
+                                        No, go back
+                                    </MuiButton>
+                                    <MuiButton onClick={props.onSave} style={{color: "#FD2D55"}}>
+                                        Yes, remove
+                                    </MuiButton>
+                                </DialogActions>
+                            </>
+                        )
+                    }
+
+
+                    {
+                        props.view === "viewImage" &&  (
+                            <>
+                                <CancelIcon className={classes.icon} fontSize="large" onClick={props.handleClose}/>
+                                <Avatar className={classes.img} alt="image received" src={props.image} size="huge"/>
+                            </>
+                        )
+                    }
+
+                    {
+                        props.view === "editGroup" &&  (
+                            <>
+                                <Typography variant="h4" align="left">
+                                    Group name
+                                </Typography>
+                                <Box display="flex" flexDirection="column" width="440px" marginTop="1.5rem">
+                                    <TextField
+                                        value={props.value}
+                                        onChange={props.handleChange}
+                                        placeholder="Type a group name"
+                                    />
+
+                                    <DialogActions>
+                                        <MuiButton onClick={props.save} color="primary">
+                                            Save
+                                        </MuiButton>
+                                        <MuiButton onClick={props.groupNameDialogClose} style={{color: "#FD2D55"}}>
+                                        Cancel
+                                        </MuiButton>
+                                    </DialogActions>
+                                </Box>   
+                                
+                            </>
+                        )
+                    }
+
 
 
                     </Paper>    
