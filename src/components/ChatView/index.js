@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { Grid, Typography, Box, Fab, useMediaQuery, Button as MuiButton, IconButton, MenuItem, Menu } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles';
+import { useTheme } from '@material-ui/styles'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import GroupIcon from '@material-ui/icons/Group';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline'
+import GroupIcon from '@material-ui/icons/Group'
 import Avatar from 'components/Avatar'
 import Button from 'components/Button'
 import ChatInput from 'components/ChatInput'
 import { useStyles } from './styles'
 import Divider from 'components/Divider'
 import moment from 'moment'
-import MiniDrawer from 'components/MiniDrawer';
-import ChatProfile from '../ChatProfile';
-import { getGroupName } from '../../helpers';
+import MiniDrawer from 'components/MiniDrawer'
+import Dialog from 'components/Dialog'
+import ChatProfile from '../ChatProfile'
+import { getGroupName } from '../../helpers'
 import Linkify from 'react-linkify';
-
-
 
 
 const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex, submitMessage, userClickedInput, selectedUser, prevReview, deleteMessage, chatList }) => {
@@ -33,12 +32,29 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
     
 
     const [openRightSidebar, setOpenRightSidebar] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [type, setType] = useState(null)
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [groupDisabled, setGroupDisabled] = React.useState(false);
     // const [chatFilter, setChatFilter] = useState([...filteredChat(chat.messages)])
 
     const view = chat.groupName ? 'groupChat' : 'singleChat'
+    let image
+    const handleDialogOpen = (displayImage) => {
+        setOpenDialog(true)
+        setType('viewImage')
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false)
+    }
+
+    const setImage = (msg) => {
+        image = msg
+
+        return true;
+    }
 
     const handleRightSidebarOpen = () => {
         setOpenRightSidebar(true);
@@ -284,17 +300,25 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                                                    <Typography variant="body1" className={classes.messageBox}>
-                                                                        <Linkify
-                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
-                                                                                <a target="blank" href={decoratedHref} key={key}>
-                                                                                    {decoratedText}
-                                                                                </a>
-                                                                            )}
-                                                                        >
-                                                                            {msg.message}
-                                                                        </Linkify>
-                                                                    </Typography>
+                                                                    {msg.message.split('%2F').includes('images') ?   (
+                                                                        setImage(msg.message) && 
+                                                                        <Box onClick={handleDialogOpen} className={classes.img}>                                                                                
+                                                                            <Avatar alt="Remy Sharp" src={msg.message}/>
+                                                                        </Box>
+                                                                        )                                                                            
+                                                                        :
+                                                                        <Typography variant="body1" className={classes.messageBox}>
+                                                                            <Linkify
+                                                                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                    <a target="blank" href={decoratedHref} key={key}>
+                                                                                        {decoratedText}
+                                                                                    </a>
+                                                                                )}
+                                                                            >
+                                                                                {msg.message}
+                                                                            </Linkify>
+                                                                        </Typography>
+                                                                    }
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -329,17 +353,25 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                                     {view === "groupChat" &&
                                                                         <Typography variant="body2" color="secondary">{msg.sender}</Typography> 
                                                                     }
-                                                                    <Typography variant="body1" className={classes.messageBox}>
-                                                                        <Linkify
-                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
-                                                                                <a target="blank" href={decoratedHref} key={key}>
-                                                                                    {decoratedText}
-                                                                                </a>
-                                                                            )}
-                                                                        >
-                                                                            {msg.message}
-                                                                        </Linkify>
-                                                                    </Typography>
+                                                                    {msg.message.split('%2F').includes('images') ?   (
+                                                                        setImage(msg.message) && 
+                                                                        <Box onClick={handleDialogOpen} className={classes.img}>                                                                                
+                                                                            <Avatar alt="Remy Sharp" src={msg.message}/>
+                                                                        </Box>
+                                                                        )                                                                            
+                                                                        :
+                                                                        <Typography variant="body1" className={classes.messageBox}>
+                                                                            <Linkify
+                                                                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                    <a target="blank" href={decoratedHref} key={key}>
+                                                                                        {decoratedText}
+                                                                                    </a>
+                                                                                )}
+                                                                            >
+                                                                                {msg.message}
+                                                                            </Linkify>
+                                                                        </Typography>
+                                                                    }
                                                                 </div>
                                                                 <Typography color="textSecondary" className='timestamp'>
                                                                     {moment(msg.timestamp).calendar()}
@@ -407,17 +439,25 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                                                         <div className={classes.userSent}>                                                            
                                                             <div>
                                                                 <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                                                    <Typography variant="body1" className={classes.messageBox}>
-                                                                        <Linkify
-                                                                            componentDecorator={(decoratedHref, decoratedText, key) => (
-                                                                                <a target="blank" href={decoratedHref} key={key}>
-                                                                                    {decoratedText}
-                                                                                </a>
-                                                                            )}
-                                                                        >
-                                                                            {msg.message}
-                                                                        </Linkify>
-                                                                    </Typography>
+                                                                    {msg.message.split('%2F').includes('images') ?   (
+                                                                        setImage(msg.message) && 
+                                                                        <Box onClick={handleDialogOpen} className={classes.img}>                                                                                
+                                                                            <Avatar alt="Remy Sharp" src={msg.message}/>
+                                                                        </Box>
+                                                                        )                                                                             
+                                                                        :
+                                                                        <Typography variant="body1" className={classes.messageBox}>
+                                                                            <Linkify
+                                                                                componentDecorator={(decoratedHref, decoratedText, key) => (
+                                                                                    <a target="blank" href={decoratedHref} key={key}>
+                                                                                        {decoratedText}
+                                                                                    </a>
+                                                                                )}
+                                                                            >
+                                                                                {msg.message}
+                                                                            </Linkify>
+                                                                        </Typography>
+                                                                    }
                                                                     <IconButton
                                                                         aria-label="more"
                                                                         aria-controls="long-menu"
@@ -509,6 +549,19 @@ const ChatView = ({ user, chat, endSessionFn, endBtn, backBtn, selectedChatIndex
                             submitMessageFn={submitMessage} 
                             isGroupDisabled={groupDisabled} // to be made dynamic
                         />
+
+                        {/* Load Custom Dialog COmponent */}
+                        {openDialog === true &&
+                            (
+                                <Dialog 
+                                    handleClose={handleDialogClose} 
+                                    openDialog={openDialog} 
+                                    disableEscape={false} 
+                                    view={type}
+                                    image={image}
+                                />
+                            )
+                        }
 
                     </>
 

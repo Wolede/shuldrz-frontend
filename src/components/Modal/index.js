@@ -1,22 +1,25 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Modal as MuiModal, Container, Box } from '@material-ui/core'
-import { useStyles } from './style'
+import { Box, Container, Modal as MuiModal } from '@material-ui/core'
 import Paper from 'components/Paper'
+import PropTypes from 'prop-types'
+import React from 'react'
 import AddJournalForm from '../Forms/AddJournalForm'
 import AddNoteForm from '../Forms/AddNoteForm'
-import ReviewForm from '../Forms/ReviewForm'
-import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
+import AddSessionsForm from '../Forms/AddSessionsForm'
+import UpdateSessionsForm from '../Forms/UpdateSessionsForm'
 import AddTopicsForm from '../Forms/AddTopicsForm'
+import ForgotPasswordForm from '../Forms/ForgotPasswordForm'
+import ReviewForm from '../Forms/ReviewForm'
 import ScheduleForm from '../Forms/ScheduleForm'
 import WallNote from '../WallNote'
 import NoteComments from '../NoteComments'
 import Share from '../Share'
-import AddSessionsForm from '../Forms/AddSessionsForm'
+import { useStyles } from './style'
 
 const Modal = props => {
     const classes = useStyles()
-    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl, callbacks } = props
+    const { view, embedUrl, openModal, handleClose, disableBackdropClick, callback, formProps, viewNote, pageLimit, triggerUrl, callbacks, people, chat } = props
+
+    console.log('PEOPLE', people)
 
     return (
         <MuiModal
@@ -74,6 +77,16 @@ const Modal = props => {
                         </Paper>
                     )
                 }
+
+                
+                { view === "updateSession" &&
+                    (
+                        <Paper padding="1.5rem">
+                            <UpdateSessionsForm onClose={handleClose}  people={people} chat={chat}/>
+                        </Paper>
+                    )
+                }
+
                 { view === "schedule" &&
                     (
                         <Paper padding="1.5rem">

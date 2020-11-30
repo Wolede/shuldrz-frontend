@@ -26,7 +26,6 @@ export const AuthContextProvider = ({ children }) => {
                 } catch (error) {
                     logout()
                 }
-                
             }
             setLoading(false)
         }
@@ -50,7 +49,6 @@ export const AuthContextProvider = ({ children }) => {
 
 export default function useAuth() {
     const context = useContext(AuthContext)
-
     return context
 };
 
@@ -68,3 +66,5 @@ export function ProtectRoute(Component) {
         return (<Component {...arguments} />)
     }
 }
+
+

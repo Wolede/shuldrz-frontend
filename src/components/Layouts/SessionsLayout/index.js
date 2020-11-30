@@ -21,7 +21,7 @@ const firebase = require("firebase/app");
 
 const Sessions = (props) => {
     const classes = useStyles()
-    
+
     const { user, loading } = useAuth()
 
     // request user permissions to display desktop notifications
@@ -46,17 +46,17 @@ const Sessions = (props) => {
     const [openLeftSidebar, setOpenLeftSidebar] = useState(true);
 
     const handleLeftSidebarOpen = () => {
-      setOpenLeftSidebar(true);
+        setOpenLeftSidebar(true);
     };
-  
+
     const handleLeftSidebarClose = () => {
-      setOpenLeftSidebar(false);
+        setOpenLeftSidebar(false);
     };
 
     const shouldOpenLeftSidebar = isDesktop ? true : openLeftSidebar;
 
 
-    
+
     // const [chats, updateChatList] = useState()
     const [selectedChat, updateSelectedChat] = useState(0)
     const [selectedUser, setSelectedUser] = React.useContext(SelectedUserContext)
@@ -67,7 +67,7 @@ const Sessions = (props) => {
     const [prevReview, setPrevReview] = useState()
     let chatNotEmpty
 
-   
+
 
     const chatContainer = useRef()
     const scrollToMyRef = () => {
@@ -75,21 +75,15 @@ const Sessions = (props) => {
         chatContainer.current.scrollTo(0, scroll)
     }
 
+    //Get chats from Firebase
     useEffect(() => {
 
-        if (user) {  
-            const userImage = user.profileImage ? user.profileImage.url : null
-                   
+        if (user) {
             firebase.firestore().collection('chats').where('users', 'array-contains', user.username).orderBy('currentTime', 'desc')
-            .onSnapshot(res => {
-                const firebase_chats = res.docs.map(doc => doc.data())  
-                
-                chatNotEmpty = firebase_chats.filter((chatList, i) => {
-                    return chatList.messages.length > 1 || chatList.messages[0].sender  === user.username 
+                .onSnapshot(res => {
+                    const firebase_chats = res.docs.map(doc => doc.data())
+                    setChats({ loading: false, data: firebase_chats ? firebase_chats : [] })
                 })
-                setChats({ loading: false, data: firebase_chats ? firebase_chats : [] })     
-            })       
-
         }
 
         // console.log('FIREBASE CHATS', chats)
@@ -140,15 +134,11 @@ const Sessions = (props) => {
         firebase.firestore().collection('users').get().then((snapshot) => {
             snapshot.docs.map(doc => userInfo(doc))
         })
-        const userInfo = (doc) =>{             
-           doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null                
-        }        
+        const userInfo = (doc) => {
+            doc.data().username === chatReceiver ? setChatReceiverID(doc.data().id) : null
+        }
     }
 
-    // useEffect(() => {
-    //     messageRead()
-    // }, [selectedChat])
-    
     // useEffect(() => {
     //     if( !selectedUser ){
     //         setChatReceiverID(chats[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId)
@@ -157,30 +147,29 @@ const Sessions = (props) => {
     //     // if(selectedUser) {
     //     //     setChatReceiverID(selectedUser.id)
     //     // }
-        
+
     // }, [chats.length])
 
-   
+
     useEffect(() => {
         // console.log('CHAT RECEIVER ID', chatReceiverID)
-        const getUserInfo = async() => {            
-            try{
-                const { data } = await api.get(`/users/${chatReceiverID}`)           
-                
+        const getUserInfo = async () => {
+            try {
+                const { data } = await api.get(`/users/${chatReceiverID}`)
+
                 // console.log('USER INFO', data)   
-                         
+
                 setSelectedUser(data)
             } catch(error){
                 // console.log(error)
             }                
         }
-        
-        if(chatReceiverID){
+
+        if (chatReceiverID) {
             getUserInfo()
         }
-        
+
     }, [chatReceiverID])
-  
 
     const loadPrevReview = async() => {
         try {            
@@ -191,7 +180,7 @@ const Sessions = (props) => {
         }        
     }
 
-    useEffect(() => {       
+    useEffect(() => {
         loadPrevReview()
     }, [selectedUser])
 
@@ -200,8 +189,8 @@ const Sessions = (props) => {
 
     const submitMessage = (msg) => {
         // console.log('submitMessageChats', selectedChat.messages.length)
-        const sessionState = chats.data[selectedChat].messages.length === 0 ? [] : 
-        chats.data[selectedChat].messages[chats.data[selectedChat].messages.length - 1].session
+        const sessionState = chats.data[selectedChat].messages.length === 0 ? [] :
+            chats.data[selectedChat].messages[chats.data[selectedChat].messages.length - 1].session
 
         let session;
         if (!chats.data[selectedChat].groupName) {
@@ -212,43 +201,43 @@ const Sessions = (props) => {
 
         let docKey;
         if (!chats.data[selectedChat].groupName) {
-            docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)     
+            docKey = buildDocKey((chats.data[selectedChat]).usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId)
         } else {
             docKey = chats.data[selectedChat].docKey
         }
- 
+
         firebase.firestore().collection('chats').doc(docKey)
-        .update({
-            messages: firebase.firestore.FieldValue.arrayUnion({
-                sender: user.username,
-                message: msg,
-                session: session,
-                timestamp: Date.now(),
-                isDeleted: false
-            }),
-            currentTime: Date.now(),
-            receiverHasRead: false
-        }).then(async () => {       
-            const doc = await firebase.firestore().collection('chats').doc(docKey).get()    
-            const usersDetails = doc.data().usersDetails
-            
-            const newUsersDetails = usersDetails.reduce((acc, curr)=> {
-                
-                if(curr.userId !== user.id){
-                    curr = {
-                        ...curr,
-                        hasDeletedChat: false
+            .update({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    sender: user.username,
+                    message: msg,
+                    session: session,
+                    timestamp: Date.now(),
+                    isDeleted: false
+                }),
+                currentTime: Date.now(),
+                receiverHasRead: false
+            }).then(async () => {
+                const doc = await firebase.firestore().collection('chats').doc(docKey).get()
+                const usersDetails = doc.data().usersDetails
+
+                const newUsersDetails = usersDetails.reduce((acc, curr) => {
+
+                    if (curr.userId !== user.id) {
+                        curr = {
+                            ...curr,
+                            hasDeletedChat: false
+                        }
                     }
-                }
-                acc.push(curr)
-                return acc;
-            }, [])
-            doc.ref.update({
-                usersDetails: newUsersDetails
+                    acc.push(curr)
+                    return acc;
+                }, [])
+                doc.ref.update({
+                    usersDetails: newUsersDetails
+                })
             })
-        })
-        updateSelectedChat(0)       
-        
+        updateSelectedChat(0)
+
     }
 
     useEffect(() => {
@@ -258,10 +247,10 @@ const Sessions = (props) => {
         }
     }, [chats.data, selectedChat])
 
-    
 
-    const clickedMessageWhereNotSender = (selectedChat) =>  {        
-        return chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages?.length - 1]?.sender !== user?.username        
+
+    const clickedMessageWhereNotSender = (selectedChat) => {
+        return chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages?.length - 1]?.sender !== user?.username
     }
 
     const userClickedInputFn = () => {
@@ -269,23 +258,23 @@ const Sessions = (props) => {
         // console.log('you clicked input')
     }
 
-    const messageRead = () => {               
+    const messageRead = () => {
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
-        
+
         let docKey;
-        if (!chats.data[selectedChat].groupName){
-            docKey = [user?.id, selectedUserID].sort().join(''); 
+        if (!chats.data[selectedChat].groupName) {
+            docKey = [user?.id, selectedUserID].sort().join('');
         } else {
-            docKey = chats.data[selectedChat].docKey          
+            docKey = chats.data[selectedChat].docKey
         }
-        
+
         if (clickedMessageWhereNotSender(selectedChat)) {
             firebase
-            .firestore()
-            .collection('chats')
-            .doc(docKey)
-            .update({ receiverHasRead: true });
-        } 
+                .firestore()
+                .collection('chats')
+                .doc(docKey)
+                .update({ receiverHasRead: true });
+        }
     }
 
 
@@ -293,9 +282,9 @@ const Sessions = (props) => {
     // <!-- Submit new chat when user cliks on the chat button on a profile --> 
     const submitNewChat = async (selectedUser) => {
 
-        const newBuildDocKey = () =>  [user.id, selectedUser.id].sort().join('');
-        const tempDocKey = () =>  [user.username, selectedUser.username].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
-        
+        const newBuildDocKey = () => [user.id, selectedUser.id].sort().join('');
+        const tempDocKey = () => [user.username, selectedUser.username].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(':');
+
         const userExists = async () => {
             const usersSnapshot = await
                 firebase
@@ -315,10 +304,10 @@ const Sessions = (props) => {
             docKey = newBuildDocKey();
             const chat = await
                 firebase
-                .firestore()
-                .collection('chats')
-                .doc(docKey)
-                .get();                         
+                    .firestore()
+                    .collection('chats')
+                    .doc(docKey)
+                    .get();
             return chat.exists;
         }
 
@@ -326,7 +315,7 @@ const Sessions = (props) => {
             const usersInChat = users.split(':');
 
             //find singlechat that meets criterion
-            const chat = [...chats.data].sort((a,b) => !!a.groupName - !!b.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
+            const chat = [...chats.data].sort((a, b) => !!a.groupName - !!b.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             // const chat = [...chats.data].filter((chat) => !chat.groupName).find(_chat => usersInChat.every(_user => _chat.users.includes(_user)));
             //update chatList with the indexOf singlechat found above
             updateSelectedChat(chats.data.indexOf(chat));
@@ -338,20 +327,20 @@ const Sessions = (props) => {
             const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
 
             let docKey;
-            if (!chats.data[selectedChat].groupName){
+            if (!chats.data[selectedChat].groupName) {
                 docKey = [user.id, selectedUserID].sort().join('')
             } else {
                 docKey = chats.data[selectedChat].docKey
             }
-            
+
             const doc = await firebase.firestore().collection('chats').doc(docKey).get()
 
             const usersDetails = doc.data().usersDetails
-            
+
 
             const newUsersDetails = usersDetails.reduce((acc, curr) => {
-                
-                if(curr.userId === user.id){
+
+                if (curr.userId === user.id) {
                     curr = {
                         ...curr,
                         hasDeletedChat: false
@@ -367,37 +356,37 @@ const Sessions = (props) => {
 
 
 
-        const newChatSubmit = async () => {            
-            const docKey = newBuildDocKey();  
+        const newChatSubmit = async () => {
+            const docKey = newBuildDocKey();
             const userImage = user.profileImage ? user.profileImage.url : null
             const selectedUserImage = selectedUser.profileImage ? selectedUser.profileImage.url : null
-            
-            await 
-            firebase
-            .firestore()
-            .collection('chats')
-            .doc(docKey)
-            .set({
-                messages: [{
-                    sender: user.username,
-                    session: 'none',                    
-                }],                
-                currentTime: Date.now(),
-                users: [user.username, selectedUser.username],
-                usersDetails: [
-                    {
-                        userId: user.id,
-                        image: userImage,
-                        hasDeletedChat: false
-                    },
-                    {   
-                        userId: selectedUser.id,
-                        image: selectedUserImage,
-                        hasDeletedChat: false
-                    }
-                ],
-                receiverHasRead: false
-            })
+
+            await
+                firebase
+                    .firestore()
+                    .collection('chats')
+                    .doc(docKey)
+                    .set({
+                        messages: [{
+                            sender: user.username,
+                            session: 'none',
+                        }],
+                        currentTime: Date.now(),
+                        users: [user.username, selectedUser.username],
+                        usersDetails: [
+                            {
+                                userId: user.id,
+                                image: userImage,
+                                hasDeletedChat: false
+                            },
+                            {
+                                userId: selectedUser.id,
+                                image: selectedUserImage,
+                                hasDeletedChat: false
+                            }
+                        ],
+                        receiverHasRead: false
+                    })
 
             updateSelectedChat(0);
         }
@@ -428,7 +417,7 @@ const Sessions = (props) => {
                 // console.log('b')          
                 newChatSubmit();
                 setSelectedUser(selectedUser);
-            }          
+            }
         }
 
 
@@ -436,23 +425,23 @@ const Sessions = (props) => {
 
 
 
-    const endSession = async () => {  
+    const endSession = async () => {
         const docKey = [user.id, chats.data[selectedChat].usersDetails.filter(_usr => _usr.userId !== user.id)[0].userId].sort().join('')
 
         firebase.firestore().collection('chats').doc(docKey)
-        .update({
-            messages: firebase.firestore.FieldValue.arrayUnion({
-                sender: user.username,                    
-                session: 'ended',
-                timestamp: Date.now()
-            }),
-            currentTime: Date.now(),
-            receiverHasRead: false
-        })
+            .update({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    sender: user.username,
+                    session: 'ended',
+                    timestamp: Date.now()
+                }),
+                currentTime: Date.now(),
+                receiverHasRead: false
+            })
 
-        try{
+        try {
             const res = await api.post(`session-logs`, {
-                user: user.id, 
+                user: user.id,
                 sessionUser: selectedUser.id
             })
             
@@ -462,33 +451,33 @@ const Sessions = (props) => {
     }
 
     const btnDisabled = () => {
-        if (chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages.length - 1].session ==='none'){
+        if (chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages.length - 1].session === 'none') {
             return true
-        } 
-         else if (chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages.length - 1].session ==='ended'){
+        }
+        else if (chats.data[selectedChat]?.messages[chats.data[selectedChat]?.messages.length - 1].session === 'ended') {
             return true
-       } else {
-           return false
-       }
+        } else {
+            return false
+        }
     }
 
     const deleteMessage = async (timestamp) => {
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
-        
+
         let docKey;
-        if (!chats.data[selectedChat].groupName){
+        if (!chats.data[selectedChat].groupName) {
             docKey = [user.id, selectedUserID].sort().join('')
         } else {
             docKey = chats.data[selectedChat].docKey
         }
-        
-        
+
+
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         let messages = doc.data().messages
-        
+
         const newMessages = messages.reduce((acc, curr) => {
-            
-            if ( curr.timestamp === timestamp ) {
+
+            if (curr.timestamp === timestamp) {
                 curr = {
                     ...curr,
                     isDeleted: true
@@ -500,15 +489,15 @@ const Sessions = (props) => {
         return doc.ref.update({
             "messages": firebase.firestore.FieldValue.arrayRemove({})
         })
-        .then(() => {
-            doc.ref.update({
-                messages: newMessages
+            .then(() => {
+                doc.ref.update({
+                    messages: newMessages
+                })
             })
-         })
-         .catch(function(error) {
-            // The document probably doesn't exist.
-            console.error(error);
-         });
+            .catch(function (error) {
+                // The document probably doesn't exist.
+                console.error(error);
+            });
     }
 
     // console.log('selectedUser', selectedUser, chats)
@@ -517,27 +506,27 @@ const Sessions = (props) => {
         const selectedUserID = chats.data[selectedChat]?.usersDetails?.find(_usr => _usr.userId !== user.id)?.userId
 
         let docKey;
-        if (!chats.data[selectedChat].groupName){
+        if (!chats.data[selectedChat].groupName) {
             docKey = [user.id, selectedUserID].sort().join('')
         } else {
             docKey = chats.data[selectedChat].docKey
         }
-        
+
         const doc = await firebase.firestore().collection('chats').doc(docKey).get()
         firebase.firestore().collection('chats').doc(docKey).update({
             messages: firebase.firestore.FieldValue.arrayUnion({
-                sender: user.username,                    
+                sender: user.username,
                 session: 'deleted',
                 timestamp: Date.now()
             }),
             currentTime: Date.now(),
             receiverHasRead: false
-        }).then( () => {
+        }).then(() => {
             const usersDetails = doc.data().usersDetails
-            
-            const newUsersDetails = usersDetails.reduce((acc, curr)=> {
-                
-                if(curr.userId === user.id){
+
+            const newUsersDetails = usersDetails.reduce((acc, curr) => {
+
+                if (curr.userId === user.id) {
                     curr = {
                         ...curr,
                         hasDeletedChat: true
@@ -550,29 +539,29 @@ const Sessions = (props) => {
                 usersDetails: newUsersDetails
             })
         })
-    
+
     }
 
     // <!-- new chat -->
-  
+
 
     return (
         <div>
-            
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.root}
+
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                className={classes.root}
+            >
+                <MiniDrawer
+                    direction='right'
+                    open={shouldOpenLeftSidebar}
+                    width={isDesktop ? '30%' : '100%'}
+                    backgroundPaper
+                    overflow='auto'
                 >
-                    <MiniDrawer
-                        direction='right'
-                        open={shouldOpenLeftSidebar}
-                        width={isDesktop ? '30%' : '100%'}
-                        backgroundPaper
-                        overflow='auto'
-                    >
                     <Paper height="100%" width='100%' padding="0">
                         {
                             chats.loading ? (
@@ -581,74 +570,74 @@ const Sessions = (props) => {
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
                                     <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
                                 </>
-                            ) : 
+                            ) :
                                 (
-                                    
+
                                     <ChatList
                                         user={user}
                                         history={props.history}
                                         selectChatFn={selectChat}
-                                        closeChatList={handleLeftSidebarClose}               
-                                        chats={ chats.data }
+                                        closeChatList={handleLeftSidebarClose}
+                                        chats={chats.data}
                                         selectedChatIndex={selectedChat}
                                         chatExist={chatExist}
                                         submitNewChat={submitNewChat}
                                         updateSelectedChat={updateSelectedChat}
                                         deleteChat={deleteChat}
-                                    />                                      
+                                    />
 
                                 )
                         }
 
                     </Paper>
-                    </MiniDrawer>
-                    <Box 
-                        className={classes.chatContainer} 
-                        ref={chatContainer} 
-                        display={!isDesktop && shouldOpenLeftSidebar ? 'none' : 'flex'} 
-                        flexDirection='column' 
-                        justifyContent='flex-end' 
-                        overflow="auto" 
-                        position="relative" 
-                        height='100%' 
-                        borderRadius={isDesktop ? '0 1.875rem 1.875rem 0' : '1.875rem'}  
-                        width={isDesktop ? '70%' : '100%'} 
-                        padding={isDesktop ? '1.5rem 3rem 3rem 3rem' : '1rem 1rem 1rem 1rem'}
-                    >
-                        {
-                            chats.loading ? (
-                                <Box marginTop={3}>
-                                    <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
-                                    <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
-                                    <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
-                                </Box>
-                            ) :
-                                (
-                                    chats.data.length  ?
-                                        <ChatView 
-                                            endBtn={btnDisabled}
-                                            backBtn={handleLeftSidebarOpen}
-                                            endSessionFn={endSession} 
-                                            selectedChatIndex={selectedChat}
-                                            userClickedInput={userClickedInputFn}
-                                            user={user} 
-                                            deleteMessage={deleteMessage}
-                                            chatList={chats.data}
-                                            chat={chats.data[selectedChat]} 
-                                            submitMessage={submitMessage}
-                                            selectedUser={selectedUser}
-                                            prevReview={prevReview}
-                                        /> 
-                                        : 
-                                    null                                        
-                                )
-                        }
-                    </Box>
-                    
-                    
-                </Grid>
+                </MiniDrawer>
+                <Box
+                    className={classes.chatContainer}
+                    ref={chatContainer}
+                    display={!isDesktop && shouldOpenLeftSidebar ? 'none' : 'flex'}
+                    flexDirection='column'
+                    justifyContent='flex-end'
+                    overflow="auto"
+                    position="relative"
+                    height='100%'
+                    borderRadius={isDesktop ? '0 1.875rem 1.875rem 0' : '1.875rem'}
+                    width={isDesktop ? '70%' : '100%'}
+                    padding={isDesktop ? '1.5rem 3rem 3rem 3rem' : '1rem 1rem 1rem 1rem'}
+                >
+                    {
+                        chats.loading ? (
+                            <Box marginTop={3}>
+                                <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
+                                <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
+                                <Box marginBottom={1}> <Skeleton variant="rect" height={180} animation="wave" /> </Box>
+                            </Box>
+                        ) :
+                            (
+                                chats.data.length ?
+                                    <ChatView
+                                        endBtn={btnDisabled}
+                                        backBtn={handleLeftSidebarOpen}
+                                        endSessionFn={endSession}
+                                        selectedChatIndex={selectedChat}
+                                        userClickedInput={userClickedInputFn}
+                                        user={user}
+                                        deleteMessage={deleteMessage}
+                                        chatList={chats.data}
+                                        chat={chats.data[selectedChat]}
+                                        submitMessage={submitMessage}
+                                        selectedUser={selectedUser}
+                                        prevReview={prevReview}
+                                    />
+                                    :
+                                    null
+                            )
+                    }
+                </Box>
 
-            
+
+            </Grid>
+
+
         </div>
     )
 }
