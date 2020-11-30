@@ -130,5 +130,11 @@ const shuldrzTheme = createMuiTheme({
   }
 });
 
+shuldrzTheme.overrides.MuiChip = {
+  root:{ 
+    cursor: 'pointer'  
+  }
+}
+
 // console.log(shuldrzTheme)
 export { shuldrzTheme };

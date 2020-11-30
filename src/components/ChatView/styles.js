@@ -144,6 +144,12 @@ const useStyles = makeStyles(theme => ({
         marginLeft: '24px'
     },
 
+    img: {
+        '&:hover': {
+            cursor: 'pointer'
+        }
+    }
+
 
 
 }))

@@ -54,4 +54,4 @@ Button.propTypes = {
     marginBottom: PropTypes.string,
 }
 
-export default Button
+export default Button;
