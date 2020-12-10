@@ -173,42 +173,6 @@ const LoginForm = () => {
                                 New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
                             </Typography>
                         </Box>
-
-
-                        <FormControl className={classes.formControl}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                disabled={isSubmitting}
-                                loading={isSubmitting}
-                            >
-                                Login
-                        </Button>
-                        </FormControl>
-
-                        <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
-                            <FormHelperText
-                                style={{ textAlign: 'center' }}
-                                error={true}
-                            >
-                                {
-                                    isSuccessful?.status === false ?
-                                        isSuccessful.message ?
-                                            isSuccessful.message
-                                            : 'an error occured'
-                                        : null
-                                }
-                            </FormHelperText>
-                        </FormControl>
-
-                        <Hidden mdUp>
-                            <Box marginTop='4rem'>
-                                <Typography variant='body2'>
-                                    New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
-                                </Typography>
-                            </Box>
-                        </Hidden>
                     </Hidden>
 
                     </Form>
