@@ -14,179 +14,179 @@ import Link from 'next/link'
 import Modal from 'components/Modal'
 
 const LoginForm = () => {
-    const classes = useStyles()
-    const { setUser } = useAuth()
-    const [isSuccessful, setIsSuccessful] = useState()
+	const classes = useStyles()
+	const { setUser } = useAuth()
+	const [isSuccessful, setIsSuccessful] = useState()
 
-    const initialValues = {
-        email: '',
-        password: '',
-    }
+	const initialValues = {
+		email: '',
+		password: '',
+	}
 
-    const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email format!').required('Email is empty!'),
-        password: Yup.string().required('Password is empty')
-    })
+	const validationSchema = Yup.object({
+		email: Yup.string().email('Invalid email format!').required('Email is empty!'),
+		password: Yup.string().required('Password is empty')
+	})
 
-    const onSubmit = async (values) => {
-        try {
-            const res = await api.post('auth/local', {
-                identifier: values.email,
-                password: values.password
-            })
-            const token = res.data.jwt
+	const onSubmit = async (values) => {
+		try {
+			const res = await api.post('auth/local', {
+				identifier: values.email,
+				password: values.password
+			})
+			const token = res.data.jwt
 
-            if (token) {
-                console.log('got token');
-                Cookies.set('token', token, { expires: 60 })
-                api.defaults.headers.Authorization = `Bearer ${token}`
-                const res = await api.get('users/me')
-                const user = res.data
+			if (token) {
+				console.log('got token');
+				Cookies.set('token', token, { expires: 60 })
+				api.defaults.headers.Authorization = `Bearer ${token}`
+				const res = await api.get('users/me')
+				const user = res.data
 
-                setUser(user)
-                console.log("Got user", user)
-                Router.push('/app')
-            }
-        } catch (error) {
-            //error state Login Unsuccessful
-            const message = error.response.data.message[0].messages[0].message
-            // console.log('error')
-            setIsSuccessful({
-                status: false,
-                message: message === 'Identifier or password invalid.' ? 'Invalid Email or Password. Please Try Again!' : message
-            })
-        }
+				setUser(user)
+				console.log("Got user", user)
+				Router.push('/app')
+			}
+		} catch (error) {
+			//error state Login Unsuccessful
+			const message = error.response.data.message[0].messages[0].message
+			// console.log('error')
+			setIsSuccessful({
+				status: false,
+				message: message === 'Identifier or password invalid.' ? 'Invalid Email or Password. Please Try Again!' : message
+			})
+		}
 
-    }
+	}
 
-    const [showPassword, setShowPassword] = useState(false)
+	const [showPassword, setShowPassword] = useState(false)
 
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
+	const handleClickShowPassword = () => {
+		setShowPassword(!showPassword);
+	};
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+	};
 
-    const [openModal, setOpenModal] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
 
-    const handleOpen = () => {
-        setOpenModal(true);
-    };
+	const handleOpen = () => {
+		setOpenModal(true);
+	};
 
-    const handleClose = () => {
-        setOpenModal(false);
-    };
-
-
-    return (
-        <div>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={onSubmit}
-            >
-            {({values, errors, touched, getFieldProps, isSubmitting, submitCount}) => (
-                <Form noValidate autoComplete="off">
-                    {/* {console.log(submitCount)} */}
-                    <FormControl className={classes.formControl}>
-                        <TextField 
-                        name="email" 
-                        id="email" 
-                        label="Email Address"
-                        type="email"
-                        { ...getFieldProps('email')}
-                        variant="outlined"
-                        error={errors.email && touched.email ? true : false}
-                        helperText={ errors.email && touched.email ?
-                            errors.email : null
-                        }
-                        />
-                    </FormControl>
-                    
-                    <FormControl className={classes.formControl}>
-                        <TextField 
-                        name="password" 
-                        id="password" 
-                        type={showPassword ? 'text' : 'password'}
-                        label="Password"
-                        { ...getFieldProps('password')}
-                        variant="outlined"
-                        error={errors.password && touched.password ? true : false}
-                        helperText={ errors.password && touched.password ?
-                            errors.password : null
-                        }
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                    >
-                                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                        />
-                    </FormControl>
+	const handleClose = () => {
+		setOpenModal(false);
+	};
 
 
-                    <Box textAlign='left' marginBottom='1rem'>
-                        <Typography variant='caption' className={classes.forgotPassword} onClick={handleOpen}>Forgot Password?</Typography>
-                    </Box>
+	return (
+		<div>
+			<Formik
+				initialValues={initialValues}
+				validationSchema={validationSchema}
+				onSubmit={onSubmit}
+			>
+				{({ values, errors, touched, getFieldProps, isSubmitting, submitCount }) => (
+					<Form noValidate autoComplete="off">
+						{/* {console.log(submitCount)} */}
+						<FormControl className={classes.formControl}>
+							<TextField
+								name="email"
+								id="email"
+								label="Email Address"
+								type="email"
+								{...getFieldProps('email')}
+								variant="outlined"
+								error={errors.email && touched.email ? true : false}
+								helperText={errors.email && touched.email ?
+									errors.email : null
+								}
+							/>
+						</FormControl>
+
+						<FormControl className={classes.formControl}>
+							<TextField
+								name="password"
+								id="password"
+								type={showPassword ? 'text' : 'password'}
+								label="Password"
+								{...getFieldProps('password')}
+								variant="outlined"
+								error={errors.password && touched.password ? true : false}
+								helperText={errors.password && touched.password ?
+									errors.password : null
+								}
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<IconButton
+												aria-label="toggle password visibility"
+												onClick={handleClickShowPassword}
+												onMouseDown={handleMouseDownPassword}
+												edge="end"
+											>
+												{showPassword ? <Visibility /> : <VisibilityOff />}
+											</IconButton>
+										</InputAdornment>
+									)
+								}}
+							/>
+						</FormControl>
 
 
-                    <FormControl className={classes.formControl}>
-                        <Button 
-                        variant="contained" 
-                        color="primary" 
-                        type="submit"
-                        disabled={isSubmitting}
-                        loading={isSubmitting}
-                        >
-                            Login
+						<Box textAlign='left' marginBottom='1rem'>
+							<Typography variant='caption' className={classes.forgotPassword} onClick={handleOpen}>Forgot Password?</Typography>
+						</Box>
+
+
+						<FormControl className={classes.formControl}>
+							<Button
+								variant="contained"
+								color="primary"
+								type="submit"
+								disabled={isSubmitting}
+								loading={isSubmitting}
+							>
+								Login
                         </Button>
-                    </FormControl>
-                    
-                    <FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
-                        <FormHelperText 
-                            style={{ textAlign: 'center' }} 
-                            error={true}
-                        >
-                            {
-                                isSuccessful?.status === false ? 
-                                    isSuccessful.message ? 
-                                        isSuccessful.message
-                                    : 'an error occured' 
-                                : null
-                            }
-                        </FormHelperText>
-                    </FormControl>
+						</FormControl>
 
-                    <Hidden mdUp>
-                        <Box marginTop='4rem'>
-                            <Typography variant='body2'>
-                                New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
-                            </Typography>
-                        </Box>
-                    </Hidden>
+						<FormControl className={isSuccessful?.status === false ? classes.formControl : null}>
+							<FormHelperText
+								style={{ textAlign: 'center' }}
+								error={true}
+							>
+								{
+									isSuccessful?.status === false ?
+										isSuccessful.message ?
+											isSuccessful.message
+											: 'an error occured'
+										: null
+								}
+							</FormHelperText>
+						</FormControl>
 
-                    </Form>
-                )}
-            </Formik>
+						<Hidden mdUp>
+							<Box marginTop='4rem'>
+								<Typography variant='body2'>
+									New here? Start your journey with us now.  <Link href="signup"><a className={classes.link}>Sign Up!</a></Link>
+								</Typography>
+							</Box>
+						</Hidden>
 
-            {/* Load Custom Modal COmponent */}
-            {openModal === true &&
-                (
-                    <Modal handleClose={handleClose} openModal={openModal} view='forgotPassword' />
-                )
-            }
-        </div>
-    )
+					</Form>
+				)}
+			</Formik>
+
+			{/* Load Custom Modal COmponent */}
+			{openModal === true &&
+				(
+					<Modal handleClose={handleClose} openModal={openModal} view='forgotPassword' />
+				)
+			}
+		</div>
+	)
 }
 
 export default LoginForm
