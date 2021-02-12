@@ -290,7 +290,7 @@ const WallNote = props => {
                         disabled={isPublic}
                         onClick={handleCommentsOpen}
                     >
-                        Comments
+                       { noteComments.length } Comments
                     </Button>
                 </div>
             </Box>
