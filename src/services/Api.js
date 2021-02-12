@@ -18,4 +18,25 @@ const api = Axios.create({
     }
 });
 
+console.log(process.env.NODE_ENV, 'node');
+const config = process.env.NODE_ENV === 'production' ? {
+    apiKey: "AIzaSyBJ8MGYaFEDfGnvMeKyeoNgT0i3ch7-8JA",
+    authDomain: "shuldrz-chat.firebaseapp.com",
+    databaseURL: "https://shuldrz-chat.firebaseio.com",
+    projectId: "shuldrz-chat",
+    storageBucket: "shuldrz-chat.appspot.com",
+    messagingSenderId: "138433830895",
+    appId: "1:138433830895:web:ce57ed0cb1d1ee54f1201a"
+} : {
+    apiKey: "AIzaSyANHygUmqxZhbgku31gsyOgjl6QOvtkMco",
+    authDomain: "shuldrz-chat-test.firebaseapp.com",
+    databaseURL: "https://shuldrz-chat-test.firebaseio.com",
+    projectId: "shuldrz-chat-test",
+    storageBucket: "shuldrz-chat-test.appspot.com",
+    messagingSenderId: "148415518343",
+    appId: "1:148415518343:web:b3ce13f58b5b9dceb6ca22"
+}
+
 export default api;
+
+export const firebaseConfig = config
