@@ -283,14 +283,14 @@ const WallNote = props => {
                     <Button 
                         variant='contained' 
                         size="small" 
-                        color="paper" 
+                        color="paper"
                         startIcon={
                             <CommentIcon/>
                         }
                         disabled={isPublic}
                         onClick={handleCommentsOpen}
                     >
-                       { noteComments.length } Comments
+                       { noteComments.length > 0 ? noteComments.length : '' } Comment{ noteComments.length > 1 ? 's' : ''}
                     </Button>
                 </div>
             </Box>
