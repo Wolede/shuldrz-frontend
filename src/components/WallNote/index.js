@@ -120,7 +120,7 @@ const WallNote = props => {
 
   useEffect(() => {
     getLikeStatus()
-  }, [])
+  }, [usersLiked])
 
   // Menu Functions
   const [anchorEl, setAnchorEl] = useState(null)
