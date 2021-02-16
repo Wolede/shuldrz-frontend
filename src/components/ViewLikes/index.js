@@ -19,9 +19,7 @@ export default function ViewLikes(props) {
       <Typography variant="body2">
         Liked by <b>{users[users.length - 1]?.username}</b>
         {`${
-          users.length > 1
-            ? ` and ${users.length - 1} ${quantify(users.length - 1, 'other')}`
-            : ''
+          users.length > 1 ? ` and ${quantify(users.length - 1, 'other')}` : ''
         }`}
       </Typography>
     </div>
