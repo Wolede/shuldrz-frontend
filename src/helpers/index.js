@@ -94,9 +94,9 @@ export const getGroupName = (mode, usersDetails, user) => {
 
 export const quantify = (num, str) => {
   if (num > 1) {
-    return str + 's'
+    return `${num} ${str}s`
   } else {
-    return str
+    return `${num} ${str}`
   }
 }
 
