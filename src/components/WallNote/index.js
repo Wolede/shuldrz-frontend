@@ -289,7 +289,7 @@ const WallNote = props => {
         {usersLiked.length > 0 && (
           <ViewLikes
             onClick={() => setOpenViewLikesModal(true)}
-            users={usersLiked}
+            usersLiked={usersLiked}
             user={user}
           />
         )}

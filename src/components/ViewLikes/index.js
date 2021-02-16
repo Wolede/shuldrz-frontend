@@ -6,20 +6,28 @@ import { useStyles } from './style'
 
 export default function ViewLikes(props) {
   const classes = useStyles()
-  const { users, onClick } = props
+  const { usersLiked, onClick, user } = props
 
   return (
     <div className={classes.root} onClick={onClick}>
       <AvatarGroup className={classes.avatarGroup} max={3}>
-        {users.length > 0 &&
-          users.map(user => (
+        {usersLiked.length > 0 &&
+          usersLiked.map(user => (
             <Avatar alt="user image" src={user.profileImage?.url} />
           ))}
       </AvatarGroup>
       <Typography variant="body2">
-        Liked by <b>{users[users.length - 1]?.username}</b>
+        {/* Liked by <b>{usersLiked[usersLiked.length - 1]?.id === user?.id ? `You` :    }</b> */}
+        Liked by{' '}
+        <b>
+          {usersLiked.some(userLike => userLike.id === user?.id)
+            ? 'You'
+            : usersLiked[usersLiked.length - 1]?.username}
+        </b>
         {`${
-          users.length > 1 ? ` and ${quantify(users.length - 1, 'other')}` : ''
+          usersLiked.length > 1
+            ? ` and ${quantify(usersLiked.length - 1, 'other')}`
+            : ''
         }`}
       </Typography>
     </div>
