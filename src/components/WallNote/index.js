@@ -82,6 +82,7 @@ const WallNote = props => {
       const res = await api.put(`wall-notes/${id}`, {
         usersLiked: [...usersLiked, user?.id],
       })
+      trigger(triggerUrl, api.get)
       setLikes({
         userHasLiked: true,
         count: usersLiked.length + 1,
@@ -93,11 +94,13 @@ const WallNote = props => {
   const unlike = async () => {
     setLikes({ ...likes, loading: true })
     const newUsersLiked = usersLiked.filter(item => item.id !== user?.id)
+    console.log('gbagaun', newUsersLiked)
 
     try {
       const res = await api.put(`wall-notes/${id}`, {
         usersLiked: newUsersLiked,
       })
+      trigger(triggerUrl, api.get)
       setLikes({
         userHasLiked: false,
         count: newUsersLiked.length,
@@ -287,6 +290,7 @@ const WallNote = props => {
           <ViewLikes
             onClick={() => setOpenViewLikesModal(true)}
             users={usersLiked}
+            user={user}
           />
         )}
 
